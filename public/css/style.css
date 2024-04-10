@@ -1,0 +1,101 @@
+/* Your Button CSS */
+.button-54 {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: #000;
+    cursor: pointer;
+    border: 3px solid;
+    padding: 0.25em 0.5em;
+    box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+.button-54:active {
+    box-shadow: 0px 0px 0px 0px;
+    top: 5px;
+    left: 5px;
+}
+@media (min-width: 768px) {
+    .button-54 {
+        padding: 0.25em 0.75em;
+    }
+}
+/* Additional CSS for Chat UI */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    font-family: "Open Sans", sans-serif;
+}
+.chat-container {
+    width: 600px;
+    border: 1px solid #000000;
+    padding: 10px;
+}
+.message-area {
+    width: 78%;
+    border: 1px solid #000000;
+    padding: 10px;
+    margin-bottom: 10px;
+    height: 200px;
+    overflow-y: auto;
+}
+.input-area {
+    display: flex;
+    gap: 10px;
+}
+.chat-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #000000;
+}
+.fixed-size-image {
+    width: 300px;
+    height: auto;
+}
+.intro-container, .chat-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+}
+.intro-container img {
+    width: 50%;
+    min-width: 250px;
+    max-width: 300px;
+}
+.select-box {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.25em 0.5em;
+    border: 3px solid;
+    box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+    cursor: pointer;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 80px;
+}
+.select-box:active {
+    box-shadow: 0px 0px 0px 0px;
+}
+.select-container {
+    position: relative;
+    width: 80px;
+    display: inline-block;
+}
