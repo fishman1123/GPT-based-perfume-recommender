@@ -1,6 +1,22 @@
 // Import Express and create a router
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '../public/images/upload');
+        fs.mkdirSync(uploadPath, { recursive: true }); // Ensure directory exists
+        cb(null, uploadPath);
+    },
+    filename: function (req, file, cb) {
+        // Generate a unique filename with the original file extension
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage });
 
 // Assuming you've set up OpenAI SDK and required any necessary modules
 const OpenAI = require("openai");
@@ -10,11 +26,11 @@ const openai = new OpenAI({
     apiKey: process.env.API_KEY,
 });
 
+
 // POST route for '/professorFish'
 router.post("/", async (req, res) => {
     const { myDateTime, userMessages, assistantMessages } = req.body;
     let todayDateTime = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul'});
-
     // Construct the message array for the OpenAI API
     try {
         // Initialize your messages array with the specific assistant message first
@@ -47,6 +63,8 @@ router.post("/", async (req, res) => {
                     JSON.parse('{"role": "assistant", "content": "' + String(assistantMessages.shift()).replace(/\n/g, "") + '"}')
                 )
             }
+            console.log("messages:", messages);
+
         }
 
         const completion = await openai.chat.completions.create({
@@ -62,6 +80,38 @@ router.post("/", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+router.post("/image", upload.single('image'), async (req, res) => {
+    try {
+        // Check if an image was uploaded
+        if (req.file) {
+            console.log('Uploaded file:', req.file);
+            // Process the file or do additional work here
+            // For example, you might want to save file information in the database
+
+            res.json({ message: "Image uploaded successfully." });
+        } else {
+            // If multer did not attach a file to req, it means no file was uploaded
+            res.status(400).json({ error: "No image uploaded." });
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
+// module.exports = router;
+
+
+
+
+
+
+
+
+
 
 // Export the router
 module.exports = router;

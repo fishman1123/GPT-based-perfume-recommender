@@ -22,13 +22,37 @@ let assistantMessages = [];
 // Variable for start function
 let myDateTime = '';
 
+
+
+
+
+
 function start() {
     const date = document.getElementById('date').value;
     const hour = document.getElementById('hour').value;
-    if (date === '') {
-        alert('생년월일을 입력해주세요.');
-        return;
-    }
+    // if (date === '') {
+    //     alert('생년월일을 입력해주세요.');
+    //     return;
+    // }
+    myDateTime = date + ' ' + hour; // Assuming you want to include a space or some delimiter
+    console.log(myDateTime);
+
+    let todayDateTime = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
+    let initialAssistantMessage = `포터 선생: 너 ${myDateTime}에 태어났다는 거지? 오늘은 ${todayDateTime}이구나, 자, 운세에 대해서 어떤 것이든 물어보렴.`;
+
+    displayMessage(initialAssistantMessage, "assistant");
+
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("chat").style.display = "block";
+}
+
+function sendImage() {
+    const date = document.getElementById('date').value;
+    const hour = document.getElementById('hour').value;
+    // if (date === '') {
+    //     alert('생년월일을 입력해주세요.');
+    //     return;
+    // }
     myDateTime = date + ' ' + hour; // Assuming you want to include a space or some delimiter
     console.log(myDateTime);
 
@@ -81,6 +105,7 @@ async function sendMessage() {
         input.value = ''; // Clear the input field
     }
 }
+
 
 function displayMessage(message, sender) {
     const messageArea = document.getElementById('messageArea');
