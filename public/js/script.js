@@ -1,7 +1,4 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Optionally, display an initial message from Professor Fish if needed
-    displayMessage("====THIS IS DEMO====", "assistant");
-});
+
 
 document.addEventListener('DOMContentLoaded', (event) => {
     // Optionally, display an initial message from Professor Fish if needed

@@ -3,12 +3,12 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = path.join(__dirname, '../public/images/upload');
-        fs.mkdirSync(uploadPath, { recursive: true }); // Ensure directory exists
+        fs.mkdir(uploadPath, { recursive: true }); // Ensure directory exists
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
@@ -98,7 +98,7 @@ router.post("/image", upload.single('image'), async (req, res) => {
             console.log('Uploaded file:', req.file);
             // Process the file or do additional work here
             // For example, you might want to save file information in the database
-
+            const imageEvaluation = await imageToGpt(req.file);
             res.json({ message: "Image uploaded successfully." });
         } else {
             // If multer did not attach a file to req, it means no file was uploaded
@@ -111,15 +111,71 @@ router.post("/image", upload.single('image'), async (req, res) => {
 });
 
 
-// module.exports = router;
 
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+// Wrap fs.access in a promise to check file existence
+async function checkFileExists(filePath) {
+    try {
+        await fs.access(filePath, fs.constants.F_OK);
+        return true; // The file exists
+    } catch {
+        return false; // The file does not exist
+    }
+}
 
+async function imageToGpt(file) {
+    console.log(`Uploaded file: ${file}`);
+    const filePath = path.join(__dirname, '../public/images/upload', file.filename);
 
+    // Function to be called when the file exists
+    async function imageConvert() {
 
+    }
+    async function onFileExist(filePath) {
+        try {
+            console.log("time to analyze bitch bithch");
+            const imageBuffer = await fs.readFile(filePath);
+            console.log("found image: ", imageBuffer);
+            const bufferedImage = imageBuffer.toString('base64');
+            const encodedImage = `data:image/jpeg;base64,{${bufferedImage}}`;
+            const response = await openai.chat.completions.create({
+                model: "gpt-4-vision-preview",
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            { type: "text", text: "What's in this image?" },
+                            { type: "image_url", image_url: { "url": encodedImage },
+                            },
+                        ],
+                    },
+                ],
+                max_tokens: 1024,
+            });
+            console.log(`Result: ${JSON.stringify(response.choices[0])}`);
+            // Place your specific task here
 
+        } catch (error) {
+            console.error("Error processing the file:", error);
+        }
+    }
 
+    // Loop to wait for the file, checking every second for up to 5 seconds
+    const maxAttempts = 10;
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        console.log(`Attempt ${attempt}: Checking for file...`);
+        if (await checkFileExists(filePath)) {
+            const result = await onFileExist(filePath); // Run specific function when file exists
+            return; // Exit after handling file existence
+        }
+        await delay(1000); // Wait for 1 second before the next check
+    }
 
+    console.log("File was not found within the expected time frame.");
+}
 
 
 // Export the router
