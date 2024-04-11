@@ -12,8 +12,17 @@ const storage = multer.diskStorage({
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
+        // Get the current date
+        const now = new Date();
+        // Format the date as 'YYYY-MM-DD-HH-MM-SS'
+        const dateString = now.getFullYear() + "-" +
+            ("0" + (now.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + now.getDate()).slice(-2) + "-" +
+            ("0" + now.getHours()).slice(-2) + "-" +
+            ("0" + now.getMinutes()).slice(-2) + "-" +
+            ("0" + now.getSeconds()).slice(-2);
         // Generate a unique filename with the original file extension
-        cb(null, Date.now() + path.extname(file.originalname));
+        cb(null, dateString + path.extname(file.originalname));
     }
 });
 const upload = multer({ storage: storage });
