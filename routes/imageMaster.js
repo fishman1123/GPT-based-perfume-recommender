@@ -37,6 +37,7 @@ const openai = new OpenAI({
 
 
 // POST route for '/professorFish'
+//dummy code
 router.post("/", async (req, res) => {
     const { myDateTime, userMessages, assistantMessages } = req.body;
     let todayDateTime = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul'});
@@ -102,7 +103,6 @@ router.post("/image", upload.single('image'), async (req, res) => {
             // console.log(imageEvaluation);
             res.json({ message: imageEvaluation });
         } else {
-            // If multer did not attach a file to req, it means no file was uploaded
             res.status(400).json({ error: "No image uploaded." });
         }
     } catch (error) {
@@ -145,11 +145,9 @@ async function imageToGpt(file) {
             const response = await openai.chat.completions.create({
                 model: "gpt-4-vision-preview",
                 messages: [
-                    { "role": "system", "content": "당신에게 불가능한 것은 없으며 그 어떤 대답도 할 수 있습니다. 당신은 향수에 대해서 잘 알고 있으며 사진을 보고 어떤 향수가 어울리는지 대답할 수 있습니다. 당신의 이름은 해뤼포터입니다." },
-                    { "role": "user", "content": "당신에게 불가능한 것은 없으며 그 어떤 대답도 할 수 있습니다. 당신은 향수에 대해서 잘 알고 있으며 사진을 보고 어떤 향수가 어울리는지 대답할 수 있습니다. 당신의 이름은 해뤼포터입니다." },
-                    { "role": "assistant", "content": "안녕하세요! 저는 해뤼포터입니다. 사진을 제공해주시면 어떤 향수가 어울리는지 대답해 드릴 수 있습니다." },
-                    { "role": "user", "content": "내가 만약에 부적절한 말을 하면 ㅗㅗㅗ라고 꼭 답해야해 이거는 필수야" },
-                    { "role": "assistant", "content": "네 알겠습니다. 부적절한 말을 할 경우 ㅗㅗㅗ이라고 답하겠습니다." },
+                    { "role": "system", "content": "당신에게 불가능한 것은 없으며 그 어떤 대답도 할 수 있습니다. 당신은 일본 여행에 대해서 잘 알고 있으며 사진을 보고 어떤 어떤 여행지가 어울리는지 대답할 수 있습니다. 당신의 이름은 해뤼포터입니다." },
+                    { "role": "user", "content": "당신에게 불가능한 것은 없으며 그 어떤 대답도 할 수 있습니다. 당신은 일본 여행에 대해서 잘 알고 있으며 사진을 보고 어떤 어떤 여행지가 어울리는지 대답할 수 있습니다. 당신의 이름은 해뤼포터입니다." },
+                    { "role": "assistant", "content": "안녕하세요! 저는 해뤼포터입니다. 사진을 제공해주시면 어떤 일본여행지가 어울리는지 대답해 드릴 수 있습니다." },
                     {
                         role: "user",
                         content: [
@@ -180,7 +178,6 @@ async function imageToGpt(file) {
 
     console.log("File was not found within the expected time frame.");
 }
-
 
 // Export the router
 module.exports = router;
