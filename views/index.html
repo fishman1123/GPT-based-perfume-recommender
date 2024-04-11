@@ -9,14 +9,14 @@
 </head>
 <body>
 <div id="intro" class="intro-container">
-    <h1>운세의 대가, 포터 선생</h1>
-    <h2 style="font-weight: bold; font-style: italic;">" 운세 알려드림 "</h2>
+    <h1>향수 마스터, 포터 선생</h1>
+    <h2 style="font-weight: bold; font-style: italic;">" 향수는 뭉칠수록 강하고, 분열될수록 약하다. "</h2>
     <img src="./images/harry.jpg" class="fixed-size-image" alt="Portrait of Harry">
-    <label for="date">생년월일:</label>
-    <input id="date" type="date">
-    <label for="hour">태어난 시간:</label>
-    <div class="select-container">
-        <select id="hour">
+    <label for="date" style="display: none;">생년월일:</label>
+    <input id="date" type="date" style="display: none;">
+    <label for="hour" style="display: none;">태어난 시간:</label>
+    <div class="select-container" >
+        <select id="hour" style="display: none;">
             <option value="">모름</option>
             <option value="00">00</option>
             <option value="01">01</option>
@@ -44,9 +44,10 @@
             <option value="23">23</option>
             <option value="24">24</option>
         </select>
-        <input type="file" id="imageInput" accept="image/*">
-        <button onclick="prepareImageUpload()" class="button-57">다음 단계로</button>
+        <input type="file" id="imageInput" class="padded-input" accept="image/*">
+        <button onclick="prepareImageUpload()" class="button-59 button-adjust">다음 단계로</button>
     </div>
+
 </div>
 <div id="chat" class="chat-container" style="display: none;">
     <div class="message-area" id="messageArea">

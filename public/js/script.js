@@ -43,8 +43,14 @@ function start() {
     document.getElementById("chat").style.display = "block";
 }
 function prepareImageUpload() {
-    transitionToIntro(); // First, transition UI
-    sendImage(); // Then, send the image
+    const imageCheck = document.getElementById('imageInput');
+    if (imageCheck.files.length === 0) {
+        alert('Please select an image to upload.');
+    } else {
+        transitionToIntro(); // First, transition UI
+        sendImage(); // Then, send the image
+    }
+
 }
 
 function transitionToIntro() {
@@ -76,8 +82,11 @@ async function sendImage() {
         }
 
         const responseData = await response.json();
-        console.log(responseData); // Assuming the server responds with some JSON
-        displayMessage("Image uploaded successfully", "assistant");
+        console.log("this is the answer " + responseData.message); // Assuming the server responds with some JSON
+
+        const filterNewLines = responseData.message.replace(/\n/g, "");
+        const filterText = filterNewLines.replace(/\d+\./g, "");
+        displayMessage(filterText, "assistant");
     } catch (error) {
         console.error('Error:', error);
         displayMessage("Error: Could not upload the image. Please try again.", "error");
