@@ -42,7 +42,7 @@ function start() {
     document.getElementById("intro").style.display = "none";
     document.getElementById("chat").style.display = "block";
 }
-function prepareImageUpload() {
+function imageUpload() {
     const imageCheck = document.getElementById('imageInput');
     if (imageCheck.files.length === 0) {
         alert('Please select an image to upload.');
@@ -57,6 +57,12 @@ function transitionToIntro() {
     document.getElementById("intro").style.display = "none";
     document.getElementById("chat").style.display = "block";
 }
+function backToMain() {
+    document.getElementById("chat").style.display = "none";
+    document.getElementById("intro").style.display = "flex";
+
+}
+
 async function sendImage() {
     const imageInput = document.getElementById('imageInput');
     if (imageInput.files.length === 0) {
@@ -69,6 +75,8 @@ async function sendImage() {
     formData.append('image', imageFile); // Append the file
 
     document.getElementById('loader').style.display = "inline-block"; // Show loading icon
+    document.getElementById('backButton').style.display = "none"; // Show loading icon
+
 
     try {
         const response = await fetch('http://localhost:3003/imageMaster/image', {
@@ -84,14 +92,17 @@ async function sendImage() {
         const responseData = await response.json();
         console.log("this is the answer " + responseData.message); // Assuming the server responds with some JSON
 
-        const filterNewLines = responseData.message.replace(/\n/g, "");
-        const filterText = filterNewLines.replace(/\d+\./g, "");
+        const filterText = responseData.message.replace(/(\n|\d+\.)\s*/g, "");
+
         displayMessage(filterText, "assistant");
+        imageInput.value = '';
     } catch (error) {
         console.error('Error:', error);
         displayMessage("Error: Could not upload the image. Please try again.", "error");
     } finally {
         document.getElementById('loader').style.display = "none"; // Hide loading icon
+        document.getElementById('backButton').style.display = "block"; // Show loading icon
+
     }
 }
 

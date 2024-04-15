@@ -45,7 +45,7 @@
             <option value="24">24</option>
         </select>
         <input type="file" id="imageInput" class="padded-input" accept="image/*">
-        <button onclick="prepareImageUpload()" class="button-59 button-adjust">다음 단계로</button>
+        <button onclick="imageUpload()" class="button-59 button-adjust">다음 단계로</button>
     </div>
 
 </div>
@@ -56,6 +56,7 @@
     <div id="loader" class="loader" style="display: none;">
         <i class="fa-solid fa-gear fa-spin"></i>
     </div>
+    <button id="backButton" onclick="backToMain()" class="button-59 button-adjust">메인으로 돌아가기</button>
     <div class="input-area">
         <input type="text" class="chat-input" id="chatInput" style="display: none;" placeholder="Type a message...">
 <!--        <button class="button-54" onclick="sendMessage()">Send</button>-->
