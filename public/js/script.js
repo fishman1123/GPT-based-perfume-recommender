@@ -58,10 +58,18 @@ function transitionToIntro() {
     document.getElementById("chat").style.display = "block";
 }
 function backToMain() {
-    document.getElementById("chat").style.display = "none";
-    document.getElementById("intro").style.display = "flex";
-
+    // Correct the ID if it's 'messageArea' and not 'message-area'
+    const messageArea = document.getElementById('messageArea');
+    if (messageArea) {
+        messageArea.innerHTML = '';
+        displayMessage("====THIS IS DEMO====", "assistant");
+        document.getElementById("chat").style.display = "none";
+        document.getElementById("intro").style.display = "flex";
+    } else {
+        console.error('Message area element not found');
+    }
 }
+
 
 async function sendImage() {
     const imageInput = document.getElementById('imageInput');

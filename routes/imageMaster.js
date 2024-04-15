@@ -151,7 +151,7 @@ async function imageToGpt(file) {
                     {
                         role: "user",
                         content: [
-                            { type: "text", text: "이 사진은 어떤 향수와 어울릴까?" },
+                            { type: "text", text: "이 사진은 어떤 향수와 어울릴까?, 정리된 문장으로 설명해줘" },
                             { type: "image_url", image_url: { "url": encodedImage },
                             },
                         ],
