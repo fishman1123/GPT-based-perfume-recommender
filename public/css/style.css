@@ -41,11 +41,10 @@ body {
     padding: 10px;
 }
 .message-area {
-    width: 78%;
     border: 1px solid #000000;
     padding: 10px;
     margin-bottom: 10px;
-    height: 200px;
+    height: 900px;
     overflow-y: auto;
 }
 .input-area {
@@ -66,7 +65,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 500px;
+    width: 100%;
+    max-width: 1000px;
+    height: 1000px;
 }
 .intro-container img {
     width: 50%;

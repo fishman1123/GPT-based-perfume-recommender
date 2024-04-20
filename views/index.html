@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<div id="intro" class="intro-container">
+<!--do not forget to change display to none when you test, this is temporal display-->
+
+<div id="intro" class="intro-container" style="display: none">
     <h1>향수 마스터, 포터 선생</h1>
     <h2 style="font-weight: bold; font-style: italic;">" 향수 추천 ㄱ? "</h2>
     <img src="./images/harry.jpg" class="fixed-size-image" alt="Portrait of Harry">
@@ -28,9 +30,14 @@
     </div>
 
 </div>
-<div id="chat" class="chat-container" style="display: none;">
+<div id="loading screen" style="display: none;">
+
+</div>
+<!--do not forget to change display to none when you test, this is temporal display-->
+<div id="report" class="chat-container" style="display: block;">
     <div class="message-area" id="messageArea">
         <!-- Messages will be displayed here -->
+
     </div>
     <div id="loader" class="loader" style="display: none;">
         <i class="fa-solid fa-gear fa-spin"></i>
@@ -40,7 +47,12 @@
         <input type="text" class="chat-input" id="chatInput" style="display: none;" placeholder="Type a message...">
 <!--        <button class="button-54" onclick="sendMessage()">Send</button>-->
     </div>
+    <div>
+
+    </div>
 </div>
+
+
 <script src="./js/script.js"></script>
 </body>
 </html>

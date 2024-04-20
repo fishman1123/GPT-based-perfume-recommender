@@ -40,22 +40,48 @@ function start() {
     displayMessage(initialAssistantMessage, "assistant");
 
     document.getElementById("intro").style.display = "none";
-    document.getElementById("chat").style.display = "block";
+    document.getElementById("report").style.display = "block";
 }
 function imageUpload() {
     const imageCheck = document.getElementById('imageInput');
-    if (imageCheck.files.length === 0) {
-        alert('Please select an image to upload.');
-    } else {
-        transitionToIntro(); // First, transition UI
-        sendImage(); // Then, send the image
+    const birthInput = document.getElementById('date');
+    const inputName = document.getElementById('nameInput');
+    const inputGender = document.getElementById('gender');
+    // Check if the name input is empty
+    if (!inputName.value.trim()) {
+        alert('Please enter your name.');
+        inputName.focus();
+        return;
     }
 
+    // Check if the birth date input is empty
+    if (!birthInput.value.trim()) {
+        alert('Please enter your birth date.');
+        birthInput.focus();
+        return;
+    }
+
+    // Check if the gender has been selected
+    if (!inputGender.value.trim()) {
+        alert('Please select your gender.');
+        inputGender.focus();
+        return;
+    }
+
+    // Check if an image has been uploaded
+    if (imageInput.files.length === 0) {
+        alert('Please select an image to upload.');
+        imageInput.focus();
+        return;
+    }
+
+    transitionToIntro(); // Transition the UI to the next step
+    sendImage();
 }
 
 function transitionToIntro() {
     document.getElementById("intro").style.display = "none";
-    document.getElementById("chat").style.display = "block";
+    document.getElementById("report").style.display = "block";
 }
 function backToMain() {
     // Correct the ID if it's 'messageArea' and not 'message-area'
@@ -63,47 +89,21 @@ function backToMain() {
     if (messageArea) {
         messageArea.innerHTML = '';
         displayMessage("====THIS IS DEMO====", "assistant");
-        document.getElementById("chat").style.display = "none";
+        document.getElementById("report").style.display = "none";
         document.getElementById("intro").style.display = "flex";
     } else {
         console.error('Message area element not found');
     }
 }
 
-function extractDetails(message) {
-    // Regex to capture insights
-    const insightsRegex = /(\d+\..*?)(?=\n\n|\n\d+|$)/gs;
-    const insightsMatches = [...message.matchAll(insightsRegex)].map(match => match[1].trim());
 
-    // Regex to capture perfume notes
-    const topNoteRegex = /TOP NOTE: "([^"]+)": (.*)/;
-    const middleNoteRegex = /MIDDLE NOTE: "([^"]+)": (.*)/;
-    const baseNoteRegex = /BASE NOTE: "([^"]+)": (.*)/;
-
-    const topNoteMatch = message.match(topNoteRegex);
-    const middleNoteMatch = message.match(middleNoteRegex);
-    const baseNoteMatch = message.match(baseNoteRegex);
-
-    console.log("Insights:");
-    insightsMatches.forEach((insight, index) => {
-        console.log(`this is Insight ${index + 1}: ${insight}`);
-    });
-
-    // Log each perfume note
-    if (topNoteMatch) {
-        console.log("Top Note:", `${topNoteMatch[1]} - ${topNoteMatch[2].trim()}`);
-    }
-    if (middleNoteMatch) {
-        console.log("Middle Note:", `${middleNoteMatch[1]} - ${middleNoteMatch[2].trim()}`);
-    }
-    if (baseNoteMatch) {
-        console.log("Base Note:", `${baseNoteMatch[1]} - ${baseNoteMatch[2].trim()}`);
-    }
-}
 
 
 
 async function sendImage() {
+    const birthInput = document.getElementById('date');
+    const inputName = document.getElementById('nameInput');
+    const inputGender = document.getElementById('gender');
     const imageInput = document.getElementById('imageInput');
     if (imageInput.files.length === 0) {
         alert('Please select an image to upload.');
@@ -131,11 +131,6 @@ async function sendImage() {
 
         const responseData = await response.json();
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
-
-
-        // if (filteredText.topNote) { // Check if topNote exists before displaying it
-        //     displayMessage(filteredText.topNote, "assistant");
-        // }
         displayMessage(responseData.message, "assistant");
         imageInput.value = '';
     } catch (error) {
