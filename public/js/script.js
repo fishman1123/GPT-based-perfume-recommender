@@ -70,6 +70,38 @@ function backToMain() {
     }
 }
 
+function extractDetails(message) {
+    // Regex to capture insights
+    const insightsRegex = /(\d+\..*?)(?=\n\n|\n\d+|$)/gs;
+    const insightsMatches = [...message.matchAll(insightsRegex)].map(match => match[1].trim());
+
+    // Regex to capture perfume notes
+    const topNoteRegex = /TOP NOTE: "([^"]+)": (.*)/;
+    const middleNoteRegex = /MIDDLE NOTE: "([^"]+)": (.*)/;
+    const baseNoteRegex = /BASE NOTE: "([^"]+)": (.*)/;
+
+    const topNoteMatch = message.match(topNoteRegex);
+    const middleNoteMatch = message.match(middleNoteRegex);
+    const baseNoteMatch = message.match(baseNoteRegex);
+
+    console.log("Insights:");
+    insightsMatches.forEach((insight, index) => {
+        console.log(`this is Insight ${index + 1}: ${insight}`);
+    });
+
+    // Log each perfume note
+    if (topNoteMatch) {
+        console.log("Top Note:", `${topNoteMatch[1]} - ${topNoteMatch[2].trim()}`);
+    }
+    if (middleNoteMatch) {
+        console.log("Middle Note:", `${middleNoteMatch[1]} - ${middleNoteMatch[2].trim()}`);
+    }
+    if (baseNoteMatch) {
+        console.log("Base Note:", `${baseNoteMatch[1]} - ${baseNoteMatch[2].trim()}`);
+    }
+}
+
+
 
 async function sendImage() {
     const imageInput = document.getElementById('imageInput');
@@ -98,11 +130,13 @@ async function sendImage() {
         }
 
         const responseData = await response.json();
-        console.log("this is the answer " + responseData.message); // Assuming the server responds with some JSON
+        console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
 
-        const filterText = responseData.message.replace(/(\n|\d+\.)\s*/g, "");
 
-        displayMessage(filterText, "assistant");
+        // if (filteredText.topNote) { // Check if topNote exists before displaying it
+        //     displayMessage(filteredText.topNote, "assistant");
+        // }
+        displayMessage(responseData.message, "assistant");
         imageInput.value = '';
     } catch (error) {
         console.error('Error:', error);

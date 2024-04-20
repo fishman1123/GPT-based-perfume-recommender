@@ -157,3 +157,7 @@ body {
 .padded-input {
     padding: 20px 0;
 }
+
+.text-input {
+    /*padding: 5px 0;*/
+}
