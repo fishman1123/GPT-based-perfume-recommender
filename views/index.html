@@ -10,7 +10,7 @@
 <body>
 <!--do not forget to change display to none when you test, this is temporal display-->
 
-<div id="intro" class="intro-container" style="display: none">
+<div id="intro" class="intro-container" style="display: flex">
     <h1>향수 마스터, 포터 선생</h1>
     <h2 style="font-weight: bold; font-style: italic;">" 향수 추천 ㄱ? "</h2>
     <img src="./images/harry.jpg" class="fixed-size-image" alt="Portrait of Harry">
@@ -33,21 +33,50 @@
 <div id="loading screen" style="display: none;">
 
 </div>
-<!--do not forget to change display to none when you test, this is temporal display-->
-<div id="report" class="chat-container" style="display: block;">
-    <div class="message-area" id="messageArea">
-        <!-- Messages will be displayed here -->
+<div class="report-base">
+    <!--do not forget to change display to none when you test, this is temporal display-->
+    <div id="report" class="chat-container" style="display: none;">
+        <div class="message-area" id="messageArea">
+            <!-- Messages will be displayed here -->
+            <div style="font-size: 20px; font-weight: bold">
+                PIXENT PROJECT
+            </div>
+            <div style="display: flex; justify-content: center" id="targetName">
+                <h1>_________님</h1>
+            </div>
 
-    </div>
-    <div id="loader" class="loader" style="display: none;">
-        <i class="fa-solid fa-gear fa-spin"></i>
-    </div>
-    <button id="backButton" onclick="backToMain()" class="button-59 button-adjust">메인으로 돌아가기</button>
-    <div class="input-area">
-        <input type="text" class="chat-input" id="chatInput" style="display: none;" placeholder="Type a message...">
-<!--        <button class="button-54" onclick="sendMessage()">Send</button>-->
-    </div>
-    <div>
+            <div style="margin-bottom: 20px" id="targetInsight">
+                <div style="font-size: 22px; padding-bottom: 20px">
+                    이미지 분석 결과
+                </div>
+            </div>
+            <div id="targetNote">
+                <div style="margin-bottom: 20px; font-size: 20px">
+                    <div style="padding-bottom: 30px; font-size: 22px">향료 분석 결과</div>
+                    <div style="padding-bottom: 30px" id="targetTopNote">
+                        TOP NOTE
+                    </div>
+                    <div style="padding-bottom: 30px" id="targetMiddleNote">
+                        MIDDLE NOTE
+                    </div>
+                    <div style="padding-bottom: 30px" id="targetBaseNote">
+                        BASE NOTE
+                    </div>
+                </div>
+                <div style="font-size: 22px">
+
+                </div>
+            </div>
+            <div id="targetNameRecommend" style="font-size: 22px"></div>
+        </div>
+        <div id="loader" class="loader" style="display: none;">
+            <i class="fa-solid fa-gear fa-spin"></i>
+        </div>
+        <button id="backButton" onclick="backToMain()" class="button-59 button-adjust">메인으로 돌아가기</button>
+        <div class="input-area">
+            <input type="text" class="chat-input" id="chatInput" style="display: none;" placeholder="Type a message...">
+            <!--        <button class="button-54" onclick="sendMessage()">Send</button>-->
+        </div>
 
     </div>
 </div>

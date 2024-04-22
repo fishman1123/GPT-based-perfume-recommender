@@ -1,0 +1,18 @@
+.report-background {
+    display: flex;
+    align-items: center;
+    max-width: 1980px;
+    justify-content: center;
+}
+
+
+.report-main {
+    margin-top: 40px;
+    display: flex;
+    width: 100%;
+    background-color: lightcoral;
+    align-items: center;
+    flex-direction: column;
+}
+
+

@@ -34,6 +34,7 @@ body {
     height: 100vh;
     margin: 0;
     font-family: "Open Sans", sans-serif;
+
 }
 .chat-container {
     width: 600px;
@@ -44,7 +45,7 @@ body {
     border: 1px solid #000000;
     padding: 10px;
     margin-bottom: 10px;
-    height: 900px;
+    height: 600px;
     overflow-y: auto;
 }
 .input-area {
@@ -66,8 +67,8 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 1000px;
-    height: 1000px;
+    /*max-width: 1000px;*/
+    /*height: 1000px;*/
 }
 .intro-container img {
     width: 50%;
@@ -162,3 +163,12 @@ body {
 .text-input {
     /*padding: 5px 0;*/
 }
+
+.report-base {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    height: 800px;
+}
+
+

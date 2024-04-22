@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', (event) => {
     // Optionally, display an initial message from Professor Fish if needed
-    displayMessage("====THIS IS DEMO====", "assistant");
+    // displayMessage("=====================", "assistant");
 
     // Listen for Enter key presses on the chat input field
     document.getElementById('chatInput').addEventListener('keypress', function(e) {
@@ -85,16 +85,18 @@ function transitionToIntro() {
 }
 function backToMain() {
     // Correct the ID if it's 'messageArea' and not 'message-area'
-    const messageArea = document.getElementById('messageArea');
-    if (messageArea) {
+    const targetArea = document.getElementById('targetTopNote');
+    if (targetArea) {
         messageArea.innerHTML = '';
-        displayMessage("====THIS IS DEMO====", "assistant");
         document.getElementById("report").style.display = "none";
         document.getElementById("intro").style.display = "flex";
     } else {
         console.error('Message area element not found');
     }
 }
+
+
+
 
 
 
@@ -130,8 +132,20 @@ async function sendImage() {
         }
 
         const responseData = await response.json();
+        console.log("checking insight :" + responseData.message.insights);
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
-        displayMessage(responseData.message, "assistant");
+        // displayMessage(responseData.message.insights, "assistant");
+        // displayMessage(responseData.message.topNote, "assistant");
+        // displayMessage(responseData.message.middleNote, "assistant");
+        // displayMessage(responseData.message.baseNote, "assistant");
+        // displayReport(responseData, "testing")
+        // displayReport(message, sender, targetID)
+        displayReport(responseData.message.insights, "testing", 'targetInsight');
+        displayReport(responseData.message.topNote, "testing", 'targetTopNote');
+        displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
+        displayReport(responseData.message.baseNote, "testing", 'targetBaseNote');
+        displayReport(responseData.message.nameRecommendation, "testing", 'targetNameRecommend');
+
         imageInput.value = '';
     } catch (error) {
         console.error('Error:', error);
@@ -142,14 +156,6 @@ async function sendImage() {
 
     }
 }
-
-
-
-
-
-
-
-
 
 
 async function sendMessage() {
@@ -200,6 +206,18 @@ function displayMessage(message, sender) {
     messageElement.textContent = message;
     messageElement.className = sender;
     messageElement.style.marginBottom = '5px'; // Add margin between messages
+    messageElement.style.fontSize = '30px';
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom to show the latest message
+}
+
+function displayReport(message, sender, targetID) {
+    const targetArea = document.getElementById(targetID);
+    const messageElement = document.createElement('div');
+    messageElement.textContent = message;
+    messageElement.className = sender;
+    messageElement.style.marginBottom = '5px'; // Add margin between messages
+    messageElement.style.fontSize = '16px';
+    targetArea.appendChild(messageElement);
+    targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
 }

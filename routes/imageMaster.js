@@ -177,7 +177,7 @@ async function imageToGpt(file) {
             console.log("this is Base note: " + filteredList.baseNote);
             console.log("this is Perfume Name: " + filteredList.nameRecommendation);
 
-            return content;
+            return filteredList;
         } catch (error) {
             console.error("Error processing the file:", error);
         }
