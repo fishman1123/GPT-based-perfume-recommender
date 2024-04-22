@@ -19,11 +19,6 @@ let assistantMessages = [];
 // Variable for start function
 let myDateTime = '';
 
-
-
-
-
-
 function start() {
     const date = document.getElementById('date').value;
     const hour = document.getElementById('hour').value;
@@ -54,7 +49,7 @@ function imageUpload() {
         return;
     }
 
-    // Check if the birth date input is empty
+    // Check if the birthdate input is empty
     if (!birthInput.value.trim()) {
         alert('Please enter your birth date.');
         birthInput.focus();
@@ -86,6 +81,7 @@ function transitionToIntro() {
 function backToMain() {
     // Correct the ID if it's 'messageArea' and not 'message-area'
     const targetArea = document.getElementById('targetTopNote');
+    cleaningPage(document.getElementById('userName'));
     cleaningPage(document.getElementById('targetInsight'));
     cleaningPage(document.getElementById('targetTopNote'));
     cleaningPage(document.getElementById('targetMiddleNote'));
@@ -101,6 +97,11 @@ function backToMain() {
     resetPage();
     document.getElementById("report").style.display = "none";
     document.getElementById("intro").style.display = "flex";
+}
+
+function displayUserName(name) {
+    const userNameElement = document.getElementById('userName');
+    userNameElement.textContent = name; // Safely add text content
 }
 
 function cleaningPage(tagId) {
@@ -122,13 +123,6 @@ function resetPage() {
     baseArea.textContent = 'BASE NOTE';
 
 }
-
-
-
-
-
-
-
 
 async function sendImage() {
     const birthInput = document.getElementById('date');
@@ -164,6 +158,8 @@ async function sendImage() {
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
         // displayMessage(responseData.message.insights, "assistant");
         // displayReport(message, sender, targetID)
+        console.log("target input name" + inputName.value);
+        displayUserName(inputName.value);
         displayReport(responseData.message.insights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
         displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
@@ -244,4 +240,5 @@ function displayReport(message, sender, targetID, ) {
     messageElement.style.fontSize = '16px';
     targetArea.appendChild(messageElement);
     targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
+
 }
