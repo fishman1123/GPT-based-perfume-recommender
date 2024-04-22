@@ -167,6 +167,7 @@ body {
 .report-base {
     margin-top: 20px;
     margin-bottom: 20px;
+    width: 100%;
     max-width: 800px;
     height: 800px;
 }

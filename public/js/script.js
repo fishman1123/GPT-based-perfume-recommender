@@ -69,9 +69,9 @@ function imageUpload() {
     }
 
     // Check if an image has been uploaded
-    if (imageInput.files.length === 0) {
+    if (imageCheck.files.length === 0) {
         alert('Please select an image to upload.');
-        imageInput.focus();
+        imageCheck.focus();
         return;
     }
 
@@ -86,13 +86,41 @@ function transitionToIntro() {
 function backToMain() {
     // Correct the ID if it's 'messageArea' and not 'message-area'
     const targetArea = document.getElementById('targetTopNote');
-    if (targetArea) {
-        messageArea.innerHTML = '';
-        document.getElementById("report").style.display = "none";
-        document.getElementById("intro").style.display = "flex";
+    cleaningPage(document.getElementById('targetInsight'));
+    cleaningPage(document.getElementById('targetTopNote'));
+    cleaningPage(document.getElementById('targetMiddleNote'));
+    cleaningPage(document.getElementById('targetBaseNote'));
+    cleaningPage(document.getElementById('targetNameRecommend'));
+    // if (targetArea) {
+    //     target.innerHTML = '';
+    //     document.getElementById("report").style.display = "none";
+    //     document.getElementById("intro").style.display = "flex";
+    // } else {
+    //     console.error('Message area element not found');
+    // }
+    resetPage();
+    document.getElementById("report").style.display = "none";
+    document.getElementById("intro").style.display = "flex";
+}
+
+function cleaningPage(tagId) {
+    if (tagId) {
+        tagId.innerHTML = '';
+
     } else {
         console.error('Message area element not found');
     }
+}
+function resetPage() {
+    const insightArea = document.getElementById('targetInsight');
+    insightArea.textContent = '이미지 분석 결과';
+    const topArea = document.getElementById('targetTopNote');
+    topArea.textContent = 'TOP NOTE';
+    const middleArea = document.getElementById('targetMiddleNote');
+    middleArea.textContent = 'MIDDLE NOTE';
+    const baseArea = document.getElementById('targetBaseNote');
+    baseArea.textContent = 'BASE NOTE';
+
 }
 
 
@@ -135,10 +163,6 @@ async function sendImage() {
         console.log("checking insight :" + responseData.message.insights);
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
         // displayMessage(responseData.message.insights, "assistant");
-        // displayMessage(responseData.message.topNote, "assistant");
-        // displayMessage(responseData.message.middleNote, "assistant");
-        // displayMessage(responseData.message.baseNote, "assistant");
-        // displayReport(responseData, "testing")
         // displayReport(message, sender, targetID)
         displayReport(responseData.message.insights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
@@ -211,7 +235,7 @@ function displayMessage(message, sender) {
     messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom to show the latest message
 }
 
-function displayReport(message, sender, targetID) {
+function displayReport(message, sender, targetID, ) {
     const targetArea = document.getElementById(targetID);
     const messageElement = document.createElement('div');
     messageElement.textContent = message;
