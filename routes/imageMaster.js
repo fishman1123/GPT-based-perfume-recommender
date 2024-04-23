@@ -158,7 +158,7 @@ async function imageToGpt(file) {
                     {
                         role: "system",
                         content: [
-                            { type: "text", text: "Here is the image for analysis. you must provide 5 insights about how the person looks politely and perfume recommendations. you must type numbering with word insight when you write insights. add colon on each insight before explanation, add space before new line for better regex and capitalize all letter for top note, middle note base note to regex easily. once you finish base note explanation. give perfume name recommendation in the end and write checkcheck for regex" },
+                            { type: "text", text: "Here is the image for analysis. you must provide 5 insights about how the person looks politely and perfume recommendations. you must type numbering with word insight when you write insights. add colon on each insight before explanation, add space before new line for better regex and capitalize all letter for top note, middle note base note to regex easily. once you finish base note explanation. give perfume name recommendation. say Perfume Recommendation: before you share perfume name and give explanation about reason why you picked the name like that use those notes you picked. write checkcheck for regex" },
                             { type: "image_url", image_url: { "url": encodedImage },
                             },
                         ],

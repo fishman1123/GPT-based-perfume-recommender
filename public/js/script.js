@@ -70,12 +70,12 @@ function imageUpload() {
         return;
     }
 
-    transitionToIntro(); // Transition the UI to the next step
+    // transitionToIntro(); // Transition the UI to the next step
+    document.getElementById("intro").style.display = "none";
     sendImage();
 }
 
 function transitionToIntro() {
-    document.getElementById("intro").style.display = "none";
     document.getElementById("report").style.display = "block";
 }
 function backToMain() {
@@ -138,7 +138,7 @@ async function sendImage() {
     const formData = new FormData();
     formData.append('image', imageFile); // Append the file
 
-    document.getElementById('loader').style.display = "inline-block"; // Show loading icon
+    document.getElementById('loader').style.display = "flex"; // Show loading icon
     document.getElementById('backButton').style.display = "none"; // Show loading icon
 
 
@@ -159,6 +159,7 @@ async function sendImage() {
         // displayMessage(responseData.message.insights, "assistant");
         // displayReport(message, sender, targetID)
         console.log("target input name" + inputName.value);
+        transitionToIntro();
         displayUserName(inputName.value);
         displayReport(responseData.message.insights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
@@ -186,12 +187,12 @@ async function sendMessage() {
     displayMessage(`You: ${message}`, "user");
     userMessages.push(message);
 
-    document.getElementById('loader').style.display = "inline-block"; // Show loading icon
+    document.getElementById('loader').style.display = "flex"; // Show loading icon
 
     try {
         const response = await fetch('http://localhost:3003/imageMaster/image', {
-            //https://o4mpwjruijpd3eu6gv7f2o7xmi0wdacz.lambda-url.ap-northeast-2.on.aws/professorFish //for serverless
-            //http://localhost:3003/professorFish //for local test
+
+            //http://localhost:3003/imageMaster/image //for local test
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -232,6 +233,7 @@ function displayMessage(message, sender) {
 }
 
 function displayReport(message, sender, targetID, ) {
+
     const targetArea = document.getElementById(targetID);
     const messageElement = document.createElement('div');
     messageElement.textContent = message;
