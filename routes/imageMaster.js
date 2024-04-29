@@ -50,11 +50,16 @@ router.post("/image", upload.single('image'), async (req, res) => {
     try {
         // Check if an image was uploaded
         if (req.file) {
-            console.log('Uploaded file:', req.file);
+            // console.log('Uploaded file:', req.file.body.);
             // Process the file or do additional work here
             // For example, you might want to save file information in the database
-            const imageEvaluation = await imageToGpt(req.file);
+            const userBirthDate = req.body.birthDate;
+            const userGender = req.body.gender;
+            const imageEvaluation = await imageToGpt(req.file , userBirthDate, userGender);
             // console.log(imageEvaluation);
+
+            console.log("heyhey: " + userBirthDate);
+            console.log(userGender);
             res.json({ message: imageEvaluation });
         } else {
             res.status(400).json({ error: "No image uploaded." });
@@ -125,9 +130,11 @@ function extractInsightsAndNotes(content) {
 }
 
 
-async function imageToGpt(file) {
+async function imageToGpt(file, gender, birthdate) {
     console.log(`Uploaded file: ${file}`);
     const filePath = path.join(__dirname, '../public/images/upload', file.filename);
+    const userGender = gender;
+    const userBirthDate = birthdate;
 
     // Function to be called when the file exists
     async function imageConvert() {
@@ -154,7 +161,10 @@ async function imageToGpt(file) {
                     // { "role": "assistant", "content": `ok, I will pick one from the list for the middle note` },
                     // { "role": "user", "content": `here's base note list. “Doson”: “African Orange, Rose, Iris / Tuberose, Pink Pepper / Benzoin, Musk”,“Blanche”: “Aldehyde, Rose / Peony, Violet / Musk, Sandalwood”,“White Suede”: “Tea / Lily of the Valley, Saffron, Rose / Suede, Musk, Sandalwood, Amber”,“Fleur De Peau”: “Bergamot, Aldehyde, Pink Pepper / Iris, Turkish Rose / Musk, Ambrette, Ambergris, Sandalwood, Amberwood, Suede Leather”,“Musc ravageur”: “Bergamot, Mandarin, Lavender / Amber, Vanilla / Sandalwood, Musk”,“Tamdao”: “Silver Plum Blossom, Rose / Juniper, Sandalwood / Brazilian Rosewood, Amber, White Musk”,“Oud Wood”: “Chinese Pepper, Rosewood, Cardamom / Oud Wood, Sandalwood, Vetiver / Tonka Bean, Vanilla, Amber”,“Fucking Fabulous”: “Lavender, Clary Sage / Suede Leather, Almond, Vanilla / Cinnamon, Tonka Bean, White Wood, Amber, Cashmeran”,“Mojave Ghost”: “Jamaican Nesberry, Ambrette / Magnolia, Violet, Sandalwood, Cinnamon / Cedarwood, Crispy Amber, Chantilly Musk”,“Nutmeg & Ginger”: “Ginger / Nutmeg / Sandalwood”. you need to pick one for the base note`},
                     // { "role": "assistant", "content": `ok, I will pick one from the list for the base note` },
+
                     { "role": "system", "content": "안녕하세요👋, 저는 당신의 인공지능 조향사입니다! 저는 인물의 이미지를 분석하여 인물에게 어울리는 맞춤형 향수를 추천해 드립니다. 추천 받고자 하는 분의 사진을 업로드 해 주시면 제가 분석을 시작하겠습니다." },
+                    { "role": "user", "content": `고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.` },
+                    { "role": "assistant", "content": `알겠습니다. 고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.` },
                     { "role": "user", "content": `당신의 첫번째 임무는 고객이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
                     { "role": "assistant", "content": `알겠습니다. 저의 첫번째 임무는 고객이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
                     { "role": "user", "content": `당신의 두번째 임무는 첫번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 당신은 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 당신은 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명해야 합니다.` },
@@ -173,7 +183,7 @@ async function imageToGpt(file) {
                     {
                         role: "system",
                         content: [
-                            { type: "text", text: "여기 분석할 사진이 있습니다. 당신은 사진에서 보여지는 인물을 기반으로 분석하여 5가지 특징을 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 탑 노트 미들노트 베이스 노트에 대한 정보를 제공할때 'TOP NOTE:', 'MIDDLE NOTE:', 'BASE NOTE:' 양식을 지키셔야 합니다. 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'perfume name recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천에 대한 설명을 제공해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 모든 분석은 한글로 작성하셔야 합니다." },
+                            { type: "text", text: "여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 인물을 기반으로 인물의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 5가지 특징을 작성해야 합니다. 5가지 특징은 300자 이상이여야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE:', 'MIDDLE NOTE:', 'BASE NOTE:' 양식을 지키셔야 합니다. 노트 추천은 각각 400자 이상이여야 합니다. 노트 추천을 할때는 설명도 추가해야 합니다. 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천에 대한 설명을 제공해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 모든 분석은 한글로 작성하셔야 합니다." },
                             { type: "image_url", image_url: { "url": encodedImage },
                             },
                         ],
@@ -191,6 +201,7 @@ async function imageToGpt(file) {
             console.log("this is Middle note: " + filteredList.middleNote);
             console.log("this is Base note: " + filteredList.baseNote);
             console.log("this is Perfume Name: " + filteredList.nameRecommendation);
+            console.log()
 
             return filteredList;
         } catch (error) {

@@ -129,6 +129,7 @@ async function sendImage() {
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
     const imageInput = document.getElementById('imageInput');
+    console.log("can you get this?: " + birthInput.value);
     if (imageInput.files.length === 0) {
         alert('Please select an image to upload.');
         return;
@@ -137,6 +138,11 @@ async function sendImage() {
 
     const formData = new FormData();
     formData.append('image', imageFile); // Append the file
+    formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
+    formData.append('birthDate', birthInput.value);
+    // const bbb = formData.get('birthName').value;
+    // console.log("check this out brother: " + bbb);
+    console.log("hello there" + document.getElementById('date').value);
 
     document.getElementById('loader').style.display = "flex"; // Show loading icon
     document.getElementById('backButton').style.display = "none"; // Show loading icon
