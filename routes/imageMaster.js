@@ -45,7 +45,6 @@ const openai = new OpenAI({
 //dummy code
 
 
-
 router.post("/image", upload.single('image'), async (req, res) => {
     try {
         // Check if an image was uploaded
@@ -55,6 +54,7 @@ router.post("/image", upload.single('image'), async (req, res) => {
             // For example, you might want to save file information in the database
             const userBirthDate = req.body.birthDate;
             const userGender = req.body.gender;
+
             const imageEvaluation = await imageToGpt(req.file , userBirthDate, userGender);
             // console.log(imageEvaluation);
 
@@ -140,14 +140,15 @@ async function imageToGpt(file, gender, birthdate) {
     const userBirthDate = birthdate;
 
     // Function to be called when the file exists
-    async function enhanceResponse(insight) {
-        console.log("target response: " + insight);
+    async function enhanceResponse(insights, topNote, middleNote, baseNote) {
+        console.log("target response: " + insights);
         try {
+            const enhancingPrompt = ``
             const secondResponse = await openai.chat.completions.create({
                 model: "gpt-3.5-turbo-0125",
                 messages: [
                     { "role": "system", "content": "안녕하세요👋, 저는 당신의 인공지능 분석가입니다! 저는 인물에게 어울리는 맞춤형 향수 분석 문장을 기반으로 더 자세한 설명을 해드리겠습니다." },
-                    { "role": "user", "content": `고객에 대한 향수 분석내용은 ${insight}입니다. 해당 내용을 450자 이상 작성하여 더 상세하게 설명하세요.` },
+                    { "role": "user", "content": `고객에 대한 향수 분석내용은 ${insight}입니다. 해당 내용을 450자 이상 작성하여 더 상세하게 설명하세요. 문장 형식은 유지해야 합니다.` },
                 ],
                 max_tokens: 1024,
             });
@@ -188,11 +189,11 @@ async function imageToGpt(file, gender, birthdate) {
                     { "role": "assistant", "content": `알겠습니다. 저의 첫번째 임무는 고객이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
                     { "role": "user", "content": `당신의 두번째 임무는 첫번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 당신은 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 당신은 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명해야 합니다.` },
                     { "role": "assistant", "content": `알겠습니다. 저의 두번째 임무는 첫번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 저는 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 저는 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명할 것입니다.` },
-                    { "role": "user", "content": `다음은 'Top Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 01": "블랙베리","AC'SCENT 02": "청사과, 작약, 블루베리, 난초, 바닐라, 무화과, 머스크","AC'SCENT 03": "베르가못, 스트로베리, 라즈베리, 오렌지플라워 앱솔루트, 자스민 앱솔루트, 화이트 피오니, 파츌리, 화이트 머스크","AC'SCENT 04": "베르가못, 라벤더, 로즈마리, 레몬, 만다린 오렌지, 아프리카 오렌지, 네롤리, 자스민, 엠버, 암브레트","AC'SCENT 05": "비터오렌지, 오렌지플라워, 주니퍼베리, 파츌리, 안젤리카","AC'SCENT 06": "레몬, 나시블라썸(배꽃), 화이트머스크","AC'SCENT 07": "베르가못, 블랙커먼트, 다마스커스 로즈, 센티폴리아 장미 에센스, 제라늄, 시더우드","AC'SCENT 08": "베르가못, 유칼립투스, 머스크, 튜베로즈 앱솔루트, 자스민 앱솔루트, 오렌지블라썸 앱솔루트","AC'SCENT 09": "베르가못, 오렌지, 오렌지블라썸, 자스민, 로즈, 일랑일랑, 파츌리, 통카콩, 바닐라, 머스크","AC'SCENT 10": "프리지아, 시클라멘, 루바브, 튤립, 베티버, 블론즈 우드".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.` },
+                    { "role": "user", "content": `다음은 'Top Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 01": "블랙베리","AC'SCENT 02": "청사과","AC'SCENT 03": "딸기","AC'SCENT 04": "만다린 오렌지","AC'SCENT 05": "오렌지 꽃","AC'SCENT 06": "배꽃","AC'SCENT 07": "다마스커스 장미","AC'SCENT 08": "자스민","AC'SCENT 09": "로즈","AC'SCENT 10": "프리지아".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.` },
                     { "role": "assistant", "content": `알겠습니다. 저는 'Top Note'의 리스트 중에서 단 하나의 향 오일만을 선택하겠습니다.` },
-                    { "role": "user", "content": `다음은 'Middle Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 11": "만다린, 바질, 앰버우드","AC'SCENT 12": "장미 꽃잎, 핑크 프리지아, 백합, 목련, 자스민","AC'SCENT 13": "유자, 시트러스, 로즈마리, 바질, 베티버, 엠버, 시더우드","AC'SCENT 14": "민트 잎, 자스민, 마테 잎","AC'SCENT 15": "유칼립투스","AC'SCENT 16": "삼나무, 카디멈, 바이올렛, 가죽, 아이리스, 앰버, 버지니아 시더","AC'SCENT 17": "베르가못, 레몬, 페퍼, 주니퍼베리, 인센스, 솔잎, 오리스, 앰버, 바닐라, 샌달우드","AC'SCENT 18": "베라그못, 민트, 라벤더, 파인애플, 제라늄, 통카콩, 앰버우드, 샌달우드","AC'SCENT 19": "암브레트, 바다 소금, 세이지","AC'SCENT 20": "타임, 핑크페퍼, 사이프러스, 가죽, 제라늄, 베티버, 프랑킨센스, 시더". 당신은 위의 'Middle Note' 중 단 하나의 향 오일을 선택해야 합니다.` },
+                    { "role": "user", "content": `다음은 'Middle Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 11": "바질","AC'SCENT 12": "백합","AC'SCENT 13": "베티버","AC'SCENT 14": "민트","AC'SCENT 15": "유칼립투스","AC'SCENT 16": "삼나무","AC'SCENT 17": "인센스","AC'SCENT 18": "제라늄","AC'SCENT 19": "바다소금","AC'SCENT 20": "상록수". 당신은 위의 'Middle Note' 중 단 하나의 향 오일을 선택해야 합니다.` },
                     { "role": "assistant", "content": `알겠습니다. 저는 'Middle Note'의 리스트 중에서 단 하나의 향 오일만을 선택하겠습니다.` },
-                    { "role": "user", "content": `다음은 'Base Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 21": "아프리카 오렌지, 로즈, 아이리스, 투베로즈, 핑크페퍼, 벤조인, 머스크","AC'SCENT 22": "알데하이드, 로즈, 모란, 바이올렛, 머스크, 샌달우드","AC'SCENT 23": "티, 은방울 꽃, 샤프론, 로즈, 가죽, 머스크, 샌달우드, 앰버","AC'SCENT 24": "베르가못, 알데하이드, 핑크페퍼, 아이리스, 터키쉬 로즈, 머스크, 암브레트, 앰버그리스, 샌달우드, 앰버우드, 가죽","AC'SCENT 25": "베르가못, 만다린, 라벤더, 호박, 바닐라, 샌달우드, 머스크","AC'SCENT 26": "은매화, 장미, 향나무, 샌달우드, 브라질리안 로즈우드, 앰버, 화이트머스크","AC'SCENT 27": "차이니즈페퍼, 로즈우드, 카디멈, 오드우드, 샌달우드, 베티버, 통카콩, 바닐라, 앰버","AC'SCENT 28": "라벤더, 클라리 세이지, 가죽, 아몬드, 바닐라, 계피, 통카콩, 화이트우드, 앰버, 캐쉬미란","AC'SCENT 29": "자메이칸 네스베리, 암브레트, 매그놀리아, 바이올렛, 샌달우드, 계피, 시더우드, 크리스피앰버, 찬탈리머스크","AC'SCENT 30": "진저, 너트맥, 샌달우드".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.`},
+                    { "role": "user", "content": `다음은 'Base Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 21": "머스크","AC'SCENT 22": "샌달우드","AC'SCENT 23": "은방울 꽃","AC'SCENT 24": "앰버우드","AC'SCENT 25": "바닐라","AC'SCENT 26": "화이트머스크","AC'SCENT 27": "로즈우드","AC'SCENT 28": "레더","AC'SCENT 29": "계피","AC'SCENT 30": "생강".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.`},
                     { "role": "assistant", "content": `알겠습니다. 저는 'Base Note'의 리스트 중에서 단 하나의 향 오일만을 선택하겠습니다.` },
                     { "role": "user", "content": `당신의 세번째 임무는 고객에게 추천한 맞춤형 향수에 대한 창의적인 이름을 짓는 것입니다.` },
                     { "role": "assistant", "content": `알겠습니다. 저는 고객에게 추천한 맞춤형 향수에 대한 창의적인 이름을 짓겠습니다.` },
@@ -222,8 +223,9 @@ async function imageToGpt(file, gender, birthdate) {
             console.log("this is Middle note: " + filteredList.middleNote);
             console.log("this is Base note: " + filteredList.baseNote);
             console.log("this is Perfume Name: " + filteredList.nameRecommendation);
-            // return await enhanceResponse(filteredList.combinedInsights);
-            return filteredList;
+
+            return await enhanceResponse(filteredList.topNote);
+            // return filteredList;
         } catch (error) {
             console.error("Error processing the file:", error);
         }
