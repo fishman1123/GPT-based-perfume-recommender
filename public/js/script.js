@@ -81,7 +81,7 @@ function transitionToIntro() {
 function backToMain() {
     // Correct the ID if it's 'messageArea' and not 'message-area'
     const targetArea = document.getElementById('targetTopNote');
-    cleaningPage(document.getElementById('userName'));
+    // cleaningPage(document.getElementById('userName'));
     cleaningPage(document.getElementById('targetInsight'));
     cleaningPage(document.getElementById('targetTopNote'));
     cleaningPage(document.getElementById('targetMiddleNote'));
@@ -113,8 +113,8 @@ function cleaningPage(tagId) {
     }
 }
 function resetPage() {
-    const insightArea = document.getElementById('targetInsight');
-    insightArea.textContent = '이미지 분석 결과';
+    // const insightArea = document.getElementById('targetInsight');
+    // insightArea.textContent = '이미지 분석 결과';
     const topArea = document.getElementById('targetTopNote');
     topArea.textContent = 'TOP NOTE';
     const middleArea = document.getElementById('targetMiddleNote');
@@ -160,14 +160,16 @@ async function sendImage() {
         }
 
         const responseData = await response.json();
-        console.log("checking insight :" + responseData.message.insights);
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
         // displayMessage(responseData.message.insights, "assistant");
         // displayReport(message, sender, targetID)
         console.log("target input name" + inputName.value);
         transitionToIntro();
-        displayUserName(inputName.value);
-        displayReport(responseData.message.insights, "testing", 'targetInsight');
+        // const targetInsight = responseData.message.insights;
+        // const filteredInsight = targetInsight.replace(/\.,(?=[^ ]|$)/g, '.');
+        console.log('hello' + responseData.message.combinedInsights);
+        // displayUserName(inputName.value);
+        displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
         displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
         displayReport(responseData.message.baseNote, "testing", 'targetBaseNote');
@@ -238,6 +240,9 @@ function displayMessage(message, sender) {
     messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom to show the latest message
 }
 
+
+
+
 function displayReport(message, sender, targetID, ) {
 
     const targetArea = document.getElementById(targetID);
@@ -245,7 +250,8 @@ function displayReport(message, sender, targetID, ) {
     messageElement.textContent = message;
     messageElement.className = sender;
     messageElement.style.marginBottom = '5px'; // Add margin between messages
-    messageElement.style.fontSize = '16px';
+    // messageElement.style.marginTop = '20px';
+    messageElement.style.fontSize = targetID === 'targetNameRecommend' ? '40px' : '16px';
     targetArea.appendChild(messageElement);
     targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
 

@@ -9,8 +9,8 @@
 </head>
 <body>
 <!--do not forget to change display to none when you test, this is temporal display-->
-
-<div id="intro" class="intro-container" style="display: flex">
+<!--change to flex to roll back-->
+<div id="intro" class="intro-container" style="display: none">
     <h1>향수 마스터, 포터 선생</h1>
     <h2 style="font-weight: bold; font-style: italic;">" 향수 추천 ㄱ? "</h2>
     <img src="./images/harry.jpg" class="fixed-size-image" alt="Portrait of Harry">
@@ -35,36 +35,68 @@
 <!--</div>-->
 <div class="report-base">
     <!--do not forget to change display to none when you test, this is temporal display-->
-    <div id="report" class="chat-container" style="display: none;">
+    <div id="report" class="chat-container" style="display: block;">
         <div class="message-area" id="messageArea">
             <!-- Messages will be displayed here -->
-            <div style="font-size: 20px; font-weight: bold">
-                PIXENT PROJECT
+<!--            <div style="display: flex; justify-content: center" id="targetName">-->
+<!--                <h1><span id="userName"></span>님</h1>-->
+<!--            </div>-->
+            <div style="display: flex; justify-content: center">
+                <div class="title-container" >
+                    <div style="font-size: 22px; font-weight: bold">
+                        SCENT NAME
+                    </div>
+                </div>
             </div>
-            <div style="display: flex; justify-content: center" id="targetName">
-                <h1><span id="userName"></span>님</h1>
+
+            <div style="display: flex; justify-content: center">
+                <div class="recommend-name-container">
+                    <div id="targetNameRecommend" style="font-size: 30px"></div>
+                </div>
             </div>
-            <div style="margin-bottom: 20px; font-size: 22px; padding-bottom: 20px" id="targetInsight">
-                이미지 분석 결과
+
+
+            <div class="report-container" style="padding-bottom: 20px">
+                <div class="title-container">
+                    <div style="font-size: 22px; font-weight: bold">
+                        이미지 분석 결과
+                    </div>
+                    <div style="margin-left: 5px">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
+                            <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="note-container" id="targetInsight"></div>
             </div>
-            <div id="targetNote">
+
+
+            <div class="report-container" id="targetNote">
                 <div style="margin-bottom: 20px; font-size: 20px">
-                    <div style="padding-bottom: 30px; font-size: 22px">향료 분석 결과</div>
-                    <div style="padding-bottom: 30px" id="targetTopNote">
+                    <div class="title-container">
+                        <div style="font-size: 22px; font-weight: bold ">향료 분석 결과</div>
+                        <div style="margin-left: 5px">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
+                                <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
+                            </svg>
+                        </div>
+
+                    </div>
+
+                    <div class="note-container" id="targetTopNote">
                         TOP NOTE
                     </div>
-                    <div style="padding-bottom: 30px" id="targetMiddleNote">
+                    <div class="note-container" style="padding-bottom: 30px" id="targetMiddleNote">
                         MIDDLE NOTE
                     </div>
-                    <div style="padding-bottom: 30px" id="targetBaseNote">
+                    <div class="note-container" style="padding-bottom: 30px" id="targetBaseNote">
                         BASE NOTE
                     </div>
                 </div>
-                <div style="font-size: 22px">
-                    센트퍼퓸 명
-                </div>
+
             </div>
-            <div id="targetNameRecommend" style="font-size: 22px"></div>
+            <div class="bottom-title-container">AC'SCENT</div>
         </div>
 <!--        change this display to none before you actually post it-->
 <!--        this change to inline-block for testing-->

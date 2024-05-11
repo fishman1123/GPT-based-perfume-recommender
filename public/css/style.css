@@ -45,8 +45,9 @@ body {
     border: 1px solid #000000;
     padding: 10px;
     margin-bottom: 10px;
-    height: 600px;
+    /*height: 600px;*/
     overflow-y: auto;
+    background-color: cornsilk;
 }
 .input-area {
     display: flex;
@@ -169,7 +170,7 @@ body {
     margin-bottom: 20px;
     width: 100%;
     max-width: 800px;
-    height: 800px;
+    height: 900px;
 }
 
 /*loading*/
@@ -379,3 +380,38 @@ body {
     100%{width:100%}
 }
 
+.title-container {
+    border: solid 4px black;
+    border-radius:30px;
+    padding: 6px 20px 0px;
+
+    display: inline-flex;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.report-container {
+    border: solid 1px black;
+    background-color: white;
+    border-radius:40px;
+    padding-bottom: 30px;
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.note-container {
+    padding: 20px 20px 30px 40px;
+}
+.bottom-title-container {
+    font-size: 20px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+.recommend-name-container {
+    font-size: 30px;
+    display: inline-flex;
+    justify-content: center;
+    text-align: center;
+}
