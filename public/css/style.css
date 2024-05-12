@@ -170,6 +170,7 @@ body {
     margin-bottom: 20px;
     width: 100%;
     max-width: 800px;
+    min-width: 780px;
     height: 900px;
 }
 
@@ -386,7 +387,7 @@ body {
     padding: 6px 20px 0px;
 
     display: inline-flex;
-    margin-left: 20px;
+    margin-left: 30px;
     margin-top: 20px;
     margin-bottom: 10px;
 }
@@ -395,15 +396,20 @@ body {
     border: solid 1px black;
     background-color: white;
     border-radius:40px;
-    padding-bottom: 30px;
+    /*padding-bottom: 30px;*/
     margin-top: 20px;
     margin-left: 10px;
     margin-right: 10px;
 }
 .note-container {
-    padding: 20px 20px 30px 40px;
+    padding: 20px 40px 10px 40px;
+}
+.second-note-container {
+    padding-left: 40px;
+    width: 100%;
 }
 .bottom-title-container {
+    font-family: "Times New Roman", Times, serif;
     font-size: 20px;
     text-align: center;
     padding-top: 20px;
@@ -415,3 +421,58 @@ body {
     justify-content: center;
     text-align: center;
 }
+.image-box {
+    width: 330px;
+    height: 200px;
+    margin-left: 40px;
+    margin-bottom: 10px;
+}
+.reverse-image-box {
+    width: 330px;
+    height: 200px;
+    margin-right: 40px;
+    margin-bottom: 10px;
+}
+
+@font-face {
+    font-family: 'BM Dohyeon';
+    src: url("../assets/BMDOHYEON_ttf.ttf") format('truetype');
+}
+@font-face {
+    font-family: 'BM Hanna Pro';
+    src: url("../assets/BMHANNAPro.ttf") format('truetype');
+}
+@font-face {
+    font-family: 'BM Hanna Air';
+    src: url("../assets/BMHANNAAir_ttf.ttf") format('truetype');
+}
+body {
+    font-family: "BM Hanna Air", sans-serif;
+}
+
+
+/* For devices with a width between 376px and 575px */
+@media only screen and (min-width: 376px) and (max-width: 575px) {
+    /* Add your CSS rules here */
+}
+
+/* For devices with a width between 576px and 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+    /* Add your CSS rules here */
+}
+
+/* For devices with a width of 768px or more */
+@media only screen and (min-width: 768px) {
+    /* Add your CSS rules here */
+}
+
+/* For devices with a width of 992px or more */
+@media only screen and (min-width: 992px) {
+    /* Add your CSS rules here */
+}
+
+/* For devices with a width of 1200px or more */
+@media only screen and (min-width: 1200px) {
+    /* Add your CSS rules here */
+}
+

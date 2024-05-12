@@ -10,6 +10,9 @@
 <body>
 <!--do not forget to change display to none when you test, this is temporal display-->
 <!--change to flex to roll back-->
+<div>
+
+
 <div id="intro" class="intro-container" style="display: none">
     <h1>향수 마스터, 포터 선생</h1>
     <h2 style="font-weight: bold; font-style: italic;">" 향수 추천 ㄱ? "</h2>
@@ -42,8 +45,8 @@
 <!--                <h1><span id="userName"></span>님</h1>-->
 <!--            </div>-->
             <div style="display: flex; justify-content: center">
-                <div class="title-container" >
-                    <div style="font-size: 22px; font-weight: bold">
+                <div class="title-container" style="margin-left: 0" >
+                    <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
                         SCENT NAME
                     </div>
                 </div>
@@ -58,7 +61,7 @@
 
             <div class="report-container" style="padding-bottom: 20px">
                 <div class="title-container">
-                    <div style="font-size: 22px; font-weight: bold">
+                    <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
                         이미지 분석 결과
                     </div>
                     <div style="margin-left: 5px">
@@ -74,8 +77,8 @@
 
             <div class="report-container" id="targetNote">
                 <div style="margin-bottom: 20px; font-size: 20px">
-                    <div class="title-container">
-                        <div style="font-size: 22px; font-weight: bold ">향료 분석 결과</div>
+                    <div class="title-container" style="margin-bottom: 30px">
+                        <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>
                         <div style="margin-left: 5px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
                                 <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
@@ -83,15 +86,46 @@
                         </div>
 
                     </div>
+                    <div style="display: flex; margin-bottom: 10px">
+<!--                        <div class="image-box" style="background-color: #0066ff">-->
 
-                    <div class="note-container" id="targetTopNote">
-                        TOP NOTE
+<!--&lt;!&ndash;                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11.002 2h-4a1 1 0 0 0-1 1v3.812a5.998 5.998 0 0 0-3 5.188v.988L3 13l.002.072V21a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9a5.999 5.999 0 0 0-3-5.188V3a1 1 0 0 0-1-1zm-3 4V4h2v2h-2zm5.001 14h-8v-6h8v6zm-8.001-8c0-2.206 1.794-4 4-4s4 1.794 4 4h-8zm8.001-9h2v2h-2zM16 3h2v2h-2zm0 3h2v2h-2zm3-3h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z"></path></svg>&ndash;&gt;-->
+<!--                        </div>-->
+                        <div class="note-container second-note-container" style="padding-top: 0;" >
+                            <div style="font-family: 'BM Hanna Pro', sans-serif">TOP NOTE | </div>
+                            <div style="font-family: 'BM Hanna Air', sans-serif" id="targetTopNote"></div>
+                        </div>
                     </div>
-                    <div class="note-container" style="padding-bottom: 30px" id="targetMiddleNote">
-                        MIDDLE NOTE
+                    <div style="display: flex; margin-bottom: 10px">
+<!--                        <div class="image-box" style="background-color: #0066ff">-->
+
+<!--                            &lt;!&ndash;                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11.002 2h-4a1 1 0 0 0-1 1v3.812a5.998 5.998 0 0 0-3 5.188v.988L3 13l.002.072V21a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9a5.999 5.999 0 0 0-3-5.188V3a1 1 0 0 0-1-1zm-3 4V4h2v2h-2zm5.001 14h-8v-6h8v6zm-8.001-8c0-2.206 1.794-4 4-4s4 1.794 4 4h-8zm8.001-9h2v2h-2zM16 3h2v2h-2zm0 3h2v2h-2zm3-3h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z"></path></svg>&ndash;&gt;-->
+<!--                        </div>-->
+                        <div class="note-container second-note-container" style="padding-top: 0;">
+                            <div style="font-family: 'BM Hanna Pro', sans-serif">MIDDLE NOTE | </div>
+                            <div style="font-family: 'BM Hanna Air', sans-serif" id="targetMiddleNote"></div>
+                        </div>
                     </div>
-                    <div class="note-container" style="padding-bottom: 30px" id="targetBaseNote">
-                        BASE NOTE
+<!--                    <div style="display: flex; margin-bottom: 20px">-->
+
+<!--                        <div class="note-container second-note-container" style="padding-top: 0; padding-bottom: 30px; padding-right: 20px; text-align: end" id="targetMiddleNote">-->
+<!--                            <div>MIDDLE NOTE | {향료이름}</div>-->
+<!--                        </div>-->
+<!--                        <div class="reverse-image-box" style="background-color: #0066ff">-->
+
+<!--                            &lt;!&ndash;                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11.002 2h-4a1 1 0 0 0-1 1v3.812a5.998 5.998 0 0 0-3 5.188v.988L3 13l.002.072V21a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9a5.999 5.999 0 0 0-3-5.188V3a1 1 0 0 0-1-1zm-3 4V4h2v2h-2zm5.001 14h-8v-6h8v6zm-8.001-8c0-2.206 1.794-4 4-4s4 1.794 4 4h-8zm8.001-9h2v2h-2zM16 3h2v2h-2zm0 3h2v2h-2zm3-3h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z"></path></svg>&ndash;&gt;-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <div style="display: flex; margin-bottom: 20px">
+<!--                        <div class="image-box" style="background-color: #0066ff">-->
+
+<!--                            &lt;!&ndash;                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11.002 2h-4a1 1 0 0 0-1 1v3.812a5.998 5.998 0 0 0-3 5.188v.988L3 13l.002.072V21a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9a5.999 5.999 0 0 0-3-5.188V3a1 1 0 0 0-1-1zm-3 4V4h2v2h-2zm5.001 14h-8v-6h8v6zm-8.001-8c0-2.206 1.794-4 4-4s4 1.794 4 4h-8zm8.001-9h2v2h-2zM16 3h2v2h-2zm0 3h2v2h-2zm3-3h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z"></path></svg>&ndash;&gt;-->
+<!--                        </div>-->
+                        <div class="note-container second-note-container" style="padding-top: 0; padding-bottom: 30px;">
+                            <div style="font-family: 'BM Hanna Pro', sans-serif">BASE NOTE | </div>
+                            <div style="font-family: 'BM Hanna Air', sans-serif" id="targetBaseNote"></div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -212,6 +246,8 @@
 </div>
 
 
+</div>
 <script src="./js/script.js"></script>
+
 </body>
 </html>

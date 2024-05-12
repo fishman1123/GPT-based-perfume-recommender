@@ -94,7 +94,7 @@ function backToMain() {
     // } else {
     //     console.error('Message area element not found');
     // }
-    resetPage();
+    // resetPage();
     document.getElementById("report").style.display = "none";
     document.getElementById("intro").style.display = "flex";
 }
@@ -113,14 +113,17 @@ function cleaningPage(tagId) {
     }
 }
 function resetPage() {
-    // const insightArea = document.getElementById('targetInsight');
-    // insightArea.textContent = '이미지 분석 결과';
+    const insightArea = document.getElementById('targetInsight');
+    insightArea.textContent = '이미지 분석 결과';
     const topArea = document.getElementById('targetTopNote');
-    topArea.textContent = 'TOP NOTE';
+    topArea.style.fontFamily = 'BM Hanna Pro, sans-serif';
+    topArea.textContent = `TOP NOTE | `;
     const middleArea = document.getElementById('targetMiddleNote');
-    middleArea.textContent = 'MIDDLE NOTE';
+    middleArea.style.fontFamily = 'BM Hanna Pro, sans-serif';
+    middleArea.textContent = 'MIDDLE NOTE | ';
     const baseArea = document.getElementById('targetBaseNote');
-    baseArea.textContent = 'BASE NOTE';
+    baseArea.style.fontFamily = 'BM Hanna Pro, sans-serif';
+    baseArea.textContent = 'BASE NOTE | ';
 
 }
 
