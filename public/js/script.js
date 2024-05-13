@@ -13,6 +13,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+const texts = ["LOADING", "이미지 분석 중...", "ANALYZING Image", "향료 추출 중...", "EXTRACTING Fragrances", "킁카킁카...", "향수 이름 작명 중...", "MAKING Scent name", "Wait a minute", "곧 분석보고서가 나옵니다", "잠시만 기다려주세요"];
+let index = 0;
+
+function changeText() {
+    const loadingTextDiv = document.getElementById('loadingText');
+    loadingTextDiv.textContent = texts[index];
+    // Increment the index and reset to 0 if it's at the end of the list
+    index = (index + 1) % texts.length;
+}
+
+// Call changeText every 3 seconds (3000 milliseconds)
+setInterval(changeText, 3000);
+
 let userMessages = [];
 let assistantMessages = [];
 
@@ -252,9 +265,14 @@ function displayReport(message, sender, targetID, ) {
     const messageElement = document.createElement('div');
     messageElement.textContent = message;
     messageElement.className = sender;
-    messageElement.style.marginBottom = '5px'; // Add margin between messages
+    // messageElement.style.marginBottom = '5px'; // Add margin between messages
     // messageElement.style.marginTop = '20px';
-    messageElement.style.fontSize = targetID === 'targetNameRecommend' ? '40px' : '16px';
+    if (targetID === 'targetNameRecommend') {
+        messageElement.style.fontSize = '32px';
+        messageElement.style.color = 'white';
+    } else {
+        messageElement.style.fontSize = '16px';
+    }
     targetArea.appendChild(messageElement);
     targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
 

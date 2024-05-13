@@ -26,19 +26,34 @@
     }
 }
 /* Additional CSS for Chat UI */
+
+@font-face {
+    font-family: 'BM Dohyeon';
+    src: url("../assets/BMDOHYEON_ttf.ttf") format('truetype');
+}
+@font-face {
+    font-family: 'BM Hanna Pro';
+    src: url("../assets/BMHANNAPro.ttf") format('truetype');
+}
+@font-face {
+    font-family: 'BM Hanna Air';
+    src: url("../assets/BMHANNAAir_ttf.ttf") format('truetype');
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    margin: 0;
-    font-family: "Open Sans", sans-serif;
-
+    margin: auto;
+    font-family: "BM Hanna Air", sans-serif;
+    width: 375px;
+    background-color: black;
 }
 .chat-container {
     width: 600px;
-    border: 1px solid #000000;
+    /*border: 1px solid #000000;*/
     padding: 10px;
 }
 .message-area {
@@ -47,7 +62,7 @@ body {
     margin-bottom: 10px;
     /*height: 600px;*/
     overflow-y: auto;
-    background-color: cornsilk;
+    background-color: black;
 }
 .input-area {
     display: flex;
@@ -68,8 +83,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    /*max-width: 1000px;*/
-    /*height: 1000px;*/
+    height: 667px;
 }
 .intro-container img {
     width: 50%;
@@ -101,6 +115,7 @@ body {
     position: relative;
     width: 180px;
     display: inline-block;
+
 }
 
 .submit-button {
@@ -169,9 +184,9 @@ body {
     margin-top: 20px;
     margin-bottom: 20px;
     width: 100%;
-    max-width: 800px;
-    min-width: 780px;
-    height: 900px;
+    /*max-width: 800px;*/
+    /*min-width: 780px;*/
+    /*height: 900px;*/
 }
 
 /*loading*/
@@ -214,15 +229,15 @@ body {
     content:'';
     height:inherit;
     position:absolute;
-    background-color:#FBCE13;
+    background-color:white;
     animation:bar 2500ms linear infinite;
 }
 .text{
-    color:#FBCE13;
+    color:white;
     font-size:24px;
     font-weight:500;
     text-align:center;
-    letter-spacing:10px;
+    letter-spacing:6px;
     text-transform:uppercase;
 }
 .cap{
@@ -240,7 +255,7 @@ body {
     margin-left:12px;
     border-radius:3px;
     position:absolute;
-    background-color:#FBCE13;
+    background-color:white;
     animation:move-cap 2500ms linear infinite;
 }
 .bottle-fill{
@@ -268,7 +283,7 @@ body {
     opacity:0;
     content:'';
     position:absolute;
-    background-color:#FBCE13;
+    background-color:white;
 }
 .bottle:before{
     opacity:1;
@@ -387,7 +402,7 @@ body {
     padding: 6px 20px 0px;
 
     display: inline-flex;
-    margin-left: 30px;
+    /*margin-left: 30px;*/
     margin-top: 20px;
     margin-bottom: 10px;
 }
@@ -414,6 +429,7 @@ body {
     text-align: center;
     padding-top: 20px;
     padding-bottom: 5px;
+    color: white;
 }
 .recommend-name-container {
     font-size: 30px;
@@ -434,21 +450,7 @@ body {
     margin-bottom: 10px;
 }
 
-@font-face {
-    font-family: 'BM Dohyeon';
-    src: url("../assets/BMDOHYEON_ttf.ttf") format('truetype');
-}
-@font-face {
-    font-family: 'BM Hanna Pro';
-    src: url("../assets/BMHANNAPro.ttf") format('truetype');
-}
-@font-face {
-    font-family: 'BM Hanna Air';
-    src: url("../assets/BMHANNAAir_ttf.ttf") format('truetype');
-}
-body {
-    font-family: "BM Hanna Air", sans-serif;
-}
+
 
 
 /* For devices with a width between 376px and 575px */
@@ -474,5 +476,11 @@ body {
 /* For devices with a width of 1200px or more */
 @media only screen and (min-width: 1200px) {
     /* Add your CSS rules here */
+}
+
+.button-adjust {
+    background-color: black;
+    color: white;
+    border: solid 2px white;
 }
 

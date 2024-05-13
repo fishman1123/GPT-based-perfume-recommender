@@ -10,27 +10,49 @@
 <body>
 <!--do not forget to change display to none when you test, this is temporal display-->
 <!--change to flex to roll back-->
-<div>
 
 
-<div id="intro" class="intro-container" style="display: none">
-    <h1>향수 마스터, 포터 선생</h1>
-    <h2 style="font-weight: bold; font-style: italic;">" 향수 추천 ㄱ? "</h2>
-    <img src="./images/harry.jpg" class="fixed-size-image" alt="Portrait of Harry">
-    <label for="date" style="display: flex;">생년월일:</label>
-    <input id="date" type="date" style="display: flex;">
-    <label for="gender" style="display: flex;">성별:</label>
-    <div class="select-container" >
-        <select id="gender" style="display: flex;">
-            <option value="">성별을 골라주세요</option>
-            <option value="00">남자</option>
-            <option value="01">여자</option>
-        </select>
-        <label for="nameInput">이름:</label>
-        <input type="text" id="nameInput" class="text-input">
-        <input type="file" id="imageInput" class="padded-input" accept="image/*">
-        <button onclick="imageUpload()" class="button-59 button-adjust">다음 단계로</button>
+
+<div id="intro" class="intro-container" style="display: none; color: white;">
+    <h1>향수 마스터</h1>
+    <h2 style="font-weight: bold; font-style: italic; margin-bottom: 100px">" 향수 추천 ㄱ? "</h2>
+<!--    <img src="./images/harry.jpg" class="fixed-size-image" alt="Portrait of Harry">-->
+    <div style="display: flex; padding-right: 10px; align-items: center">
+        <label for="date" style="display: flex; padding-right: 10px;">생년월일:</label>
+        <input id="date" type="date" style="display: flex;">
     </div>
+    <div>
+        <div class="select-container" >
+            <div style="display: flex">
+                <div>
+                    <label for="gender" style="display: flex; margin-top: 10px; margin-bottom: 10px; align-items: center; padding-right: 13px">성별:</label>
+                </div>
+                <div style="display: inline-flex; align-items: center;">
+                    <select id="gender" style="display: block;">
+                        <option value="">성별을 골라주세요</option>
+                        <option value="00">남자</option>
+                        <option value="01">여자</option>
+                    </select>
+                </div>
+
+            </div>
+            <div style="display: flex">
+                <div>
+                    <label for="nameInput" style=" width: 42px;display: flex; align-items: center;">이름:</label>
+                </div>
+                <div>
+                    <input style="width: 80%" type="text" id="nameInput" class="text-input">
+                </div>
+            </div>
+
+
+            <input style="width: 100%" type="file" id="imageInput" class="padded-input" accept="image/*">
+            <button onclick="imageUpload()" class="button-59 button-adjust" style="width: 100%">다음 단계로</button>
+        </div>
+    </div>
+
+
+
 
 </div>
 <!--<div id="loading screen" style="display: none;">-->
@@ -45,7 +67,7 @@
 <!--                <h1><span id="userName"></span>님</h1>-->
 <!--            </div>-->
             <div style="display: flex; justify-content: center">
-                <div class="title-container" style="margin-left: 0" >
+                <div class="title-container" style="margin-left: 0; color: white; border: solid 4px white; padding-bottom: 6px" >
                     <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
                         SCENT NAME
                     </div>
@@ -59,32 +81,36 @@
             </div>
 
 
-            <div class="report-container" style="padding-bottom: 20px">
-                <div class="title-container">
-                    <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
-                        이미지 분석 결과
-                    </div>
-                    <div style="margin-left: 5px">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
-                            <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="note-container" id="targetInsight"></div>
-            </div>
-
-
-            <div class="report-container" id="targetNote">
-                <div style="margin-bottom: 20px; font-size: 20px">
-                    <div class="title-container" style="margin-bottom: 30px">
-                        <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>
+            <div class="report-container" style="padding-bottom: 20px; margin-top: 10px; ">
+                <div style="display: flex; justify-content: center">
+                    <div class="title-container">
+                        <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
+                            이미지 분석 결과
+                        </div>
                         <div style="margin-left: 5px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
                                 <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
                             </svg>
                         </div>
+                    </div>
+                </div>
 
+
+                <div style="padding-top: 10px" class="note-container" id="targetInsight"></div>
+            </div>
+
+
+            <div class="report-container" id="targetNote">
+                <div style="margin-bottom: 20px; font-size: 20px">
+                    <div style="display: flex; justify-content: center ">
+                        <div class="title-container" style="margin-bottom: 20px">
+                            <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>
+                            <div style="margin-left: 5px">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
+                                    <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                     <div style="display: flex; margin-bottom: 10px">
 <!--                        <div class="image-box" style="background-color: #0066ff">-->
@@ -121,7 +147,7 @@
 
 <!--                            &lt;!&ndash;                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11.002 2h-4a1 1 0 0 0-1 1v3.812a5.998 5.998 0 0 0-3 5.188v.988L3 13l.002.072V21a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9a5.999 5.999 0 0 0-3-5.188V3a1 1 0 0 0-1-1zm-3 4V4h2v2h-2zm5.001 14h-8v-6h8v6zm-8.001-8c0-2.206 1.794-4 4-4s4 1.794 4 4h-8zm8.001-9h2v2h-2zM16 3h2v2h-2zm0 3h2v2h-2zm3-3h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z"></path></svg>&ndash;&gt;-->
 <!--                        </div>-->
-                        <div class="note-container second-note-container" style="padding-top: 0; padding-bottom: 30px;">
+                        <div class="note-container second-note-container" style="padding-top: 0;">
                             <div style="font-family: 'BM Hanna Pro', sans-serif">BASE NOTE | </div>
                             <div style="font-family: 'BM Hanna Air', sans-serif" id="targetBaseNote"></div>
 
@@ -137,7 +163,9 @@
 <!--        <div id="loader" class="loader" style="display: none;">-->
 <!--            <i class="fa-solid fa-gear fa-spin"></i>-->
 <!--        </div>-->
-        <button id="backButton" onclick="backToMain()" class="button-59 button-adjust">메인으로 돌아가기</button>
+        <div style="display: flex; justify-content: center">
+            <button id="backButton" onclick="backToMain()" class="button-59 button-adjust">메인으로 돌아가기</button>
+        </div>
         <div class="input-area">
             <input type="text" class="chat-input" id="chatInput" style="display: none;" placeholder="Type a message...">
             <!--        <button class="button-54" onclick="sendMessage()">Send</button>-->
@@ -240,13 +268,14 @@
                 </div>
             </div>
             <div class="bar"></div>
-            <div class="text">loading</div>
+            <div style="display: flex; justify-content: center">
+                <div id="loadingText" class="text" style="font-size: 20px; width: 330px">loading</div>
+            </div>
         </div>
     </div>
 </div>
 
 
-</div>
 <script src="./js/script.js"></script>
 
 </body>
