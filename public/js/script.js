@@ -91,25 +91,29 @@ function imageUpload() {
 function transitionToIntro() {
     document.getElementById("report").style.display = "block";
 }
-function backToMain() {
-    // Correct the ID if it's 'messageArea' and not 'message-area'
-    const targetArea = document.getElementById('targetTopNote');
-    // cleaningPage(document.getElementById('userName'));
-    cleaningPage(document.getElementById('targetInsight'));
-    cleaningPage(document.getElementById('targetTopNote'));
-    cleaningPage(document.getElementById('targetMiddleNote'));
-    cleaningPage(document.getElementById('targetBaseNote'));
-    cleaningPage(document.getElementById('targetNameRecommend'));
-    // if (targetArea) {
-    //     target.innerHTML = '';
-    //     document.getElementById("report").style.display = "none";
-    //     document.getElementById("intro").style.display = "flex";
-    // } else {
-    //     console.error('Message area element not found');
-    // }
-    // resetPage();
-    document.getElementById("report").style.display = "none";
-    document.getElementById("intro").style.display = "flex";
+// function backToMain() {
+//     // Correct the ID if it's 'messageArea' and not 'message-area'
+//     const targetArea = document.getElementById('targetTopNote');
+//     // cleaningPage(document.getElementById('userName'));
+//     cleaningPage(document.getElementById('targetInsight'));
+//     cleaningPage(document.getElementById('targetTopNote'));
+//     cleaningPage(document.getElementById('targetMiddleNote'));
+//     cleaningPage(document.getElementById('targetBaseNote'));
+//     cleaningPage(document.getElementById('targetNameRecommend'));
+//     // if (targetArea) {
+//     //     target.innerHTML = '';
+//     //     document.getElementById("report").style.display = "none";
+//     //     document.getElementById("intro").style.display = "flex";
+//     // } else {
+//     //     console.error('Message area element not found');
+//     // }
+//     // resetPage();
+//     document.getElementById("report").style.display = "none";
+//     document.getElementById("intro").style.display = "flex";
+// }
+
+function backToPage() {
+    window.location.href = "https://nadr11061992806.imweb.me/?redirect=no&_gl=1*13xfk1t*_ga*ODc4MjQ0MTQ2LjE3MTU1MTA3NDE.*_ga_HP37L08LP3*MTcxNTc3NzY3Mi41LjAuMTcxNTc3NzY3Mi42MC4wLjA.&_ga=2.204799184.1372044061.1715660820-878244146.1715510741&_gac=1.58459736.1715510741.CjwKCAjw0YGyBhByEiwAQmBEWsnKsJR4ot2cJTx5LeUWbN7HkzecuskP9xIWW2r0p9m5LeAb8rNYzhoCZTwQAvD_BwE";
 }
 
 function displayUserName(name) {
@@ -166,6 +170,8 @@ async function sendImage() {
 
     try {
         const response = await fetch('http://localhost:3003/imageMaster/image', {
+            // local http://localhost:3003/imageMaster/image
+            // http://neander-perfume-maker-recommend-env.eba-dzkzephp.ap-northeast-2.elasticbeanstalk.com/imageMaster/image
             method: 'POST',
             // Don't set 'Content-Type': 'application/json' for FormData
             body: formData,
@@ -203,46 +209,46 @@ async function sendImage() {
 }
 
 
-async function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const message = input.value.trim(); // Get the message from the input and trim whitespace
-    if (!message) return; // Do nothing if the message is empty
-
-    displayMessage(`You: ${message}`, "user");
-    userMessages.push(message);
-
-    document.getElementById('loader').style.display = "flex"; // Show loading icon
-
-    try {
-        const response = await fetch('http://localhost:3003/imageMaster/image', {
-
-            //http://localhost:3003/imageMaster/image //for local test
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                myDateTime: myDateTime,
-                userMessages: userMessages,
-                assistantMessages: assistantMessages,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-        displayMessage(`포터 선생: ${responseData.assistant}`, "assistant");
-        assistantMessages.push(responseData.assistant);
-    } catch (error) {
-        console.error('Error:', error);
-        displayMessage("Error: Could not get a response. Please try again.", "error");
-    } finally {
-        document.getElementById('loader').style.display = "none"; // Hide loading icon after the operation
-        input.value = ''; // Clear the input field
-    }
-}
+// async function sendMessage() {
+//     const input = document.getElementById('chatInput');
+//     const message = input.value.trim(); // Get the message from the input and trim whitespace
+//     if (!message) return; // Do nothing if the message is empty
+//
+//     displayMessage(`You: ${message}`, "user");
+//     userMessages.push(message);
+//
+//     document.getElementById('loader').style.display = "flex"; // Show loading icon
+//
+//     try {
+//         const response = await fetch('http://localhost:3003/imageMaster/image', {
+//
+//             //http://localhost:3003/imageMaster/image //for local test
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({
+//                 myDateTime: myDateTime,
+//                 userMessages: userMessages,
+//                 assistantMessages: assistantMessages,
+//             }),
+//         });
+//
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//
+//         const responseData = await response.json();
+//         displayMessage(`포터 선생: ${responseData.assistant}`, "assistant");
+//         assistantMessages.push(responseData.assistant);
+//     } catch (error) {
+//         console.error('Error:', error);
+//         displayMessage("Error: Could not get a response. Please try again.", "error");
+//     } finally {
+//         document.getElementById('loader').style.display = "none"; // Hide loading icon after the operation
+//         input.value = ''; // Clear the input field
+//     }
+// }
 
 
 function displayMessage(message, sender) {
