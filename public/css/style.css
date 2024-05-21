@@ -58,10 +58,21 @@ body {
     background-position: center;      /* Center the background image */
     background-attachment: fixed;     /* Fix the background image so it doesn't scroll with the page */
 }
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .chat-container {
     width: 600px;
-    /*border: 1px solid #000000;*/
     padding: 10px;
+    opacity: 0; /* Initial state for fade-in effect */
+    animation: fadeIn 1s ease-in-out 0.5s forwards; /* Animation with 2s delay */
 }
 .message-area {
     /*border: 1px solid #000000;*/
@@ -197,6 +208,15 @@ body {
 }
 
 /*loading*/
+
+#loader {
+    opacity: 1;
+    transition: opacity 1.3s ease-out; /* 1 second fade-out transition */
+}
+
+#loader.hidden {
+    opacity: 0;
+}
 
 
 

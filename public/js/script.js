@@ -231,6 +231,8 @@ async function sendImage() {
         });
 
         if (!response.ok) {
+            alert('이미지 처리 중 문제가 발생했습니다.');
+            backToPage();
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -250,8 +252,21 @@ async function sendImage() {
         console.error('Error:', error);
         displayMessage("Error: Could not upload the image. Please try again.", "error");
     } finally {
-        document.getElementById('loader').style.display = "none"; // Hide loading icon
-        document.getElementById('backButton').style.display = "block"; // Show back button
+        // document.getElementById('loader').style.display = "none"; // Hide loading icon
+        // document.getElementById('backButton').style.display = "block"; // Show back button
+        const loader = document.getElementById('loader');
+        const backButton = document.getElementById('backButton');
+
+        loader.classList.add('hidden'); // Add the hidden class to trigger fade-out
+
+        // Wait for the transition to complete before setting display to none
+        loader.addEventListener('transitionend', function handleTransitionEnd() {
+            loader.style.display = "none"; // Hide loading icon
+            loader.classList.remove('hidden'); // Remove the hidden class so it can be used again
+            loader.removeEventListener('transitionend', handleTransitionEnd); // Clean up the event listener
+        });
+
+        backButton.style.display = "block"; // Show back button
     }
 }
 
