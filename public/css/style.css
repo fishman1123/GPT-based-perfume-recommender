@@ -64,12 +64,12 @@ body {
     padding: 10px;
 }
 .message-area {
-    border: 1px solid #000000;
+    /*border: 1px solid #000000;*/
     padding: 10px;
     margin-bottom: 10px;
     /*height: 600px;*/
     overflow-y: auto;
-    background-color: black;
+    /*background-color: black;*/
 }
 .input-area {
     display: flex;

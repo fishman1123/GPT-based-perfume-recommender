@@ -154,23 +154,76 @@ async function sendImage() {
         alert('Please select an image to upload.');
         return;
     }
+
+    function compressImage(file, maxWidth = 800, maxHeight = 800, quality = 0.7) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        if (blob) {
+                            resolve(new File([blob], file.name, { type: file.type }));
+                        } else {
+                            reject(new Error('Canvas is empty'));
+                        }
+                    }, file.type, quality);
+                };
+
+                img.onerror = (error) => {
+                    reject(error);
+                };
+            };
+
+            reader.onerror = (error) => {
+                reject(error);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
     const imageFile = imageInput.files[0];
 
-    const formData = new FormData();
-    formData.append('image', imageFile); // Append the file
-    formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
-    formData.append('birthDate', birthInput.value);
-    // const bbb = formData.get('birthName').value;
-    // console.log("check this out brother: " + bbb);
-    console.log("hello there" + document.getElementById('date').value);
-
-    document.getElementById('loader').style.display = "flex"; // Show loading icon
-    document.getElementById('backButton').style.display = "none"; // Show loading icon
-
-
     try {
+        const compressedFile = await compressImage(imageFile);
+
+        const formData = new FormData();
+        formData.append('image', compressedFile); // Append the compressed file
+        formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
+        formData.append('birthDate', birthInput.value);
+        console.log("hello there" + document.getElementById('date').value);
+
+        document.getElementById('loader').style.display = "flex"; // Show loading icon
+        document.getElementById('backButton').style.display = "none"; // Hide back button
+
         const response = await fetch('http://localhost:3003/imageMaster/image', {
-            // local http://localhost:3003/imageMaster/image
+            // local: http://localhost:3003/imageMaster/image
             // http://neander-perfume-maker-recommend-env.eba-dzkzephp.ap-northeast-2.elasticbeanstalk.com/imageMaster/image
             method: 'POST',
             // Don't set 'Content-Type': 'application/json' for FormData
@@ -183,14 +236,9 @@ async function sendImage() {
 
         const responseData = await response.json();
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
-        // displayMessage(responseData.message.insights, "assistant");
-        // displayReport(message, sender, targetID)
         console.log("target input name" + inputName.value);
         transitionToIntro();
-        // const targetInsight = responseData.message.insights;
-        // const filteredInsight = targetInsight.replace(/\.,(?=[^ ]|$)/g, '.');
         console.log('hello' + responseData.message.combinedInsights);
-        // displayUserName(inputName.value);
         displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
         displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
@@ -203,10 +251,10 @@ async function sendImage() {
         displayMessage("Error: Could not upload the image. Please try again.", "error");
     } finally {
         document.getElementById('loader').style.display = "none"; // Hide loading icon
-        document.getElementById('backButton').style.display = "block"; // Show loading icon
-
+        document.getElementById('backButton').style.display = "block"; // Show back button
     }
 }
+
 
 
 // async function sendMessage() {
