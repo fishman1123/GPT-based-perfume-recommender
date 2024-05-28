@@ -1,4 +1,7 @@
+window.onload = function(){
+    alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
 
+}
 
 document.addEventListener('DOMContentLoaded', (event) => {
     // Optionally, display an initial message from Professor Fish if needed
@@ -113,7 +116,7 @@ function transitionToIntro() {
 // }
 
 function backToPage() {
-    window.location.href = "https://nadr11061992806.imweb.me/?redirect=no&_gl=1*13xfk1t*_ga*ODc4MjQ0MTQ2LjE3MTU1MTA3NDE.*_ga_HP37L08LP3*MTcxNTc3NzY3Mi41LjAuMTcxNTc3NzY3Mi42MC4wLjA.&_ga=2.204799184.1372044061.1715660820-878244146.1715510741&_gac=1.58459736.1715510741.CjwKCAjw0YGyBhByEiwAQmBEWsnKsJR4ot2cJTx5LeUWbN7HkzecuskP9xIWW2r0p9m5LeAb8rNYzhoCZTwQAvD_BwE";
+    window.location.href = "https://acscent.co.kr";
 }
 
 function displayUserName(name) {
@@ -222,7 +225,7 @@ async function sendImage() {
         document.getElementById('loader').style.display = "flex"; // Show loading icon
         document.getElementById('backButton').style.display = "none"; // Hide back button
 
-        const response = await fetch('http://localhost:3003/imageMaster/image', {
+        const response = await fetch('/imageMaster/image', {
             // local: http://localhost:3003/imageMaster/image
             // http://neander-perfume-maker-recommend-env.eba-dzkzephp.ap-northeast-2.elasticbeanstalk.com/imageMaster/image
             method: 'POST',
@@ -239,6 +242,10 @@ async function sendImage() {
         const responseData = await response.json();
         console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
         console.log("target input name" + inputName.value);
+        if (responseData.message.nameRecommendation === 'Name Recommendation not found') {
+            alert("허용하지 않는 이미지 유형입니다.");
+            window.location.href = "https://acscent.co.kr";
+        }
         transitionToIntro();
         console.log('hello' + responseData.message.combinedInsights);
         displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');

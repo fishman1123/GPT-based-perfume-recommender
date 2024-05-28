@@ -445,6 +445,7 @@ body {
 }
 .note-container {
     padding: 20px 40px 10px 40px;
+    text-align: center;
 }
 .second-note-container {
     padding-left: 40px;
