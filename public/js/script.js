@@ -35,9 +35,26 @@ let assistantMessages = [];
 // Variable for start function
 let myDateTime = '';
 function codeSubmit() {
-    const passwordCheck = document.getElementById('passcode');
-    //code check from
-    console.log("code triggered");
+    const passcode = document.getElementById('passcode').value;
+    const validPasscode = '010-4508-5570';
+
+    // Show loading
+    pageTransition('loader');
+    document.getElementById('security').style.display = 'none';
+
+    setTimeout(() => {
+        // Check passcode
+        if (passcode === validPasscode) {
+            // Hide loading and show intro
+            document.getElementById('loader').style.display = 'none';
+            pageTransition('intro');
+        } else {
+            // Hide loading and show alert
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('security').style.display = 'flex';
+            alert('wrong passcode');
+        }
+    }, 2000); // Simulating a delay for the validation process
 }
 // function start() {
 //     const date = document.getElementById('date').value;
@@ -97,7 +114,8 @@ function imageUpload() {
 }
 
 function pageTransition(id) {
-    document.getElementById(`${id}`).style.display = "block";
+    let displayType = id === "intro" || "security" ? "flex" : "block";
+    document.getElementById(`${id}`).style.display = `${displayType}`;
 }
 // function backToMain() {
 //     // Correct the ID if it's 'messageArea' and not 'message-area'

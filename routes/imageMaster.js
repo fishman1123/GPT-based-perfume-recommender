@@ -17,16 +17,69 @@ const stream = require("node:stream");
 const fs = require('fs').promises;
 const GOOGLE_ACCOUNT = path.join(__dirname, '../perfume-maker-google.json');
 
-const auth = new google.auth.GoogleAuth({
+const authDrive = new google.auth.GoogleAuth({
     keyFile: GOOGLE_ACCOUNT,
     scopes: ['https://www.googleapis.com/auth/drive'],
 });
-const drive = google.drive({ version: 'v3', auth });
+const authSheets = new google.auth.GoogleAuth({
+    keyFile: GOOGLE_ACCOUNT,
+    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+});
+const drive = google.drive({ version: 'v3', auth: authDrive });
+const sheets = google.sheets({ version: 'v4', auth: authSheets });
 
-async function getDriveStorage() {
-    const res = await drive.about.get({ fields: 'storageQuota' });
-    return res.data.storageQuota;
+
+async function listingReport() {
+    const spreadsheetId = '1D8n8faBvrYjX3Yk-6-voGoS0YUgN37bi7yEkKfk24Ws'; // Replace with your actual spreadsheet ID
+    const sheetName = 'perfumeReportList'; // Replace with your sheet name
+
+    try {
+        // Log available sheet names
+        const sheetsResponse = await sheets.spreadsheets.get({
+            spreadsheetId,
+        });
+
+        const sheetNames = sheetsResponse.data.sheets.map(sheet => sheet.properties.title);
+        console.log('Available sheets:', sheetNames);
+
+        // Get the existing data to find the column index for '주문번호'
+        const getResponse = await sheets.spreadsheets.values.get({
+            spreadsheetId,
+            range: `${sheetName}!A1:G1`, // Assuming the headers are in the first row
+        });
+
+        const headers = getResponse.data.values[0];
+        const orderNumberColumnIndex = headers.indexOf('주문번호');
+        if (orderNumberColumnIndex === -1) {
+            console.log(`'주문번호' column not found in the sheet`);
+            return;
+        }
+
+        // Find the column letter based on the index
+        const orderNumberColumnLetter = String.fromCharCode(65 + orderNumberColumnIndex);
+
+        // Append the value '1234567890123' to the '주문번호' column
+        const appendResponse = await sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: `${sheetName}!${orderNumberColumnLetter}:${orderNumberColumnLetter}`,
+            valueInputOption: 'RAW',
+            resource: {
+                values: [['1234567890123']],
+            },
+        });
+
+        console.log('Appended value to the spreadsheet:', appendResponse.data.updates);
+    } catch (error) {
+        console.error('Error listing report:', error);
+        if (error.errors) {
+            error.errors.forEach((err) => {
+                console.error(`Error reason: ${err.reason}, message: ${err.message}`);
+            });
+        }
+    }
 }
+listingReport().catch(console.error);
+
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -159,29 +212,6 @@ function extractInsightsAndNotes(content) {
     };
 }
 
-//this function need to be fixed if you need to use it
-// async function getImageFromDrive(file) {
-//     try {
-//         const response = await drive.files.get(
-//             { fileId: file, alt: 'media' },
-//             { responseType: 'stream' } // Ensure response is a stream
-//         );
-//
-//         // Convert the stream to a Buffer
-//         const buffer = await new Promise((resolve, reject) => {
-//             const chunks = [];
-//             response.data.on('data', (chunk) => chunks.push(chunk));
-//             response.data.on('end', () => resolve(Buffer.concat(chunks)));
-//             response.data.on('error', reject);
-//         });
-//
-//         return buffer;
-//     } catch (error) {
-//         console.error('Error downloading file from Google Drive:', error);
-//         throw error;
-//     }
-// }
-
 
 
 async function imageToGpt(file, gender, birthdate, name) {
@@ -189,36 +219,6 @@ async function imageToGpt(file, gender, birthdate, name) {
     const userGender = gender;
     const userBirthDate = birthdate;
     const userName = name;
-
-
-    // Function to be called when the file exists
-    //dummy code
-    // async function enhanceResponse(insights, topNote, middleNote, baseNote, perfumeName) {
-    //     console.log("target response: ", firstResponse);
-    //
-    //     try {
-    //         const prompt = `
-    //         Please provide a detailed enhancement for each note attribute with approximately 450 words each:
-    //         - Top Note Description for: ${topNote}
-    //         - Middle Note Description for: ${middleNote}
-    //         - Base Note Description for: ${baseNote}
-    //         `;
-    //         return await openai.chat.completions.create({
-    //
-    //             model: "gpt-4-turbo-2024-04-09",
-    //             messages: [
-    //                 {
-    //                     role: "system",
-    //                     content: prompt
-    //                 }
-    //             ],
-    //             max_tokens: 1024,
-    //         });
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //
-    // }
 
     try {
         console.log("time to analyze bitch");
