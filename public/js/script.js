@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
-const texts = ["LOADING", "이미지 분석 중...", "ANALYZING Image", "향료 추출 중...", "EXTRACTING Fragrances", "킁카킁카...", "향수 이름 작명 중...", "MAKING Scent name", "Wait a minute", "곧 분석보고서가 나옵니다", "잠시만 기다려주세요"];
+const texts = ["LOADING", "이미지 분석 중...", "ANALYZING Image", "향료 추출 중...", "EXTRACTING Fragrances", "향수 이름 작명 중...", "MAKING Scent name", "Wait a minute", "곧 분석보고서가 나옵니다", "잠시만 기다려주세요"];
 let index = 0;
 
 function changeText() {
@@ -34,30 +34,35 @@ let assistantMessages = [];
 
 // Variable for start function
 let myDateTime = '';
-
-function start() {
-    const date = document.getElementById('date').value;
-    const hour = document.getElementById('hour').value;
-    // if (date === '') {
-    //     alert('생년월일을 입력해주세요.');
-    //     return;
-    // }
-    myDateTime = date + ' ' + hour; // Assuming you want to include a space or some delimiter
-    console.log(myDateTime);
-
-    let todayDateTime = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
-    let initialAssistantMessage = `포터 선생: 너 ${myDateTime}에 태어났다는 거지? 오늘은 ${todayDateTime}이구나, 자, 운세에 대해서 어떤 것이든 물어보렴.`;
-
-    displayMessage(initialAssistantMessage, "assistant");
-
-    document.getElementById("intro").style.display = "none";
-    document.getElementById("report").style.display = "block";
+function codeSubmit() {
+    const passwordCheck = document.getElementById('passcode');
+    //code check from
+    console.log("code triggered");
 }
+// function start() {
+//     const date = document.getElementById('date').value;
+//     const hour = document.getElementById('hour').value;
+//     // if (date === '') {
+//     //     alert('생년월일을 입력해주세요.');
+//     //     return;
+//     // }
+//     myDateTime = date + ' ' + hour; // Assuming you want to include a space or some delimiter
+//     console.log(myDateTime);
+//
+//     let todayDateTime = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
+//     let initialAssistantMessage = `포터 선생: 너 ${myDateTime}에 태어났다는 거지? 오늘은 ${todayDateTime}이구나, 자, 운세에 대해서 어떤 것이든 물어보렴.`;
+//
+//     displayMessage(initialAssistantMessage, "assistant");
+//
+//     document.getElementById("intro").style.display = "none";
+//     document.getElementById("report").style.display = "block";
+// }
 function imageUpload() {
     const imageCheck = document.getElementById('imageInput');
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
+
     // Check if the name input is empty
     if (!inputName.value.trim()) {
         alert('Please enter your name.');
@@ -91,8 +96,8 @@ function imageUpload() {
     sendImage();
 }
 
-function transitionToIntro() {
-    document.getElementById("report").style.display = "block";
+function pageTransition(id) {
+    document.getElementById(`${id}`).style.display = "block";
 }
 // function backToMain() {
 //     // Correct the ID if it's 'messageArea' and not 'message-area'
@@ -220,6 +225,7 @@ async function sendImage() {
         formData.append('image', compressedFile); // Append the compressed file
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('birthDate', birthInput.value);
+        formData.append('name', inputName.value);
         console.log("hello there" + document.getElementById('date').value);
 
         document.getElementById('loader').style.display = "flex"; // Show loading icon
@@ -246,7 +252,8 @@ async function sendImage() {
             alert("허용하지 않는 이미지 유형입니다.");
             window.location.href = "https://acscent.co.kr";
         }
-        transitionToIntro();
+
+        pageTransition("report");
         console.log('hello' + responseData.message.combinedInsights);
         displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');

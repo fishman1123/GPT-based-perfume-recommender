@@ -222,7 +222,7 @@ body {
 
 .loading-main {
     margin:0;
-    color:#444;
+    color: #000;
     background-color:#141414;
     font:300 18px/18px Roboto, sans-serif;
 
@@ -247,7 +247,7 @@ body {
     width:100%;
     margin:30px 0;
     position:relative;
-    background-color:#444;
+    background-color:#000;
 }
 .bar:before{
     top:0;
@@ -511,4 +511,41 @@ body {
     color: white;
     border: solid 2px white;
 }
+
+
+.securityInput {
+    display: block;
+    margin: 2em auto;
+    border: none;
+    padding: 0;
+    width: calc(13 * (1ch + 0.5 * 1ch));
+    background: repeating-linear-gradient(90deg,
+    black 0, black 1ch,
+    transparent 0, transparent calc(1ch + 0.5 * 1ch))
+    0 100%/ calc((13 * (1ch + 0.5 * 1ch)) - 0.5 * 1ch) 2px no-repeat;
+    font: 5ch "Droid Sans Mono", consolas, monospace;
+    letter-spacing: calc(0.5 * 1ch);
+    color: white;
+}
+
+.securityInput:focus {
+    outline: none;
+    color: dodgerblue;
+}
+
+.securityContainer {
+    display: none;
+    color: white;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
+.securitySubmit {
+    display: flex;
+    width: 100px;
+    margin: auto;
+}
+
+
 

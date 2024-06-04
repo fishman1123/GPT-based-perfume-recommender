@@ -78,13 +78,14 @@ router.post('/image', upload.single('image'), async (req, res) => {
         if (req.file) {
             const userBirthDate = req.body.birthDate;
             const userGender = req.body.gender;
+            const userName = req.body.name;
 
             // Upload file to Google Drive
             const fileId = await uploadImageToDrive(req.file);
             console.log('File uploaded to Google Drive with ID:', fileId);
 
             // Here you can call the function to process the image and get the evaluation
-            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender);
+            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender, userName);
 
             console.log('User Birth Date:', userBirthDate);
             console.log('User Gender:', userGender);
@@ -183,10 +184,11 @@ function extractInsightsAndNotes(content) {
 
 
 
-async function imageToGpt(file, gender, birthdate) {
+async function imageToGpt(file, gender, birthdate, name) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
     const userBirthDate = birthdate;
+    const userName = name;
 
 
     // Function to be called when the file exists
@@ -224,18 +226,19 @@ async function imageToGpt(file, gender, birthdate) {
         console.log("target image: ", file);
         const bufferedImage = file.buffer.toString('base64');
         const encodedImage = `data:image/jpeg;base64,{${bufferedImage}}`;
+        console.log("이름:", userName);
         const response = await openai.chat.completions.create({
             // model: "gpt-4-turbo-2024-04-09",
             model: "gpt-4o",
             messages: [
 
-                { "role": "system", "content": "안녕하세요👋, 저는 당신의 인공지능 조향사입니다! 저는 인물의 이미지를 분석하여 인물에게 어울리는 맞춤형 향수를 추천해 드립니다. 저는 인물의 이미지를 분석하여 인물에게 어울리는 맞춤형 향수를 추천해 드립니다. 각 노트의 센서리 경험, 사용될 재료, 그리고 그 노트가 어떻게 향수의 전체적인 느낌을 향상시키는지에 대한 설명을 포함해 주세요." },
+                { "role": "system", "content": `안녕하세요👋, 저는 당신의 인공지능 조향사입니다! 저는 ${userName}님의 이미지를 분석하여 인물에게 어울리는 맞춤형 향수를 추천해 드립니다. 저는 인물의 이미지를 분석하여 인물에게 어울리는 맞춤형 향수를 추천해 드립니다. 각 노트의 센서리 경험, 사용될 재료, 그리고 그 노트가 어떻게 향수의 전체적인 느낌을 향상시키는지에 대한 설명을 포함해 주세요.` },
                 { "role": "user", "content": `고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.` },
                 { "role": "assistant", "content": `알겠습니다. 고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.` },
-                { "role": "user", "content": `당신의 첫번째 임무는 고객이 업로드한 이미지가 해당 기준에 맞는지 확인을 하셔야 하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함 을 출력해야 합니다. 기준은 아래와 같습니다. 1.인물이 한명이어야 합니다, 2. 인물사진이어야 합니다.` },
-                { "role": "assistant", "content": `알겠습니다. 저의 첫번째 임무는 고객이 업로드한 이미지에 대한 해당 기준에 맞는지 확인을 해야하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함. 을 출력 하겠습니다.` },
-                { "role": "user", "content": `당신의 두번째 임무는 고객이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
-                { "role": "assistant", "content": `알겠습니다. 저의 두번째 임무는 고객이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
+                { "role": "user", "content": `당신의 첫번째 임무는 ${userName}님이 업로드한 이미지가 해당 기준에 맞는지 확인을 하셔야 하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함 을 출력해야 합니다. 기준은 아래와 같습니다. 1.인물이 한명이어야 합니다, 2. 인물사진이어야 합니다.` },
+                { "role": "assistant", "content": `알겠습니다. 저의 첫번째 임무는 ${userName}님이 업로드한 이미지에 대한 해당 기준에 맞는지 확인을 해야하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함. 을 출력 하겠습니다.` },
+                { "role": "user", "content": `당신의 두번째 임무는 ${userName}님이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
+                { "role": "assistant", "content": `알겠습니다. 저의 두번째 임무는 ${userName}님이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다.` },
                 { "role": "user", "content": `당신의 세번째 임무는 두번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 각 향 노트에 대해 자세한 설명을 포함하여 적어도 1500자 이상이어야 합니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 당신은 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 당신은 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명해야 합니다.` },
                 { "role": "assistant", "content": `알겠습니다. 저의 세번째 임무는 두번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 저는 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 저는 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명할 것입니다.` },
                 { "role": "user", "content": `다음은 'Top Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 01": "블랙베리","AC'SCENT 02": "청사과","AC'SCENT 03": "딸기","AC'SCENT 04": "만다린 오렌지","AC'SCENT 05": "오렌지 꽃","AC'SCENT 06": "배꽃","AC'SCENT 07": "다마스커스 장미","AC'SCENT 08": "자스민","AC'SCENT 09": "로즈","AC'SCENT 10": "프리지아".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.` },
@@ -244,10 +247,10 @@ async function imageToGpt(file, gender, birthdate) {
                 { "role": "assistant", "content": `알겠습니다. 저는 'Middle Note'의 리스트 중에서 단 하나의 향 오일만을 선택하고 500자 이상 설명을 작성하겠습니다.` },
                 { "role": "user", "content": `다음은 'Base Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 21": "머스크","AC'SCENT 22": "샌달우드","AC'SCENT 23": "은방울 꽃","AC'SCENT 24": "앰버우드","AC'SCENT 25": "바닐라","AC'SCENT 26": "화이트머스크","AC'SCENT 27": "로즈우드","AC'SCENT 28": "레더","AC'SCENT 29": "계피","AC'SCENT 30": "생강".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다. 설명은 500자 이상이어야 합니다.`},
                 { "role": "assistant", "content": `알겠습니다. 저는 'Base Note'의 리스트 중에서 단 하나의 향 오일만을 선택하고 500자 이상 설명을 작성하겠습니다.` },
-                { "role": "user", "content": `당신의 네번째 임무는 고객에게 추천한 맞춤형 향수에 대한 창의적인 이름을 짓는 것입니다.` },
-                { "role": "assistant", "content": `알겠습니다. 저는 고객에게 추천한 맞춤형 향수에 대한 창의적인 이름을 짓겠습니다.` },
-                { "role": "user", "content": `당신의 다섯번째 임무는 고객이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락은 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락은 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다. 세번째 단락은 세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.` },
-                { "role": "assistant", "content": `알겠습니다. 저의 다섯번째 임무는 고객이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다.  세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.` },
+                { "role": "user", "content": `당신의 네번째 임무는 ${userName}님에게 추천한 맞춤형 향수에 대한 창의적이며 시적인 긴 이름을 짓는 것입니다.` },
+                { "role": "assistant", "content": `알겠습니다. 저는 ${userName}님에게 추천한 맞춤형 향수에 대한 창의적이며 시적인 긴 이름을 짓겠습니다.` },
+                { "role": "user", "content": `당신의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락은 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락은 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다. 세번째 단락은 세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.` },
+                { "role": "assistant", "content": `알겠습니다. 저의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다.  세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.` },
                 { "role": "user", "content": `특징 내용은 총 300자, 각각의 향수 노트 추천은 400자 이상이어야 합니다.` },
                 { "role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.` },
 
@@ -256,7 +259,7 @@ async function imageToGpt(file, gender, birthdate) {
                 {
                     role: "user",
                     content: [
-                        { type: "text", text: "여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 인물을 기반으로 인물의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 2가지 특징을 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE:', 'MIDDLE NOTE:', 'BASE NOTE:' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 5가지 특징은 450자 이상 이어야 하며, 향수 노트 추천은 1500자 이상 이어야 합니다."},
+                        { type: "text", text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 2가지 특징을 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE:', 'MIDDLE NOTE:', 'BASE NOTE:' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 5가지 특징은 450자 이상 이어야 하며, 향수 노트 추천은 1500자 이상 이어야 합니다.`},
                         { type: "image_url", image_url: { "url": encodedImage },
                         },
                     ],
