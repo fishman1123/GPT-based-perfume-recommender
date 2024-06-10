@@ -7,6 +7,7 @@ const { google } = require('googleapis');
 const express = require('express');
 const router = express.Router();
 const OpenAI = require("openai");
+const https = require("https");
 require('dotenv').config();
 const openai = new OpenAI({
     apiKey: process.env.API_KEY,
@@ -31,52 +32,55 @@ const sheets = google.sheets({ version: 'v4', auth: authSheets });
 
 async function listingReport() {
     const spreadsheetId = '1D8n8faBvrYjX3Yk-6-voGoS0YUgN37bi7yEkKfk24Ws'; // Replace with your actual spreadsheet ID
-    const sheetName = 'perfumeReportList'; // Replace with your sheet name
-
-    try {
-        // Log available sheet names
-        const sheetsResponse = await sheets.spreadsheets.get({
-            spreadsheetId,
-        });
-
-        const sheetNames = sheetsResponse.data.sheets.map(sheet => sheet.properties.title);
-        console.log('Available sheets:', sheetNames);
-
-        // Get the existing data to find the column index for '주문번호'
-        const getResponse = await sheets.spreadsheets.values.get({
-            spreadsheetId,
-            range: `${sheetName}!A1:G1`, // Assuming the headers are in the first row
-        });
-
-        const headers = getResponse.data.values[0];
-        const orderNumberColumnIndex = headers.indexOf('주문번호');
-        if (orderNumberColumnIndex === -1) {
-            console.log(`'주문번호' column not found in the sheet`);
-            return;
-        }
-
-        // Find the column letter based on the index
-        const orderNumberColumnLetter = String.fromCharCode(65 + orderNumberColumnIndex);
-
-        // Append the value '1234567890123' to the '주문번호' column
-        const appendResponse = await sheets.spreadsheets.values.append({
-            spreadsheetId,
-            range: `${sheetName}!${orderNumberColumnLetter}:${orderNumberColumnLetter}`,
-            valueInputOption: 'RAW',
-            resource: {
-                values: [['1234567890123']],
-            },
-        });
-
-        console.log('Appended value to the spreadsheet:', appendResponse.data.updates);
-    } catch (error) {
-        console.error('Error listing report:', error);
-        if (error.errors) {
-            error.errors.forEach((err) => {
-                console.error(`Error reason: ${err.reason}, message: ${err.message}`);
+    // const sheetName = 'Sheet1'; // Replace with your sheet name
+    const check = false;
+    if (check) {
+        try {
+            // Log available sheet names
+            const sheetsResponse = await sheets.spreadsheets.get({
+                spreadsheetId,
             });
+
+            const sheetNames = sheetsResponse.data.sheets.map(sheet => sheet.properties.title);
+            console.log('Available sheets:', sheetNames);
+
+            // Get the existing data to find the column index for '주문번호'
+            const getResponse = await sheets.spreadsheets.values.get({
+                spreadsheetId,
+                range: `${sheetNames}!A1:G1`, // Assuming the headers are in the first row
+            });
+
+            const headers = getResponse.data.values[0];
+            const orderNumberColumnIndex = headers.indexOf('주문번호');
+            if (orderNumberColumnIndex === -1) {
+                console.log(`'주문번호' column not found in the sheet`);
+                return;
+            }
+
+            // Find the column letter based on the index
+            const orderNumberColumnLetter = String.fromCharCode(65 + orderNumberColumnIndex);
+
+            // Append the value '1234567890123' to the '주문번호' column
+            const appendResponse = await sheets.spreadsheets.values.append({
+                spreadsheetId,
+                range: `${sheetNames}!${orderNumberColumnLetter}:${orderNumberColumnLetter}`,
+                valueInputOption: 'RAW',
+                resource: {
+                    values: [['1234567890123','김해리','볼드모트의 숨결', '이미지 설명', '탑노트입니다', '미들노트입니다', '베이스노트입니다']],
+                },
+            });
+
+            console.log('Appended value to the spreadsheet:', appendResponse.data.updates);
+        } catch (error) {
+            console.error('Error listing report:', error);
+            if (error.errors) {
+                error.errors.forEach((err) => {
+                    console.error(`Error reason: ${err.reason}, message: ${err.message}`);
+                });
+            }
         }
     }
+
 }
 listingReport().catch(console.error);
 
@@ -124,6 +128,48 @@ async function uploadImageToDrive(file) {
         throw error;
     }
 }
+const iamWeb = process.env.IMWEB_API_KEY;
+
+router.get('/products', async (req, res) => {
+    try {
+        const url = 'https://api.imweb.me/v2/shop/products';
+
+        const options = {
+            headers: {
+                'Content-Type': 'application/json',
+                'access-token': iamWeb
+            }
+        };
+
+        const request = https.get(url, options, (response) => {
+            let data = '';
+
+            response.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            response.on('end', () => {
+                try {
+                    const products = JSON.parse(data);
+                    res.json(products);
+                } catch (error) {
+                    console.error('Error parsing JSON:', error);
+                    res.status(500).json({ error: 'Error parsing JSON response' });
+                }
+            });
+        });
+
+        request.on('error', (error) => {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
+
+        request.end();
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 // POST route for '/image'
 router.post('/image', upload.single('image'), async (req, res) => {
