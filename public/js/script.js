@@ -35,8 +35,8 @@ let assistantMessages = [];
 // Variable for start function
 let myDateTime = '';
 function codeSubmit() {
-    const passcode = document.getElementById('passcode').value;
-    const validPasscode = '010-4508-5570';
+        const passcode = document.getElementById('passcode').value;
+        const validPasscode = '010-4508-5570';
 
     // Show loading
     pageTransition('loader');

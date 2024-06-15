@@ -9,6 +9,8 @@ app.set('views', path.join(__dirname, 'views'));
 // Import routes
 const imageMasterRouter = require('./routes/imageMaster');
 const reportRouter = require('./routes/reportRouter');
+const authRouter = require('./routes/authRouter');
+
 // Middleware to serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -27,6 +29,7 @@ app.get('/', (req, res) => {
 // Use the imported router for the '/professorFish' path
 app.use("/imageMaster", imageMasterRouter);
 app.use(reportRouter);
+app.use(authRouter);
 
 
 app.listen(PORT, () => {

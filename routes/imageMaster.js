@@ -5,6 +5,8 @@
 
 const { google } = require('googleapis');
 const express = require('express');
+const request = require('request');
+
 const router = express.Router();
 const OpenAI = require("openai");
 const https = require("https");
@@ -18,10 +20,13 @@ const stream = require("node:stream");
 const fs = require('fs').promises;
 const GOOGLE_ACCOUNT = path.join(__dirname, '../perfume-maker-google.json');
 
+const iamWebApiKey = process.env.IMWEB_API_KEY;
+const iamWebSecretKey = process.env.IMWEB_SECRET_KEY;
 const authDrive = new google.auth.GoogleAuth({
     keyFile: GOOGLE_ACCOUNT,
     scopes: ['https://www.googleapis.com/auth/drive'],
 });
+
 const authSheets = new google.auth.GoogleAuth({
     keyFile: GOOGLE_ACCOUNT,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
@@ -128,47 +133,68 @@ async function uploadImageToDrive(file) {
         throw error;
     }
 }
-const iamWeb = process.env.IMWEB_API_KEY;
+// const iamWeb = process.env.IMWEB_TOKEN;
 
 router.get('/products', async (req, res) => {
-    try {
-        const url = 'https://api.imweb.me/v2/shop/products';
+    const authUrl = 'https://api.imweb.me/v2/auth';
+    const authReqBody = {
+        key: iamWebApiKey,
+        secret: iamWebSecretKey
+    };
 
-        const options = {
-            headers: {
-                'Content-Type': 'application/json',
-                'access-token': iamWeb
-            }
-        };
-
-        const request = https.get(url, options, (response) => {
-            let data = '';
-
-            response.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            response.on('end', () => {
-                try {
-                    const products = JSON.parse(data);
-                    res.json(products);
-                } catch (error) {
-                    console.error('Error parsing JSON:', error);
-                    res.status(500).json({ error: 'Error parsing JSON response' });
-                }
-            });
-        });
-
-        request.on('error', (error) => {
-            console.error('Error:', error);
+    // Fetch access token
+    request.post({
+        headers: { 'Content-Type': 'application/json' },
+        url: authUrl,
+        body: JSON.stringify(authReqBody)
+    }, (authError, authResponse, authBody) => {
+        if (authError) {
+            console.error('Auth Error:', authError);
             res.status(500).json({ error: 'Internal Server Error' });
-        });
+            return;
+        }
+        try {
+            const authData = JSON.parse(authBody);
+            const accessToken = authData.access_token; // Assuming access_token is the field in the response
 
-        request.end();
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+            // Use the access token to make the request to the products endpoint
+            const url = 'https://api.imweb.me/v2/member/members';
+            const options = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'access-token': accessToken
+                }
+            };
+
+            https.get(url, options, (response) => {
+                let data = '';
+
+                response.on('data', (chunk) => {
+                    data += chunk;
+                });
+
+                response.on('end', () => {
+                    try {
+                        const clientData = JSON.parse(data);
+                        const email = clientData.data.email;
+                        const memberCode = clientData.data.member_code;
+                        // res.json({memeber_code: memberCode});
+                        res.json(clientData);
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                        res.status(500).json({ error: 'Error parsing JSON response' });
+                    }
+                });
+            }).on('error', (error) => {
+                console.error('Error:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            });
+
+        } catch (err) {
+            console.error('Error parsing Auth JSON:', err);
+            res.status(500).json({ error: 'Error parsing Auth JSON response' });
+        }
+    });
 });
 
 // POST route for '/image'
