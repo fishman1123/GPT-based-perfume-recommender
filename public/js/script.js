@@ -1,3 +1,49 @@
+
+
+document.getElementById('generate-pdf').addEventListener('click', async () => {
+    const content = document.getElementById('messageArea');
+
+    // Calculate the scale factor based on the content height and A4 page height
+    const pageHeight = 297; // A4 page height in mm
+    const contentHeight = content.scrollHeight;
+    const scaleFactor = pageHeight / (contentHeight * 0.264583); // Convert content height from px to mm (1px = 0.264583mm)
+
+    html2canvas(content, {
+        scale: 2, // Scale factor to improve resolution
+        useCORS: true,
+        allowTaint: false,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.offsetWidth,
+        windowHeight: document.documentElement.scrollHeight,
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+
+        const imgWidth = 210; // Width in mm (A4)
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+        });
+
+        // Add the image to the PDF
+        doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+        // Save the PDF
+        doc.save('capture.pdf');
+    });
+});
+
+
+
+
+
+
+
+
+
 window.onload = function(){
     alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
 
@@ -34,28 +80,56 @@ let assistantMessages = [];
 
 // Variable for start function
 let myDateTime = '';
-function codeSubmit() {
-        const passcode = document.getElementById('passcode').value;
-        const validPasscode = '010-4508-5570';
+async function codeSubmit() {
+    const passcode = document.getElementById('passcode').value;
 
-    // Show loading
-    pageTransition('loader');
-    document.getElementById('security').style.display = 'none';
+    try {
+        const response = await fetch('/imageMaster/passcode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ passcode }),
+        });
 
-    setTimeout(() => {
-        // Check passcode
-        if (passcode === validPasscode) {
-            // Hide loading and show intro
-            document.getElementById('loader').style.display = 'none';
-            pageTransition('intro');
-        } else {
-            // Hide loading and show alert
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('security').style.display = 'flex';
-            alert('wrong passcode');
+        if (!response.ok) {
+            alert('이미지 처리 중 문제가 발생했습니다.');
+            backToPage();
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    }, 2000); // Simulating a delay for the validation process
+
+        const responseData = await response.json();
+
+        // Show loading
+        pageTransition('loader');
+        document.getElementById('security').style.display = 'none';
+
+        setTimeout(() => {
+            // Check passcode based on the server response
+            if (responseData.status === 'validated') { // Passcode validated and updated
+                // Hide loading and show intro
+                document.getElementById('loader').style.display = 'none';
+                pageTransition('intro');
+            } else if (responseData.status === 'already_used') { // Passcode already used
+                // Hide loading and show alert
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('security').style.display = 'flex';
+                alert('Passcode already used');
+            } else {
+                // Hide loading and show alert
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('security').style.display = 'flex';
+                alert('Wrong passcode');
+            }
+        }, 2000); // Simulating a delay for the validation process
+    } catch (error) {
+        console.error('Error:', error);
+        alert('이미지 처리 중 문제가 발생했습니다.');
+        backToPage();
+    }
 }
+
+
 // function start() {
 //     const date = document.getElementById('date').value;
 //     const hour = document.getElementById('hour').value;
@@ -175,7 +249,7 @@ async function sendImage() {
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
     const imageInput = document.getElementById('imageInput');
-    console.log("can you get this?: " + birthInput.value);
+    // console.log("can you get this?: " + birthInput.value);
     if (imageInput.files.length === 0) {
         alert('Please select an image to upload.');
         return;
@@ -244,7 +318,7 @@ async function sendImage() {
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
-        console.log("hello there" + document.getElementById('date').value);
+        // console.log("hello there" + document.getElementById('date').value);
 
         document.getElementById('loader').style.display = "flex"; // Show loading icon
         document.getElementById('backButton').style.display = "none"; // Hide back button
@@ -264,15 +338,15 @@ async function sendImage() {
         }
 
         const responseData = await response.json();
-        console.log("this is the answer: " + responseData); // Assuming the server responds with some JSON
-        console.log("target input name" + inputName.value);
+        // console.log("this is the answer: ", responseData);
+        // console.log("target input name" + inputName.value);
         if (responseData.message.nameRecommendation === 'Name Recommendation not found') {
             alert("허용하지 않는 이미지 유형입니다.");
             window.location.href = "https://acscent.co.kr";
         }
 
         pageTransition("report");
-        console.log('hello' + responseData.message.combinedInsights);
+        // console.log('hello' + responseData.message.combinedInsights);
         displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
         displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
