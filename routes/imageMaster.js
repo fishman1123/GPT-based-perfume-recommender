@@ -265,7 +265,7 @@ router.get('/products', async (req, res) => {
             const accessToken = authData.access_token; // Assuming access_token is the field in the response
 
             // Use the access token to make the request to the products endpoint
-            const url = 'https://api.imweb.me/v2/member/members';
+            const url = 'https://api.imweb.me/v2/shop/orders';
             const options = {
                 headers: {
                     'Content-Type': 'application/json',

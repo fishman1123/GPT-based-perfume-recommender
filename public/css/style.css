@@ -46,17 +46,29 @@ body {
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    margin: auto;
     font-family: "BM Hanna Air", sans-serif;
-    width: 375px;
-    /*background-color: black;*/
-
+    width: 100%;
+    max-width: 375px;
+    margin: auto;
 
     background-image: url('/images/back.png');
-    background-size: cover;           /* Scale the image to cover the entire element */
-    background-repeat: no-repeat;     /* Prevent the image from repeating */
-    background-position: center;      /* Center the background image */
-    background-attachment: fixed;     /* Fix the background image so it doesn't scroll with the page */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative; /* Necessary for the pseudo-element to work */
+    z-index: 0; /* Ensure the background is behind other content */
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Adjust the opacity to make it darker or lighter */
+    z-index: -1; /* Ensure the overlay is behind other content */
 }
 @keyframes fadeIn {
     0% {
@@ -537,15 +549,72 @@ body {
     display: flex;
     color: white;
     flex-direction: column;
+    /*width: 375px;*/
     align-items: center;
-    margin: auto;
+    /*margin: auto;*/
 }
 
 .securitySubmit {
     display: flex;
-    width: 100px;
-    margin: auto;
+    width: 24px;
+    height: 24px;
+    background-color: black;
+    border-radius: 3rem;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    margin: 3px 2px 0 0;
+
 }
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    font-size: 62,5%;
+}
+
+
+
+
+
+.form__input {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    font-size: 16px;
+    padding-left: 6px;
+    padding-top: 7px;
+
+    background-color: transparent;
+    border: none;
+    width: 80%;
+    display: block;
+    border-bottom: solid transparent;
+    margin-left: 5px;
+}
+.form__group {
+    display: flex;
+    border-radius: 3rem;
+    height: 30px;
+    background-color: white;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
+.securityTitleText {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    font-family: "Times New Roman", Times, serif;
+}
+.securitySubText {
+    font-size: 12px;
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+}
+
 
 
 
