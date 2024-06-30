@@ -1,4 +1,33 @@
 
+window.onload = function(){
+    alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
+
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var imageInput = document.getElementById('imageInput');
+    var fileStatus = document.getElementById('fileStatus');
+    var imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', function() {
+        if (imageInput.files.length > 0) {
+            var file = imageInput.files[0];
+            fileStatus.textContent = file.name;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            fileStatus.textContent = 'No files have been selected';
+            imagePreview.style.display = 'none';
+            imagePreview.src = '';
+        }
+    });
+});
+
 
 document.getElementById('generate-pdf').addEventListener('click', async () => {
     const content = document.getElementById('messageArea');
@@ -44,23 +73,23 @@ document.getElementById('generate-pdf').addEventListener('click', async () => {
 
 
 
-window.onload = function(){
-    alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
 
-}
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Optionally, display an initial message from Professor Fish if needed
-    // displayMessage("=====================", "assistant");
 
-    // Listen for Enter key presses on the chat input field
-    document.getElementById('chatInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Prevent the default action to avoid form submission
-            sendMessage(); // Trigger the sendMessage function
-        }
-    });
-});
+
+
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     // Optionally, display an initial message from Professor Fish if needed
+//     // displayMessage("=====================", "assistant");
+//
+//     // Listen for Enter key presses on the chat input field
+//     document.getElementById('chatInput').addEventListener('keypress', function(e) {
+//         if (e.key === 'Enter') {
+//             e.preventDefault(); // Prevent the default action to avoid form submission
+//             sendMessage(); // Trigger the sendMessage function
+//         }
+//     });
+// });
 
 const texts = ["LOADING", "이미지 분석 중...", "ANALYZING Image", "향료 추출 중...", "EXTRACTING Fragrances", "향수 이름 작명 중...", "MAKING Scent name", "Wait a minute", "곧 분석보고서가 나옵니다", "잠시만 기다려주세요"];
 let index = 0;

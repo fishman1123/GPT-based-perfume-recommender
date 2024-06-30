@@ -15,21 +15,20 @@
 <body>
 <!--do not forget to change display to none when you test, this is temporal display-->
 <!--change to flex to roll back-->
-
-<div id="security" class="securityContainer" style="display: flex">
-    <div class="securityTitleText">AC'SCENT</div>
+<div id="security" class="securityContainer" style="display: none">
+    <div class="titleText">AC'SCENT</div>
 <!--    <div>-->
 <!--        <div style="color: white; text-align: center; font-size: 20px">구매 일렬번호 입력</div>-->
 
 <!--        <input id="passcode" class="securityInput" maxlength='13' value='PASSWORD-HERE' style="scale: 0.5"/>-->
 <!--    </div>-->
     <div style="display: flex; flex-direction: column">
-        <p class="securityTitleText securitySubText" style="text-align: start;">AI IMAGE ANALYSIS PERFUME MAKER</p>
+        <p class="titleText securitySubText" style="text-align: start;">AI IMAGE ANALYSIS PERFUME MAKER</p>
         <div style="display: flex; text-align: end; flex-direction: column; margin-top: 30px; margin-bottom: 40px" >
-            <p class="securityTitleText securitySubText" style="text-align: end;">
+            <p class="titleText securitySubText" style="text-align: end;">
                 Create your personal perfume
             </p>
-            <p class="securityTitleText securitySubText" style="text-align: end;">
+            <p class="titleText securitySubText" style="text-align: end;">
                 based on AI analysis of an image
             </p>
         </div>
@@ -56,18 +55,34 @@
 </div>
 
 
-
-<div id="intro" class="intro-container" style="display: none; color: white; padding-bottom: 20px">
-    <h1>AC'SCENT</h1>
+<!--flex is default-->
+<div id="intro" class="intro-container" style="display: flex; color: white; padding-bottom: 20px;">
+    <h1 class="titleText">AC'SCENT</h1>
+    <p class="titleText securitySubText" style="text-align: start; padding-bottom: 6px">AI IMAGE ANALYSIS PERFUME MAKER</p>
+    <div style="padding-left: 80px; padding-right: 80px; display: flex; flex-direction: column; margin-bottom: 10px">
+        <div style="font-size: 12px">보다 정확한 분석 결과를 위해 사진 속 인물에 대한 기본 정보를 입력해 주세요. 해당 정보는 오르지 분석 과정에만 사용되며 외부로 유출하진 않습니다.</div>
+        <div style="font-size: 12px">Please enter some basic information about the person in the image for better results. this information will only be used for analysis and not be exposed.</div>
+    </div>
     <div style="display: flex; padding-right: 10px; align-items: center">
         <label for="date" style="display: flex; padding-right: 10px;">생년월일:</label>
-        <input id="date" type="date" style="display: flex;">
+        <input style="width: 60%" type="text" id="date" class="text-input">
     </div>
     <div>
+
+
+
         <div class="select-container" >
             <div style="display: flex">
                 <div>
-                    <label for="gender" style="display: flex; margin-top: 10px; margin-bottom: 10px; align-items: center; padding-right: 13px">성별:</label>
+                    <label for="nameInput" style=" width: 46px;display: flex; align-items: center; margin-top: 10px">이름:</label>
+                </div>
+                <div style="margin-top: 10px; margin-bottom: 10px">
+                    <input style="width: 80%" type="text" id="nameInput" class="text-input">
+                </div>
+            </div>
+            <div style="display: flex">
+                <div>
+                    <label for="gender" style="display: flex; margin-top: 12px; margin-bottom: 12px; align-items: center; padding-right: 13px">성별:</label>
                 </div>
                 <div style="display: inline-flex; align-items: center;">
                     <select id="gender" style="display: block;">
@@ -78,17 +93,14 @@
                 </div>
 
             </div>
-            <div style="display: flex">
-                <div>
-                    <label for="nameInput" style=" width: 42px;display: flex; align-items: center;">이름:</label>
-                </div>
-                <div>
-                    <input style="width: 80%" type="text" id="nameInput" class="text-input">
-                </div>
+
+            <div class="file-upload-container">
+                <img id="imagePreview" src="/images/default.png" alt="" style="width: 70px; height: 160px; padding-bottom: 10px">
+                <input type="file" id="imageInput" class="padded-input" accept="image/*">
+                <label for="imageInput">이미지 선택</label>
+                <div class="file-status" id="fileStatus">No files have been selected</div>
             </div>
 
-
-            <input style="width: 100%" type="file" id="imageInput" class="padded-input" accept="image/*">
             <button onclick="imageUpload()" class="button-59 button-adjust" style="width: 100%">다음 단계로</button>
         </div>
     </div>
