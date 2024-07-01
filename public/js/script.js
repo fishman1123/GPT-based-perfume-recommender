@@ -5,16 +5,16 @@ window.onload = function(){
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var imageInput = document.getElementById('imageInput');
-    var fileStatus = document.getElementById('fileStatus');
-    var imagePreview = document.getElementById('imagePreview');
+    let imageInput = document.getElementById('imageInput');
+    let fileStatus = document.getElementById('fileStatus');
+    let imagePreview = document.getElementById('imagePreview');
 
     imageInput.addEventListener('change', function() {
         if (imageInput.files.length > 0) {
-            var file = imageInput.files[0];
+            let file = imageInput.files[0];
             fileStatus.textContent = file.name;
 
-            var reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function(e) {
                 imagePreview.src = e.target.result;
                 imagePreview.style.display = 'block';
