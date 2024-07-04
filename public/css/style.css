@@ -540,9 +540,18 @@ body::before {
 }
 
 .button-adjust {
-    background-color: black;
+    /*background-color: black;*/
+    /*color: white;*/
+    /*border: solid 2px white;*/
+    /*border-radius: 10px;*/
+}
+
+.button-second-adjust {
+    background-color: rgba(0, 0, 0, 0.7); /* Dark transparent background */
     color: white;
     border: solid 2px white;
+    border-radius: 10px;
+    width: 100%; /* Adjusts the button width */
 }
 
 
