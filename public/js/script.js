@@ -122,7 +122,7 @@ async function codeSubmit() {
         });
 
         if (!response.ok) {
-            alert('이미지 처리 중 문제가 발생했습니다.');
+            alert('처리 중 문제가 발생했습니다.');
             backToPage();
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -154,7 +154,7 @@ async function codeSubmit() {
     } catch (error) {
         console.error('Error:', error);
         alert('이미지 처리 중 문제가 발생했습니다.');
-        backToPage();
+        // backToPage();
     }
 }
 
@@ -183,30 +183,45 @@ function imageUpload() {
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
 
+
     // Check if the name input is empty
     if (!inputName.value.trim()) {
-        alert('Please enter your name.');
+        alert('이름을 작성해 주세요.');
         inputName.focus();
         return;
     }
 
     // Check if the birthdate input is empty
     if (!birthInput.value.trim()) {
-        alert('Please enter your birth date.');
+        alert('생일 일자를 작성 해주세요.');
         birthInput.focus();
         return;
     }
 
+    const birthDateRegex = /^\d+$/;
+    if (!birthDateRegex.test(birthInput.value.trim()) || birthInput.length > 8) {
+        alert('생일일자에는 특수문자를 허용하지 않습니다.');
+        birthInput.focus();
+        return;
+    }
+
+    if (birthInput.length > 8) {
+        alert('생일일자는 8자만 허용합니다(특수문자 제외)');
+        birthInput.focus();
+        return;
+    }
+
+
     // Check if the gender has been selected
     if (!inputGender.value.trim()) {
-        alert('Please select your gender.');
+        alert('성별을 입력해주세요.');
         inputGender.focus();
         return;
     }
 
     // Check if an image has been uploaded
     if (imageCheck.files.length === 0) {
-        alert('Please select an image to upload.');
+        alert('이미지 첨부를 해주세요.');
         imageCheck.focus();
         return;
     }
@@ -219,6 +234,10 @@ function imageUpload() {
 function pageTransition(id) {
     let displayType = id === "intro" || "security" ? "flex" : "block";
     document.getElementById(`${id}`).style.display = `${displayType}`;
+}
+
+function pageTransitionEnhanced(id) {
+    document.getElementById(`${id}`).style.display = 'none' ? 'flex' : 'none';
 }
 // function backToMain() {
 //     // Correct the ID if it's 'messageArea' and not 'message-area'
@@ -479,5 +498,6 @@ function displayReport(message, sender, targetID, ) {
     }
     targetArea.appendChild(messageElement);
     targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
-
 }
+
+function displaySequence(message, sender, targetID) {}

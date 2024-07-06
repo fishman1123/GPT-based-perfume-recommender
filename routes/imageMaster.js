@@ -89,7 +89,6 @@ async function listingReport(userName, resultList) {
                     values: [['test', `${userName}`, `${resultList.nameRecommendation}`, `${resultList.combinedInsights}`, `${resultList.topNote}`, `${resultList.middleNote}`, `${resultList.baseNote}`]],
                 },
             });
-
             console.log('Appended value to the spreadsheet:', appendResponse.data.updates);
         } catch (error) {
             console.error('Error listing report:', error);
@@ -341,6 +340,10 @@ router.post('/passcode', async (req, res) => {
     }
 
     try {
+        // if (passcode === 'master') {
+        //     return res.status(200).json({ status: 'validated' });
+        // }
+
         // Log available sheet names
         const sheetsResponse = await sheets.spreadsheets.get({ spreadsheetId });
 
@@ -379,6 +382,7 @@ router.post('/passcode', async (req, res) => {
             console.log('Passcode not found');
             return res.status(404).send('Passcode not found');
         }
+
 
         if (usageStatus === 'FALSE') {
             // Update '사용여부' to true
@@ -546,9 +550,12 @@ async function imageToGpt(file, gender, birthdate, name) {
                     "role": "assistant",
                     "content": `알겠습니다. 저의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다.  세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.`
                 },
-                {"role": "user", "content": `특징 내용은 총 300자, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`},
-                {"role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`},
-
+                {
+                    "role": "user", "content": `특징 내용은 총 300자, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`
+                },
+                {
+                    "role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`
+                },
 
                 {
                     role: "user",
