@@ -237,8 +237,25 @@ const pageTransition = (id) => {
 }
 
 function pageTransitionEnhanced(id) {
+    document.body.style.height = "400vh";
     document.getElementById(`${id}`).style.display = 'none' ? 'flex' : 'none';
 }
+function testFunction() {
+    document.body.style.height = "400vh";
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("reportSequence").style.display = 'flex';
+
+    // Ensure all reports are initially hidden and then transition them to visible
+    let reports = ["reportOne", "reportTwo", "reportThree", "reportFour"];
+    reports.forEach(report => {
+        setTimeout(() => {
+            document.getElementById(report).style.opacity = '1';
+        }, 100); // small delay to ensure transition effect
+    });
+}
+
+
+
 // function backToMain() {
 //     // Correct the ID if it's 'messageArea' and not 'message-area'
 //     const targetArea = document.getElementById('targetTopNote');
