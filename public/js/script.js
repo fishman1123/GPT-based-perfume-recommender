@@ -1,8 +1,8 @@
 
-// window.onload = function(){
-//     alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
-//
-// }
+window.onload = function(){
+    // alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
+
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     let imageInput = document.getElementById('imageInput');
@@ -244,15 +244,22 @@ function testFunction() {
     document.body.style.height = "400vh";
     document.getElementById("intro").style.display = 'none';
     document.getElementById("reportSequence").style.display = 'flex';
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+            }
+        });
+    }, {
+        threshold: 0.1 // Trigger when 10% of the element is visible
+    });
 
-    // Ensure all reports are initially hidden and then transition them to visible
     let reports = ["reportOne", "reportTwo", "reportThree", "reportFour"];
     reports.forEach(report => {
-        setTimeout(() => {
-            document.getElementById(report).style.opacity = '1';
-        }, 100); // small delay to ensure transition effect
+        observer.observe(document.getElementById(report));
     });
 }
+
 
 
 
