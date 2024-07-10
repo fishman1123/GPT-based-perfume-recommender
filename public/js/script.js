@@ -130,6 +130,7 @@ async function codeSubmit() {
         const responseData = await response.json();
 
         // Show loading
+        document.getElementById('report').style.display = "flex";
         pageTransition('loader');
         document.getElementById('security').style.display = 'none';
 
@@ -139,6 +140,8 @@ async function codeSubmit() {
                 // Hide loading and show intro
                 document.getElementById('loader').style.display = 'none';
                 pageTransition('intro');
+                document.getElementById('report').style.display = "none";
+
             } else if (responseData.status === 'already_used') { // Passcode already used
                 // Hide loading and show alert
                 document.getElementById('loader').style.display = 'none';
@@ -182,6 +185,8 @@ function imageUpload() {
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
+    document.getElementById('report').style.display = "flex";
+
 
 
     // Check if the name input is empty
@@ -244,7 +249,7 @@ function reportSequenceTransition() {
     document.body.style.height = "400vh";
     let insight = document.getElementById('reportOne');
     let targetElement = document.getElementById('reportOneElement');
-    insight.style.height = `calc(${targetElement.style.height} + 100px)`;
+    insight.style.height = `calc(${targetElement.style.height} + 140px)`;
     document.getElementById("intro").style.display = 'none';
     document.getElementById("reportSequence").style.display = 'flex';
     const observer = new IntersectionObserver((entries) => {

@@ -768,6 +768,17 @@ body::before {
     body {
         width: 320px;
     }
+    #intro {
+        padding-top: 50px;
+    }
+}
+@media only screen and (max-width: 375px) {
+    body {
+        width: 320px;
+    }
+    #intro {
+        padding-top: 50px;
+    }
 }
 
 
