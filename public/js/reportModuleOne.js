@@ -15,7 +15,7 @@ export const reportModuleOne = () => {
                 </div>
             </div>
 
-            <div class="report-container" style="padding-bottom: 20px; margin-top: 10px; border: 0; border-radius: 20px">
+            <div class="report-container" style="padding-bottom: 20px; margin-top: 10px; margin-bottom: 10px; border: 0; border-radius: 20px">
                 <div style="display: flex; justify-content: flex-start; align-content: center; margin-left: 10px">
                     <div class="title-container">
                         <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
