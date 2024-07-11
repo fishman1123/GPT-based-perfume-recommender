@@ -473,9 +473,7 @@ body::before {
     background-color: white;
     border-radius:40px;
     /*padding-bottom: 30px;*/
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 20px 10px 10px;
 }
 .note-container {
     padding: 20px 40px 10px 40px;
