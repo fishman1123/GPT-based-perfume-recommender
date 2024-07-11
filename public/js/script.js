@@ -231,9 +231,19 @@ function reportSequenceTransition() {
     document.body.style.height = "400vh";
     let insight = document.getElementById('reportOne');
     let targetElement = document.getElementById('reportOneElement');
+    let targetReportElementHeight;
+    let targetReportContainer;
+    let reports = ["reportOne", "reportTwo", "reportThree", "reportFour", "reportLast"];
+    let targetElementList = ["reportOneElement", "reportTwoElement", "reportThreeElement", "reportFourElement"];
+
     insight.style.height = `calc(${targetElement.style.height} + 140px)`;
     document.getElementById("intro").style.display = 'none';
     document.getElementById("reportSequence").style.display = 'flex';
+    const assignHeight = () => {
+        targetElementList.forEach((element, index) => {
+            targetReportElementHeight  = document.getElementById(`${element}`).style.height;
+            document.getElementById(`${reports[index]}`).style.height = `${element} === "reportOne"` ? `calc(${targetReportElementHeight} + 140px)` : `calc(${targetReportElementHeight} + 100px))`;})
+    }
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -244,7 +254,6 @@ function reportSequenceTransition() {
         threshold: 0.1 // Trigger when 10% of the element is visible
     });
 
-    let reports = ["reportOne", "reportTwo", "reportThree", "reportFour", "reportLast"]
     reports.forEach(report => {
         observer.observe(document.getElementById(report));
     });

@@ -60,13 +60,6 @@
 <!--flex is default-->
 <div id="intro" class="intro-container" style="display: flex; color: white; padding-bottom: 20px;">
 
-
-
-
-
-
-
-
     <h1 class="titleText">AC'SCENT</h1>
     <p class="titleText securitySubText" style="text-align: start; padding-bottom: 6px">AI IMAGE ANALYSIS PERFUME MAKER</p>
     <div style="padding-left: 80px; padding-right: 80px; display: flex; flex-direction: column; margin-bottom: 10px">
@@ -121,7 +114,7 @@
             <!-- Report One -->
             <div id="reportOne" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; margin-bottom: 10px; flex-direction: column">
                 <div class="zigzag" style="margin-top: 80px"></div>
-                <div id="reportOneElement" style="display: flex; flex-direction: column; width: 100%;; background-color: lightgrey;">
+                <div id="reportOneElement" style="display: flex; flex-direction: column; width: 100%; background-color: lightgrey;">
                     <div style="display: flex; justify-content: center">
                         <div class="title-container" style="margin-left: 0; color: black; border: solid 4px black; padding-bottom: 6px">
                             <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
@@ -154,9 +147,9 @@
             </div>
 
             <!-- Report Two -->
-            <div id="reportTwo" style="width: 100%; height: 100vh; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
+            <div id="reportTwo" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
                 <div class="zigzag" style="margin-top: 20px"></div>
-                <div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
+                <div id="reportTwoElement" style="display: flex; flex-direction: column; width: 100%; background-color: lightgrey;">
                     <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
                         <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
                             <div class="title-container" style="margin-bottom: 20px">
@@ -170,7 +163,7 @@
                         </div>
                         <div style="display: flex; margin-bottom: 10px">
                             <div class="note-container second-note-container" style="padding-top: 0; text-align: start; padding-left: 20px;">
-                                <div>MIDDLE NOTE</div>
+                                <div>TOP NOTE</div>
                                 <div id="targetTopNote"></div>
                             </div>
                         </div>
@@ -180,9 +173,9 @@
             </div>
 
             <!-- Report Three -->
-            <div id="reportThree" style="width: 100%; height: 100vh; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
+            <div id="reportThree" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
                 <div class="zigzag" style="margin-top: 20px"></div>
-                <div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
+                <div id="reportThreeElement" style="display: flex; flex-direction: column; width: 100%; background-color: lightgrey;">
                     <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
                         <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
                             <div class="title-container" style="margin-bottom: 20px">
@@ -206,9 +199,9 @@
             </div>
 
             <!-- Report Four -->
-            <div id="reportFour" style="width: 100%; height: 100vh; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
+            <div id="reportFour" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
                 <div class="zigzag" style="margin-top: 20px"></div>
-                <div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
+                <div id="reportFourElement" style="display: flex; flex-direction: column; width: 100%; background-color: lightgrey;">
                     <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
                         <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
                             <div class="title-container" style="margin-bottom: 20px">
@@ -222,7 +215,7 @@
                         </div>
                         <div style="display: flex; margin-bottom: 10px">
                             <div class="note-container second-note-container" style="padding-top: 0; text-align: start; padding-left: 20px;">
-                                <div>MIDDLE NOTE</div>
+                                <div>BASE NOTE</div>
                                 <div id="targetBaseNote"></div>
                             </div>
                         </div>
@@ -236,7 +229,7 @@
                     <p class="titleText securitySubText" style="text-align: center; padding-bottom: 6px; margin-bottom: 80px">AI IMAGE ANALYSIS PERFUME MAKER</p>
                     <div style=" margin: auto; width: 150px; display: flex; align-content: center; flex-direction: column">
                         <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px"><span style="letter-spacing: 10px; padding-left: 10px;">저장하기</span><br><span style="letter-spacing: 0;">Save Report</span></button>
-                        <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px"><span style="letter-spacing: 10px; padding-left: 10px;">저장하기</span><br><span style="letter-spacing: 0">Save Report</span></button>
+                        <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px"><span style="letter-spacing: 10px; padding-left: 10px;">인쇄하기</span><br><span style="letter-spacing: 0">Print Report</span></button>
                     </div>
                 </div>
             </div>
