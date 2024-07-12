@@ -175,6 +175,7 @@ function imageUpload() {
     if (!inputName.value.trim()) {
         alert('이름을 작성해 주세요.');
         inputName.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
@@ -182,6 +183,7 @@ function imageUpload() {
     if (!birthInput.value.trim()) {
         alert('생일 일자를 작성 해주세요.');
         birthInput.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
@@ -189,12 +191,14 @@ function imageUpload() {
     if (!birthDateRegex.test(birthInput.value.trim()) || birthInput.length > 8) {
         alert('생일일자에는 특수문자를 허용하지 않습니다.');
         birthInput.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
     if (birthInput.length > 8) {
         alert('생일일자는 8자만 허용합니다(특수문자 제외)');
         birthInput.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
@@ -203,6 +207,7 @@ function imageUpload() {
     if (!inputGender.value.trim()) {
         alert('성별을 입력해주세요.');
         inputGender.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
@@ -210,6 +215,7 @@ function imageUpload() {
     if (imageCheck.files.length === 0) {
         alert('이미지 첨부를 해주세요.');
         imageCheck.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
