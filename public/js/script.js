@@ -321,6 +321,8 @@ function resetPage() {
 
 }
 
+
+
 async function sendImage() {
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
@@ -460,6 +462,15 @@ async function sendImage() {
         // backButton.style.display = "block"; // Show back button
     }
 }
+//구현해야됨
+async function compressedReport() {
+    const reportTitle = document.getElementById('targetNameRecommend');
+    const reportOne = document.getElementById('targetInsight');
+    const reportTwo = document.getElementById('targetMiddleNote');
+    const reportThree = document.getElementById('targetBaseNote');
+
+
+}
 
 
 
@@ -537,167 +548,7 @@ function displayReport(message, sender, targetID, ) {
     targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
 }
 
-// function displaySequence(message, targetID, senderId) {
-//     document.body.style.height = '400vh';
-//
-//     let targetArea = document.getElementById(targetID);
-//     targetArea.style.display = 'flex';
-//     targetArea.style.flexDirection = 'column';
-//     targetArea.style.alignItems = 'center';
-//     // targetArea.style.width = '360px';
-//     targetArea.style.height = '400vh';
-//     // targetArea.style.overflowY = 'scroll';
-//     targetArea.style.scrollSnapType = 'y mandatory';
-//     targetArea.style.webkitOverflowScrolling = 'touch'; // Smooth scrolling on iOS
-//
-//     // Function to create a new container
-//     const createContainer = (id) => {
-//         let newContainer = document.createElement('div');
-//         newContainer.id = `${id}`;
-//         // newContainer.style.backgroundColor = 'lightgrey';
-//         newContainer.style.width = '100%';
-//         newContainer.style.height = '100vh';
-//         newContainer.style.opacity = 0;
-//         newContainer.style.transition = 'opacity 1s';
-//         newContainer.style.scrollSnapAlign = 'start';
-//         // newContainer.style.border = '1px solid black'; // Added border for better visibility
-//         newContainer.style.display = 'flex';
-//         newContainer.style.alignItems = 'center';
-//         if (id === `newIdOne`) {
-//             newContainer.style.flexDirection = 'column';
-//             newContainer.innerHTML = `<div class="zigzag" style="margin-top: 80px"></div>
-//     <div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
-//             <div style="display: flex; justify-content: center">
-//                 <div class="title-container" style="margin-left: 0; color: black; border: solid 4px black; padding-bottom: 6px" >
-//                     <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
-//                         SCENT NAME
-//                     </div>
-//                 </div>
-//             </div>
-//
-//             <div style="display: flex; justify-content: center">
-//                 <div class="recommend-name-container">
-//                     <div id="targetNameRecommend" style="font-size: 30px"></div>
-//                 </div>
-//             </div>
-//
-//
-//             <div class="report-container" style="padding-bottom: 20px; margin-top: 10px; border: 0; border-radius: 20px">
-//                 <div style="display: flex; justify-content: flex-start; align-content: center; margin-left: 10px">
-//                     <div class="title-container">
-//                         <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">
-//                             이미지 분석 결과
-//                         </div>
-//                         <div style="margin-left: 5px">
-//                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
-//                                 <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
-//                             </svg>
-//                         </div>
-//                     </div>
-//                 </div>
-//             <div style="padding-top: 10px" class="note-container" id="targetInsight"></div>
-//         </div>
-//     </div>
-//         <div class="zigzag-upside-down"></div>`
-//         }
-//         if (id === `newIdTwo`) {
-//             newContainer.style.flexDirection = 'column';
-//             newContainer.innerHTML = `<div class="zigzag" style="margin-top: 20px"></div>
-//                 <div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
-//                     <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
-//                     <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
-//                         <div class="title-container" style="margin-bottom: 20px">
-//                             <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>
-//                             <div style="margin-left: 5px">
-//                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
-//                                     <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
-//                                 </svg>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div style="display: flex; margin-bottom: 10px">
-//
-//
-//                         <div class="note-container second-note-container" style="padding-top: 0; text-align: start; padding-left: 20px; >
-//                             <div style=" font-family: 'BM Hanna Pro', sans-serif">TOP NOTE </div>
-//                             <div style="font-family: 'BM Hanna Air', sans-serif" id="targetTopNote"></div>
-//                         </div>
-//                     </div>
-//                 </div>
-//                 </div><div class="zigzag-upside-down"></div>`
-//         }
-//         if (id === `newIdThree`) {
-//             newContainer.style.flexDirection = 'column';
-//             newContainer.innerHTML = `<div class="zigzag" style="margin-top: 20px"></div><div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
-//                     <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
-//                     <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
-//                         <div class="title-container" style="margin-bottom: 20px">
-//                             <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>
-//                             <div style="margin-left: 5px">
-//                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
-//                                     <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
-//                                 </svg>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div style="display: flex; margin-bottom: 10px">
-//                         <div class="note-container second-note-container" style="padding-top: 0; text-align: start; padding-left: 20px; >
-//                             <div style=" font-family: 'BM Hanna Pro', sans-serif">MIDDLE NOTE </div>
-//                             <div style="font-family: 'BM Hanna Air', sans-serif" id="targetTopNote"></div>
-//                         </div>
-//                     </div>
-//                 </div>
-//                 </div><div class="zigzag-upside-down" ></div>`
-//         }
-//         if (id === `newIdFour`) {
-//             newContainer.style.flexDirection = 'column';
-//             newContainer.innerHTML = `<div class="zigzag" style="margin-top: 20px"></div><div style="display: flex; flex-direction: column; width: 100%; height: 500px; background-color: lightgrey;">
-//                     <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
-//                     <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
-//                         <div class="title-container" style="margin-bottom: 20px">
-//                             <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>
-//                             <div style="margin-left: 5px">
-//                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">
-//                                     <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
-//                                 </svg>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div style="display: flex; margin-bottom: 10px">
-//                         <div class="note-container second-note-container" style="padding-top: 0; text-align: start; padding-left: 20px; >
-//                             <div style=" font-family: 'BM Hanna Pro', sans-serif">BASE NOTE </div>
-//                             <div style="font-family: 'BM Hanna Air', sans-serif" id="targetTopNote"></div>
-//                         </div>
-//                     </div>
-//                 </div>
-//                 </div><div class="zigzag-upside-down" ></div>`
-//         }
-//
-//
-//             targetArea.appendChild(newContainer);
-//         return newContainer;
-//     };
-//
-//
-//     // Create three containers
-//     let insight = createContainer(`${senderId}One`);
-//     let topNoteContainer = createContainer(`${senderId}Two`);
-//     let middleNoteContainer = createContainer(`${senderId}Three`);
-//     let baseNoteContainer = createContainer(`${senderId}Four`);
-//
-//
-//     // Show all containers with a fade-in effect
-//     requestAnimationFrame(() => {
-//         insight.style.opacity = 1;
-//         topNoteContainer.style.opacity = 1;
-//         middleNoteContainer.style.opacity = 1;
-//         baseNoteContainer.style.opacity = 1;
-//     });
-//
-//
-//     // Hide the intro section
-//     document.getElementById('intro').style.display = 'none';
-// }
+
 
 
 
