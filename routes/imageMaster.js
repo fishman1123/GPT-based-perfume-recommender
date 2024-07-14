@@ -331,6 +331,8 @@ router.post('/image', upload.single('image'), async (req, res) => {
     }
 });
 
+router.post('')
+
 router.post('/passcode', async (req, res) => {
     const passcode = req.body.passcode; // Assuming passcode is sent in the request body
     const spreadsheetId = '1XQF7kn7GCjcKj6PXq-O-kUPPBOKGLqdnfxWeNyG_QAY'; // Replace with your actual spreadsheet ID
@@ -341,9 +343,9 @@ router.post('/passcode', async (req, res) => {
     }
 
     try {
-        // if (passcode === 'master') {
-        //     return res.status(200).json({ status: 'validated' });
-        // }
+        if (passcode === 'acscentkimchi' || "재영마스터") { //임시 마스터키
+            return res.status(200).json({ status: 'validated' });
+        }
 
         // Log available sheet names
         const sheetsResponse = await sheets.spreadsheets.get({ spreadsheetId });

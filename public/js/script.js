@@ -470,6 +470,7 @@ async function compressedReport() {
     const reportThree = document.getElementById('targetBaseNote');
 
 
+
 }
 
 

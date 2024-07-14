@@ -476,7 +476,7 @@ body::before {
     margin: 20px 10px 10px;
 }
 .note-container {
-    padding: 20px 40px 10px 40px;
+    padding: 20px 40px 10px 20px;
     text-align: center;
 }
 .second-note-container {
@@ -663,9 +663,10 @@ body::before {
 }
 
 .zigzag {
+
     width: 100%;
     height: 6px;
-    margin-bottom: 0;
+    margin-bottom: -1px;
     background-color: lightgray;
     clip-path: polygon(
             0 100%,
@@ -715,7 +716,7 @@ body::before {
 .zigzag-upside-down {
     width: 100%;
     height: 6px;
-    margin: 0;
+    margin-top: -1px;
     background-color: lightgray;
     clip-path: polygon(
             0 0%,
