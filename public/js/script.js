@@ -230,11 +230,12 @@ const pageTransition = (id) => {
 }
 
 function pageTransitionEnhanced(id) {
-    document.body.style.height = "400vh";
+    document.body.style.height = "300vh";
     document.getElementById(`${id}`).style.display = 'none' ? 'flex' : 'none';
 }
 function reportSequenceTransition() {
-    document.body.style.height = "400vh";
+    document.body.style.height = "100%";
+    document.getElementById('report').style.display = "none";
     let insight = document.getElementById('reportOne');
     let targetElement = document.getElementById('reportOneElement');
     let targetReportElementHeight;
@@ -469,16 +470,21 @@ const compressedReport = () => {
     const reportTwo = document.getElementById('chunktargetTopNote').innerText;
     const reportThree = document.getElementById('chunktargetMiddleNote').innerText;
     const reportFour = document.getElementById('chunktargetBaseNote').innerText;
+    document.getElementById('report').style.display = "flex";
     document.getElementById('reportSequence').style.display = 'none';
     document.getElementById('reportCompressedPage').style.display = "flex";
+
+
+
     document.body.style.height = '100vh';
     document.body.style.maxWidth = '100%';
+    document.body.style.width = '100%';
     document.getElementById('report').style.marginTop = '0';
     document.getElementById('report').style.padding = '0';
     document.getElementById('report').style.height = '100%';
     document.getElementById('report-main').style.display = 'none';
     document.getElementById('reportCompressedPage').style.backgroundColor = 'white';
-
+    // document.getElementById('messageArea').style.marginTop = "30px";
     displayReport(reportOne, "preview", 'previewInsight');
     displayReport(reportTwo, "preview", 'previewTopNote');
     displayReport(reportThree, "preview", 'previewMiddleNote');
@@ -567,6 +573,7 @@ function displayReport(message, sender, targetID, ) {
     const messageElement = document.createElement('div');
     messageElement.id = `chunk${targetID}`;
     messageElement.textContent = message;
+    messageElement.style.textAlign = "left";
     messageElement.className = sender;
     // messageElement.style.marginBottom = '5px'; // Add margin between messages
     // messageElement.style.marginTop = '20px';
