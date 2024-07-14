@@ -19,11 +19,7 @@
 <!--change to flex to roll back-->
 <div id="security" class="securityContainer" style="display: flex">
     <div class="titleText">AC'SCENT</div>
-<!--    <div>-->
-<!--        <div style="color: white; text-align: center; font-size: 20px">구매 일렬번호 입력</div>-->
 
-<!--        <input id="passcode" class="securityInput" maxlength='13' value='PASSWORD-HERE' style="scale: 0.5"/>-->
-<!--    </div>-->
     <div style="display: flex; flex-direction: column">
         <p class="titleText securitySubText" style="text-align: start;">AI IMAGE ANALYSIS PERFUME MAKER</p>
         <div style="display: flex; text-align: end; flex-direction: column; margin-top: 30px; margin-bottom: 40px" >
@@ -229,109 +225,14 @@
                     <p class="titleText securitySubText" style="text-align: center; padding-bottom: 6px; margin-bottom: 80px">AI IMAGE ANALYSIS PERFUME MAKER</p>
                     <div style=" margin: auto; width: 150px; display: flex; align-content: center; flex-direction: column">
                         <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px" onclick="compressedReport()"><span style="letter-spacing: 10px; padding-left: 10px;">저장하기</span><br><span style="letter-spacing: 0;">Save Report</span></button>
-                        <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px" onclick="backToPage()"><span style="letter-spacing: 10px; padding-left: 10px;">돌아가기</span><br><span style="letter-spacing: 0">Print Report</span></button>
+                        <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px" onclick="backToPage()"><span style="letter-spacing: 10px; padding-left: 10px;">돌아가기</span><br><span style="letter-spacing: 0">Back to Main</span></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
-
-
-
-    <div id="report" class="chat-container" style="display: none;">
-<!--        <div class="message-area" id="messageArea">-->
-
-<!--            <div style="display: flex; justify-content: center">-->
-<!--                <div class="title-container" style="margin-left: 0; color: white; border: solid 4px white; padding-bottom: 6px" >-->
-<!--                    <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">-->
-<!--                        SCENT NAME-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            <div style="display: flex; justify-content: center">-->
-<!--                <div class="recommend-name-container">-->
-<!--                    <div id="targetNameRecommend" style="font-size: 30px"></div>-->
-<!--                </div>-->
-<!--            </div>-->
-
-
-<!--            <div class="report-container" style="padding-bottom: 20px; margin-top: 10px; ">-->
-<!--                <div style="display: flex; justify-content: center">-->
-<!--                    <div class="title-container">-->
-<!--                        <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">-->
-<!--                            이미지 분석 결과-->
-<!--                        </div>-->
-<!--                        <div style="margin-left: 5px">-->
-<!--                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">-->
-<!--                                <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>-->
-<!--                            </svg>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-
-<!--                <div style="padding-top: 10px" class="note-container" id="targetInsight"></div>-->
-<!--            </div>-->
-
-
-<!--            <div class="report-container" id="targetNote">-->
-<!--                <div style="margin-bottom: 20px; font-size: 20px">-->
-<!--                    <div style="display: flex; justify-content: center ">-->
-<!--                        <div class="title-container" style="margin-bottom: 20px">-->
-<!--                            <div style="font-size: 22px; font-family: 'BM Hanna Pro', sans-serif">향료 분석 결과</div>-->
-<!--                            <div style="margin-left: 5px">-->
-<!--                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1); align-self: center;">-->
-<!--                                    <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>-->
-<!--                                </svg>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div style="display: flex; margin-bottom: 10px">-->
-
-
-<!--                        <div class="note-container second-note-container" style="padding-top: 0;" >-->
-<!--                            <div style="font-family: 'BM Hanna Pro', sans-serif">TOP NOTE | </div>-->
-<!--                            <div style="font-family: 'BM Hanna Air', sans-serif" id="targetTopNote"></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div style="display: flex; margin-bottom: 10px">-->
-
-<!--                        <div class="note-container second-note-container" style="padding-top: 0;">-->
-<!--                            <div style="font-family: 'BM Hanna Pro', sans-serif">MIDDLE NOTE | </div>-->
-<!--                            <div style="font-family: 'BM Hanna Air', sans-serif" id="targetMiddleNote"></div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <div style="display: flex; margin-bottom: 20px">-->
-
-<!--                        <div class="note-container second-note-container" style="padding-top: 0;">-->
-<!--                            <div style="font-family: 'BM Hanna Pro', sans-serif">BASE NOTE | </div>-->
-<!--                            <div style="font-family: 'BM Hanna Air', sans-serif" id="targetBaseNote"></div>-->
-
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--            </div>-->
-<!--            <div class="bottom-title-container">AC'SCENT</div>-->
-<!--        </div>-->
-<!--        change this display to none before you actually post it-->
-<!--        this change to inline-block for testing-->
-<!--        <div id="loader" class="loader" style="display: none;">-->
-<!--            <i class="fa-solid fa-gear fa-spin"></i>-->
-<!--        </div>-->
-<!--        <div style="margin-bottom: 30px"><button id="generate-pdf">Generate PDF</button></div>-->
-<!--        <div style="display: flex; justify-content: center">-->
-<!--            <button id="backButton" onclick="backToPage()" class="button-59 button-adjust">메인으로 돌아가기</button>-->
-<!--        </div>-->
-<!--        <div class="input-area">-->
-<!--            <input type="text" class="chat-input" id="chatInput" style="display: none;" placeholder="Type a message...">-->
-<!--            &lt;!&ndash;        <button class="button-54" onclick="sendMessage()">Send</button>&ndash;&gt;-->
-<!--        </div>-->
-<!--    </div>-->
+<div id="report" class="chat-container" style="display: none;">
     <div id="loader" style="display: none;" class="loading-main">
         <div class="loader-wrap">
             <div class="bottle-wrap">
