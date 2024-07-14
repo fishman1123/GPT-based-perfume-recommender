@@ -464,13 +464,14 @@ async function sendImage() {
 }
 //구현해야됨
 async function compressedReport() {
-    const reportTitle = document.getElementById('targetNameRecommend');
-    const reportOne = document.getElementById('targetInsight');
-    const reportTwo = document.getElementById('targetMiddleNote');
-    const reportThree = document.getElementById('targetBaseNote');
+    const reportTitle = document.getElementById('chunktargetNameRecommend').innerText;
+    const reportOne = document.getElementById('chunktargetInsight').innerText;
+    const reportTwo = document.getElementById('chunktargetMiddleNote').innerText;
+    const reportThree = document.getElementById('chunktargetBaseNote').innerText;
+
 
     try {
-        const response = fetch('/imageMaster/savePDF', {
+        const response = await fetch('/preview/report', { // Correct path to match server route
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -482,18 +483,20 @@ async function compressedReport() {
                 targetReportThree: reportThree,
             }),
         });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const responseData = await response.json();
-
+        console.log('Response from server:', responseData);
     } catch (e) {
-        console.log('error: ',e);
+        console.log('error: ', e);
     }
-
-
 }
+
+
+
 
 
 
@@ -542,6 +545,7 @@ async function compressedReport() {
 function displayMessage(message, sender) {
     const messageArea = document.getElementById('messageArea');
     const messageElement = document.createElement('div');
+
     messageElement.textContent = message;
     messageElement.className = sender;
     messageElement.style.marginBottom = '5px'; // Add margin between messages
@@ -557,6 +561,7 @@ function displayReport(message, sender, targetID, ) {
 
     const targetArea = document.getElementById(targetID);
     const messageElement = document.createElement('div');
+    messageElement.id = `chunk${targetID}`;
     messageElement.textContent = message;
     messageElement.className = sender;
     // messageElement.style.marginBottom = '5px'; // Add margin between messages

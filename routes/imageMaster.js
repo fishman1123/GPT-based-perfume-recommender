@@ -331,8 +331,6 @@ router.post('/image', upload.single('image'), async (req, res) => {
     }
 });
 
-router.post('')
-
 router.post('/passcode', async (req, res) => {
     const passcode = req.body.passcode; // Assuming passcode is sent in the request body
     const spreadsheetId = '1XQF7kn7GCjcKj6PXq-O-kUPPBOKGLqdnfxWeNyG_QAY'; // Replace with your actual spreadsheet ID
