@@ -463,36 +463,32 @@ async function sendImage() {
     }
 }
 //구현해야됨
-async function compressedReport() {
+const compressedReport = () => {
     const reportTitle = document.getElementById('chunktargetNameRecommend').innerText;
     const reportOne = document.getElementById('chunktargetInsight').innerText;
     const reportTwo = document.getElementById('chunktargetMiddleNote').innerText;
     const reportThree = document.getElementById('chunktargetBaseNote').innerText;
+    document.getElementById('reportSequence').style.display = 'none';
+    document.getElementById('reportCompressedPage').style.display = "flex";
+    document.body.style.height = '100vh';
+    document.body.style.maxWidth = '100%';
+    document.getElementById('report').style.marginTop = '0';
+    document.getElementById('report').style.padding = '0';
+    document.getElementById('report').style.height = '100%';
+    document.getElementById('report-main').style.display = 'none';
 
 
-    try {
-        const response = await fetch('/preview/report', { // Correct path to match server route
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                targetReportTitle: reportTitle,
-                targetReportOne: reportOne,
-                targetReportTwo: reportTwo,
-                targetReportThree: reportThree,
-            }),
-        });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
 
-        const responseData = await response.json();
-        console.log('Response from server:', responseData);
-    } catch (e) {
-        console.log('error: ', e);
-    }
+
+
+
+}
+
+const revertCompressedReport = () => {
+    document.getElementById('reportSequence').style.display = 'flex';
+    document.getElementById('reportCompressedPage').style.display = "none";
+    document.body.style.height = '100vh';
 }
 
 

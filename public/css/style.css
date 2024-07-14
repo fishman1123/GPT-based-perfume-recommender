@@ -100,7 +100,7 @@ body::before {
         transform: translateY(0);
     }
 }
-.chat-container {
+.chatContainer {
     width: 600px;
     padding: 10px;
     opacity: 0; /* Initial state for fade-in effect */
@@ -127,7 +127,7 @@ body::before {
     width: 300px;
     height: auto;
 }
-.intro-container, .chat-container {
+.intro-container, .chatContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
