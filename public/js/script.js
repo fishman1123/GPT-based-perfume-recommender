@@ -469,6 +469,28 @@ async function compressedReport() {
     const reportTwo = document.getElementById('targetMiddleNote');
     const reportThree = document.getElementById('targetBaseNote');
 
+    try {
+        const response = fetch('/imageMaster/savePDF', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                targetReportTitle: reportTitle,
+                targetReportOne: reportOne,
+                targetReportTwo: reportTwo,
+                targetReportThree: reportThree,
+            }),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+
+    } catch (e) {
+        console.log('error: ',e);
+    }
 
 
 }

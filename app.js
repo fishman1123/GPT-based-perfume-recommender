@@ -11,6 +11,7 @@ app.set('views', path.join(__dirname, 'views'));
 const imageMasterRouter = require('./routes/imageMaster');
 const reportRouter = require('./routes/reportRouter');
 const authRouter = require('./routes/authRouter');
+const compressedReportsRouter = require('./routes/compressedReportRouter');
 
 // Middleware to serve static files
 app.use(express.static(path.join(__dirname, 'public')));
