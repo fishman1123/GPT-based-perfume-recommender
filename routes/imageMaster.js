@@ -519,7 +519,7 @@ async function imageToGpt(file, gender, birthdate, name) {
                 },
                 {
                     "role": "user",
-                    "content": `다음은 'Top Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 01": "블랙베리","AC'SCENT 02": "청사과","AC'SCENT 03": "딸기","AC'SCENT 04": "만다린 오렌지","AC'SCENT 05": "오렌지 꽃","AC'SCENT 06": "배꽃","AC'SCENT 07": "다마스커스 장미","AC'SCENT 08": "자스민","AC'SCENT 09": "로즈","AC'SCENT 10": "프리지아".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.`
+                    "content": `다음은 'Top Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 01": "블랙베리", 해당 향료는 신선한 블랙베리 과즙 향으로, 자연의 달콤ㄹ함과 약간의 산미가 조화를 이루어 생동감 있는 시작을 제공합니다."AC'SCENT 02": "청사과","AC'SCENT 03": "딸기","AC'SCENT 04": "만다린 오렌지","AC'SCENT 05": "오렌지 꽃","AC'SCENT 06": "배꽃","AC'SCENT 07": "다마스커스 장미","AC'SCENT 08": "자스민","AC'SCENT 09": "로즈","AC'SCENT 10": "프리지아".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다.`
                 },
                 {
                     "role": "assistant",
@@ -610,3 +610,5 @@ async function imageToGpt(file, gender, birthdate, name) {
 
 // Export the router
 module.exports = router;
+
+

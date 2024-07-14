@@ -466,8 +466,9 @@ async function sendImage() {
 const compressedReport = () => {
     const reportTitle = document.getElementById('chunktargetNameRecommend').innerText;
     const reportOne = document.getElementById('chunktargetInsight').innerText;
-    const reportTwo = document.getElementById('chunktargetMiddleNote').innerText;
-    const reportThree = document.getElementById('chunktargetBaseNote').innerText;
+    const reportTwo = document.getElementById('chunktargetTopNote').innerText;
+    const reportThree = document.getElementById('chunktargetMiddleNote').innerText;
+    const reportFour = document.getElementById('chunktargetBaseNote').innerText;
     document.getElementById('reportSequence').style.display = 'none';
     document.getElementById('reportCompressedPage').style.display = "flex";
     document.body.style.height = '100vh';
@@ -476,6 +477,13 @@ const compressedReport = () => {
     document.getElementById('report').style.padding = '0';
     document.getElementById('report').style.height = '100%';
     document.getElementById('report-main').style.display = 'none';
+    document.getElementById('reportCompressedPage').style.backgroundColor = 'white';
+
+    displayReport(reportOne, "preview", 'previewInsight');
+    displayReport(reportTwo, "preview", 'previewTopNote');
+    displayReport(reportThree, "preview", 'previewMiddleNote');
+    displayReport(reportFour, "preview", 'previewBaseNote');
+    displayReport(reportTitle, "preview", 'previewName');
 
 
 
