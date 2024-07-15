@@ -188,8 +188,7 @@ listingReport().catch(console.error);
 
 const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
-
-function imageNameAsDate(originalName) {
+function imageNameAsDate(originalName, userName) {
     const now = new Date();
     const dateString = now.getFullYear() + "-" +
         ("0" + (now.getMonth() + 1)).slice(-2) + "-" +
@@ -198,11 +197,25 @@ function imageNameAsDate(originalName) {
         ("0" + now.getMinutes()).slice(-2) + "-" +
         ("0" + now.getSeconds()).slice(-2);
     const extension = path.extname(originalName);
-    return dateString + extension;
+    return userName + "-" + dateString + extension;
 }
 
-async function uploadImageToDrive(file) {
-    const filename = imageNameAsDate(file.originalname);
+//if you want to save without name, then use code below
+// function imageNameAsDate(originalName, userName) {
+//     const now = new Date();
+//     const dateString = now.getFullYear() + "-" +
+//         ("0" + (now.getMonth() + 1)).slice(-2) + "-" +
+//         ("0" + now.getDate()).slice(-2) + "-" +
+//         ("0" + now.getHours()).slice(-2) + "-" +
+//         ("0" + now.getMinutes()).slice(-2) + "-" +
+//         ("0" + now.getSeconds()).slice(-2);
+//     const extension = path.extname(originalName);
+//     return dateString + extension;
+// }
+
+
+async function uploadImageToDrive(file, targetUserName) {
+    const filename = imageNameAsDate(file.originalname, targetUserName);
     const bufferStream = new stream.PassThrough();
     bufferStream.end(file.buffer);
     const fileMetadata = {
@@ -313,7 +326,7 @@ router.post('/image', upload.single('image'), async (req, res) => {
             const userName = req.body.name;
 
             // Upload file to Google Drive
-            const fileId = await uploadImageToDrive(req.file);
+            const fileId = await uploadImageToDrive(req.file, userName);
             console.log('File uploaded to Google Drive with ID:', fileId);
 
             // Here you can call the function to process the image and get the evaluation
@@ -341,9 +354,9 @@ router.post('/passcode', async (req, res) => {
     }
 
     try {
-        if (passcode === 'acscentkimchi' || "재영마스터") { //임시 마스터키
-            return res.status(200).json({ status: 'validated' });
-        }
+        // if (passcode === 'acscentkimchi' || "재영마스터") { //임시 마스터키
+        //     return res.status(200).json({ status: 'validated' });
+        // }
 
         // Log available sheet names
         const sheetsResponse = await sheets.spreadsheets.get({ spreadsheetId });

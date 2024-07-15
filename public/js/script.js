@@ -123,7 +123,8 @@ async function codeSubmit() {
 
         if (!response.ok) {
             alert('처리 중 문제가 발생했습니다.');
-            backToPage();
+            // backToPage();
+            window.reload();
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
@@ -147,11 +148,16 @@ async function codeSubmit() {
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('security').style.display = 'flex';
                 alert('Passcode already used');
+                document.getElementById('report').style.display = 'none';
+                window.reload();
             } else {
                 // Hide loading and show alert
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('security').style.display = 'flex';
                 alert('Wrong passcode');
+                document.getElementById('report').style.display = 'none';
+                window.reload();
+
             }
         }, 2000); // Simulating a delay for the validation process
     } catch (error) {
