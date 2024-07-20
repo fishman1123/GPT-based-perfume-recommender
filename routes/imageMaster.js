@@ -20,6 +20,8 @@ const stream = require("node:stream");
 const fs = require('fs').promises;
 const GOOGLE_ACCOUNT = path.join(__dirname, '../perfume-maker-google.json');
 
+const topNoteFilePath = path.join(__dirname, '../topnotes.json');
+
 const iamWebApiKey = process.env.IMWEB_API_KEY;
 const iamWebSecretKey = process.env.IMWEB_SECRET_KEY;
 
@@ -469,12 +471,47 @@ function extractInsightsAndNotes(content) {
     };
 }
 
+// Top Notes Count Read/Write
+async function readTopNotes() {
+    const data = await fs.readFile(topNoteFilePath, 'utf-8');
+    return JSON.parse(data);
+}
+
+async function updateTopNoteCount(selectedTopNote) {
+    const topNotes = await readTopNotes();
+    const topNoteRegex = /^(.*?) \|/;
+    selectedTopNote = selectedTopNote.match(topNoteRegex)[1];
+    console.log("updating top note count: ", selectedTopNote);
+    const topNote = topNotes.find(note => note.name === selectedTopNote);
+    if (topNote) {
+        topNote.count += 1;
+        await fs.writeFile(topNoteFilePath, JSON.stringify(topNotes, null, 2), 'utf-8');
+        console.log("updating top note count success");
+    } else {
+        console.log("updating top note count fail");
+    }
+}
+
+async function getFilteredTopNotes() {
+    const topNotes = await readTopNotes();
+    const minCount = Math.min(...topNotes.map(note => note.count));
+    const threshold = minCount + 3;
+    return topNotes.filter(note => note.count <= threshold);
+}
 
 async function imageToGpt(file, gender, birthdate, name) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
     const userBirthDate = birthdate;
     const userName = name;
+    const filteredTopNotes = await getFilteredTopNotes(); // 필터링된 top notes 선택
+
+    let topNotePrompts = 'Top Note 향 오일 리스트:\n';
+    filteredTopNotes.forEach(note => {
+        topNotePrompts += `${note.name}\n향 묘사: ${note.description}\n추천 문구: ${note.recommendation}\n`;
+    });
+
+    console.log("this is filtered top notes: " + topNotePrompts + "\n");
 
     try {
         console.log("time to analyze bitch");
@@ -497,21 +534,15 @@ async function imageToGpt(file, gender, birthdate, name) {
                     3. 이미지 분석을 바탕으로 고객에게 어울리는 맞춤형 향수를 추천합니다. 향수는 Top Note, Middle Note, Base Note의 3가지 노트로 구성됩니다.
                     4. 각각의 노트에서 하나의 향 오일을 선택하고, 선택 이유를 400자 이상 설명합니다.
                     5. 추천한 향수에 대해 창의적이고 시적인 긴 이름을 짓습니다.
-                    6. 최종 보고서를 작성합니다. 보고서는 이미지 분석, 향수 노트 추천 이유, 그리고 향수 이름으로 구성된 3개 단락으로 구성됩니다. 첫 단락은 300자, 각각의 향수 노트 추천은 400자 이상이어야 합니다.
-                  
-                    Top Note 향 오일 리스트:
-                    "AC'SCENT 01": "블랙베리"
-                    "AC'SCENT 02": "청사과"
-                    "AC'SCENT 03": "딸기"
-                    "AC'SCENT 04": "만다린 오렌지"
-                    "AC'SCENT 05": "오렌지 꽃"
-                    "AC'SCENT 06": "배꽃"
-                    "AC'SCENT 07": "다마스커스 장미"
-                    "AC'SCENT 08": "자스민"
-                    "AC'SCENT 09": "로즈"
-                    "AC'SCENT 10": "프리지아"
-                  
-                    Middle Note 향 오일 리스트:
+                    6. 최종 보고서를 작성합니다. 보고서는 이미지 분석, 향수 노트 추천 이유(향 묘사와 추천 문구가 있다면 활용), 그리고 향수 이름으로 구성된 3개 단락으로 구성됩니다. 첫 단락은 300자, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`
+                },
+                {
+                    "role": "system",
+                    "content": topNotePrompts
+                },
+                {
+                    "role": "system",
+                    "content": `Middle Note 향 오일 리스트:
                     "AC'SCENT 11": "바질"
                     "AC'SCENT 12": "백합"
                     "AC'SCENT 13": "베티버"
@@ -533,8 +564,7 @@ async function imageToGpt(file, gender, birthdate, name) {
                     "AC'SCENT 27": "로즈우드"
                     "AC'SCENT 28": "레더"
                     "AC'SCENT 29": "계피"
-                    "AC'SCENT 30": "생강"
-                    `
+                    "AC'SCENT 30": "생강"`
                 },
                 {"role": "user", "content": `고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.`},
                 {"role": "assistant", "content": `알겠습니다. 고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.`},
@@ -573,23 +603,23 @@ async function imageToGpt(file, gender, birthdate, name) {
                 },
                 {
                     "role": "assistant",
-                    "content": `알겠습니다. 저는 'Top Note'의 리스트 중에서 단 하나의 향 오일만을 선택하고 400자 이상 500자 이하로 설명을 작성하겠습니다.`
+                    "content": `알겠습니다. 저는 'Top Note', 'Middle Note', 'Base Note'의 향 오일 리스트 중에서 단 하나의 향 오일만을 선택하고 400자 이상 500자 이하로 설명을 작성하겠습니다.`
                 },
                 {
                     "role": "user",
-                    "content": `다음은 'Middle Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 11": "바질","AC'SCENT 12": "백합","AC'SCENT 13": "베티버","AC'SCENT 14": "민트","AC'SCENT 15": "유칼립투스","AC'SCENT 16": "삼나무","AC'SCENT 17": "인센스","AC'SCENT 18": "제라늄","AC'SCENT 19": "바다소금","AC'SCENT 20": "상록수". 당신은 위의 'Middle Note' 중 단 하나의 향 오일을 선택해야 합니다. 설명은 400자 이상 500자 이하이어야 합니다.`
+                    "content": `또한 각 Note에 추천 향 오일 이름을 적고 " | "로 구분한 뒤 설명을 작성해야 합니다.`
                 },
                 {
                     "role": "assistant",
-                    "content": `알겠습니다. 저는 'Middle Note'의 리스트 중에서 단 하나의 향 오일만을 선택하고 400자 이상 500자 이하로 설명을 작성하겠습니다.`
+                    "content": `알겠습니다. 저는 "Top Note: AC'SCENT 01 블랙베리 | 블랙베리 향료는 매혹적인 분위기와 소년미를 동시에 드러냅니다." 와 같이 이름과 설명을 구분하여 적겠습니다.`
                 },
                 {
                     "role": "user",
-                    "content": `다음은 'Base Note'에 해당하는 향 오일 리스트입니다. 향 오일의 명칭과 해당 향 오일을 구성하고 있는 구체적인 재료를 함께 묶어 나열하였습니다. "AC'SCENT 21": "머스크","AC'SCENT 22": "샌달우드","AC'SCENT 23": "은방울 꽃","AC'SCENT 24": "앰버우드","AC'SCENT 25": "바닐라","AC'SCENT 26": "화이트머스크","AC'SCENT 27": "로즈우드","AC'SCENT 28": "레더","AC'SCENT 29": "계피","AC'SCENT 30": "생강".당신은 위의 'Top Note' 중 단 하나의 향 오일을 선택해야 합니다. 설명은 400자 이상 500자 이하이어야 합니다.`
+                    "content": `향 오일에 여러가지 재료가 포함되는 경우 ', '로 구분하여 모두 작성해야 합니다.`
                 },
                 {
                     "role": "assistant",
-                    "content": `알겠습니다. 저는 'Base Note'의 리스트 중에서 단 하나의 향 오일만을 선택하고 400자 이상 500자 이하로 설명을 작성하겠습니다.`
+                    "content": `알겠습니다. 저는 "AC'SCENT 04 레몬, 베르가못" 와 같이 여러 개의 재료가 들어가는 향 오일의 경우 "Top Note: AC'SCENT 04 레몬, 베르가못 | 레몬, 베르가못 향료는 시트러스 계열로, 상큼한 레몬과 상큼하면서도 쌉싸름한 베르가못이 블랜딩되어 밝고 생기 넘치는 첫인상을 자아냅니다."와 같이 모든 재료를 포함하여 적겠습니다.`
                 },
                 {"role": "user", "content": `당신의 네번째 임무는 ${userName}님에게 추천한 맞춤형 향수에 대한 창의적이며 시적인 긴 이름을 짓는 것입니다.`},
                 {"role": "assistant", "content": `알겠습니다. 저는 ${userName}님에게 추천한 맞춤형 향수에 대한 창의적이며 시적인 긴 이름을 짓겠습니다.`},
@@ -599,13 +629,13 @@ async function imageToGpt(file, gender, birthdate, name) {
                 },
                 {
                     "role": "assistant",
-                    "content": `알겠습니다. 저의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다.  세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.`
+                    "content": `알겠습니다. 저의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다. 세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.`
                 },
                 {"role": "user", "content": `특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`},
                 {"role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`},
                 {
                     role: "user",
-                    content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE:', 'MIDDLE NOTE:', 'BASE NOTE:' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 1500자 이상 이어야 합니다.`
+                    content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 1500자 이상 이어야 합니다.`
                 },
                 {
                     "role": "assistant",
@@ -617,14 +647,11 @@ async function imageToGpt(file, gender, birthdate, name) {
                     Insight 5: 차은우 님은 전반적으로 매우 세련되고 우아한 아우라를 자아내면서도 진중한 이미지를 가지고 있습니다.
                     Insight 6: 해당 이미지를 바탕으로 다음과 같이 향료를 추천드리겠습니다.
                     
-                    TOP NOTE: AC'SCENT 01 블랙베리
-                    블랙베리 향료는 매혹적인 분위기와 소년미를 동시에 드러냅니다. 블랙베리의 깊이감 있는 향이 깊이 있고 강렬한 차은우 님의 첫인상을 드러내고 동시에 블랙베리의 상쾌한 향이 차은우 님의 소년미를 표현합니다.
+                    TOP NOTE: AC'SCENT 01 블랙베리 | 블랙베리 향료는 매혹적인 분위기와 소년미를 동시에 드러냅니다. 블랙베리의 깊이감 있는 향이 깊이 있고 강렬한 차은우 님의 첫인상을 드러내고 동시에 블랙베리의 상쾌한 향이 차은우 님의 소년미를 표현합니다.
                     
-                    MIDDLE NOTE: AC'SCENT 13 베티버
-                    베티버 향료는 인물의 신비로운 분위기를 부각하는 향입니다. 차은우 님의 강렬한 분위기를 중화하여 향수의 전체적인 밸런스를 잡아줍니다. 동시에 이미지의 색감과 차은우 님이 풍기고 있는 신비로운 분위기를 드러낼 수 있습니다.
+                    MIDDLE NOTE: AC'SCENT 13 베티버 | 베티버 향료는 인물의 신비로운 분위기를 부각하는 향입니다. 차은우 님의 강렬한 분위기를 중화하여 향수의 전체적인 밸런스를 잡아줍니다. 동시에 이미지의 색감과 차은우 님이 풍기고 있는 신비로운 분위기를 드러낼 수 있습니다.
                     
-                    BASE NOTE: AC'SCENT 28 레더
-                    레더 향료는 차은우 님의 깔끔하게 정돈된 짧은 흑발과 정갈한 의상에서 느껴지는 세련된 감각을 드러내며 차은우 님을 더욱 돋보이게 합니다. 강렬하고 남성적인 힘을 가지고 있는 가죽은 마지막까지 깊고 풍부한 잔향을 남깁니다. 이는 차은우 님의 카리스마를 강조합니다.
+                    BASE NOTE: AC'SCENT 28 레더 | 레더 향료는 차은우 님의 깔끔하게 정돈된 짧은 흑발과 정갈한 의상에서 느껴지는 세련된 감각을 드러내며 차은우 님을 더욱 돋보이게 합니다. 강렬하고 남성적인 힘을 가지고 있는 가죽은 마지막까지 깊고 풍부한 잔향을 남깁니다. 이는 차은우 님의 카리스마를 강조합니다.
 
                     Perfume Name Recommendation: 신비로운 밤의 서사
                     
@@ -635,7 +662,7 @@ async function imageToGpt(file, gender, birthdate, name) {
                     content: [
                         {
                             type: "text",
-                            text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE:', 'MIDDLE NOTE:', 'BASE NOTE:' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 1500자 이상 이어야 합니다.`
+                            text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 1500자 이상 이어야 합니다.`
                         },
                         {
                             type: "image_url", image_url: {"url": encodedImage},
@@ -662,6 +689,8 @@ async function imageToGpt(file, gender, birthdate, name) {
         console.log("this is Perfume Name: " + filteredList.nameRecommendation);
 
         await listingReport(userName, filteredList);
+
+        await updateTopNoteCount(filteredList.topNote);
 
         // return await enhanceResponse(
         //     filteredList.combinedInsights,
