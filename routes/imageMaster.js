@@ -7,6 +7,7 @@ const {google} = require('googleapis');
 const express = require('express');
 const request = require('request');
 
+
 const router = express.Router();
 const OpenAI = require("openai");
 const https = require("https");
@@ -91,7 +92,6 @@ async function listingReport(userName, resultList) {
                     values: [['test', `${userName}`, `${resultList.nameRecommendation}`, `${resultList.combinedInsights}`, `${resultList.topNote}`, `${resultList.middleNote}`, `${resultList.baseNote}`]],
                 },
             });
-
             console.log('Appended value to the spreadsheet:', appendResponse.data.updates);
         } catch (error) {
             console.error('Error listing report:', error);
@@ -190,8 +190,7 @@ listingReport().catch(console.error);
 
 const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
-
-function imageNameAsDate(originalName) {
+function imageNameAsDate(originalName, userName) {
     const now = new Date();
     const dateString = now.getFullYear() + "-" +
         ("0" + (now.getMonth() + 1)).slice(-2) + "-" +
@@ -200,11 +199,25 @@ function imageNameAsDate(originalName) {
         ("0" + now.getMinutes()).slice(-2) + "-" +
         ("0" + now.getSeconds()).slice(-2);
     const extension = path.extname(originalName);
-    return dateString + extension;
+    return userName + "-" + dateString + extension;
 }
 
-async function uploadImageToDrive(file) {
-    const filename = imageNameAsDate(file.originalname);
+//if you want to save without name, then use code below
+// function imageNameAsDate(originalName, userName) {
+//     const now = new Date();
+//     const dateString = now.getFullYear() + "-" +
+//         ("0" + (now.getMonth() + 1)).slice(-2) + "-" +
+//         ("0" + now.getDate()).slice(-2) + "-" +
+//         ("0" + now.getHours()).slice(-2) + "-" +
+//         ("0" + now.getMinutes()).slice(-2) + "-" +
+//         ("0" + now.getSeconds()).slice(-2);
+//     const extension = path.extname(originalName);
+//     return dateString + extension;
+// }
+
+
+async function uploadImageToDrive(file, targetUserName) {
+    const filename = imageNameAsDate(file.originalname, targetUserName);
     const bufferStream = new stream.PassThrough();
     bufferStream.end(file.buffer);
     const fileMetadata = {
@@ -315,7 +328,7 @@ router.post('/image', upload.single('image'), async (req, res) => {
             const userName = req.body.name;
 
             // Upload file to Google Drive
-            const fileId = await uploadImageToDrive(req.file);
+            const fileId = await uploadImageToDrive(req.file, userName);
             console.log('File uploaded to Google Drive with ID:', fileId);
 
             // Here you can call the function to process the image and get the evaluation
@@ -343,6 +356,10 @@ router.post('/passcode', async (req, res) => {
     }
 
     try {
+        // if (passcode === 'acscentkimchi' || "재영마스터") { //임시 마스터키
+        //     return res.status(200).json({ status: 'validated' });
+        // }
+
         // Log available sheet names
         const sheetsResponse = await sheets.spreadsheets.get({ spreadsheetId });
 
@@ -381,6 +398,7 @@ router.post('/passcode', async (req, res) => {
             console.log('Passcode not found');
             return res.status(404).send('Passcode not found');
         }
+
 
         if (usageStatus === 'FALSE') {
             // Update '사용여부' to true
@@ -631,8 +649,12 @@ async function imageToGpt(file, gender, birthdate, name) {
                     "role": "assistant",
                     "content": `알겠습니다. 저의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다. 세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.`
                 },
-                {"role": "user", "content": `특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`},
-                {"role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`},
+                {
+                  "role": "user", "content": `특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`
+                },
+                {
+                  "role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`
+                },
                 {
                     role: "user",
                     content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 1500자 이상 이어야 합니다.`
@@ -711,3 +733,5 @@ async function imageToGpt(file, gender, birthdate, name) {
 
 // Export the router
 module.exports = router;
+
+

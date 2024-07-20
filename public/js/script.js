@@ -1,6 +1,6 @@
 
 window.onload = function(){
-    alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
+    // alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
 
 }
 
@@ -29,41 +29,41 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-document.getElementById('generate-pdf').addEventListener('click', async () => {
-    const content = document.getElementById('messageArea');
-
-    // Calculate the scale factor based on the content height and A4 page height
-    const pageHeight = 297; // A4 page height in mm
-    const contentHeight = content.scrollHeight;
-    const scaleFactor = pageHeight / (contentHeight * 0.264583); // Convert content height from px to mm (1px = 0.264583mm)
-
-    html2canvas(content, {
-        scale: 2, // Scale factor to improve resolution
-        useCORS: true,
-        allowTaint: false,
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: document.documentElement.offsetWidth,
-        windowHeight: document.documentElement.scrollHeight,
-    }).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-
-        const imgWidth = 210; // Width in mm (A4)
-        const imgHeight = canvas.height * imgWidth / canvas.width;
-
-        const doc = new jsPDF({
-            orientation: 'p',
-            unit: 'mm',
-            format: 'a4',
-        });
-
-        // Add the image to the PDF
-        doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-
-        // Save the PDF
-        doc.save('capture.pdf');
-    });
-});
+// document.getElementById('generate-pdf').addEventListener('click', async () => {
+//     const content = document.getElementById('messageArea');
+//
+//     // Calculate the scale factor based on the content height and A4 page height
+//     const pageHeight = 297; // A4 page height in mm
+//     const contentHeight = content.scrollHeight;
+//     const scaleFactor = pageHeight / (contentHeight * 0.264583); // Convert content height from px to mm (1px = 0.264583mm)
+//
+//     html2canvas(content, {
+//         scale: 2, // Scale factor to improve resolution
+//         useCORS: true,
+//         allowTaint: false,
+//         scrollX: 0,
+//         scrollY: 0,
+//         windowWidth: document.documentElement.offsetWidth,
+//         windowHeight: document.documentElement.scrollHeight,
+//     }).then(canvas => {
+//         const imgData = canvas.toDataURL('image/png');
+//
+//         const imgWidth = 210; // Width in mm (A4)
+//         const imgHeight = canvas.height * imgWidth / canvas.width;
+//
+//         const doc = new jsPDF({
+//             orientation: 'p',
+//             unit: 'mm',
+//             format: 'a4',
+//         });
+//
+//         // Add the image to the PDF
+//         doc.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+//
+//         // Save the PDF
+//         doc.save('capture.pdf');
+//     });
+// });
 
 
 
@@ -122,14 +122,16 @@ async function codeSubmit() {
         });
 
         if (!response.ok) {
-            alert('이미지 처리 중 문제가 발생했습니다.');
-            backToPage();
+            alert('처리 중 문제가 발생했습니다.');
+            // backToPage();
+            window.reload();
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const responseData = await response.json();
 
         // Show loading
+        document.getElementById('report').style.display = "flex";
         pageTransition('loader');
         document.getElementById('security').style.display = 'none';
 
@@ -139,75 +141,87 @@ async function codeSubmit() {
                 // Hide loading and show intro
                 document.getElementById('loader').style.display = 'none';
                 pageTransition('intro');
+                document.getElementById('report').style.display = "none";
+
             } else if (responseData.status === 'already_used') { // Passcode already used
                 // Hide loading and show alert
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('security').style.display = 'flex';
                 alert('Passcode already used');
+                document.getElementById('report').style.display = 'none';
+                window.reload();
             } else {
                 // Hide loading and show alert
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('security').style.display = 'flex';
                 alert('Wrong passcode');
+                document.getElementById('report').style.display = 'none';
+                window.reload();
+
             }
         }, 2000); // Simulating a delay for the validation process
     } catch (error) {
         console.error('Error:', error);
         alert('이미지 처리 중 문제가 발생했습니다.');
-        backToPage();
+        // backToPage();
     }
 }
 
 
-// function start() {
-//     const date = document.getElementById('date').value;
-//     const hour = document.getElementById('hour').value;
-//     // if (date === '') {
-//     //     alert('생년월일을 입력해주세요.');
-//     //     return;
-//     // }
-//     myDateTime = date + ' ' + hour; // Assuming you want to include a space or some delimiter
-//     console.log(myDateTime);
-//
-//     let todayDateTime = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' });
-//     let initialAssistantMessage = `포터 선생: 너 ${myDateTime}에 태어났다는 거지? 오늘은 ${todayDateTime}이구나, 자, 운세에 대해서 어떤 것이든 물어보렴.`;
-//
-//     displayMessage(initialAssistantMessage, "assistant");
-//
-//     document.getElementById("intro").style.display = "none";
-//     document.getElementById("report").style.display = "block";
-// }
 function imageUpload() {
     const imageCheck = document.getElementById('imageInput');
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
+    document.getElementById('report').style.display = "flex";
+
+
 
     // Check if the name input is empty
     if (!inputName.value.trim()) {
-        alert('Please enter your name.');
+        alert('이름을 작성해 주세요.');
         inputName.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
     // Check if the birthdate input is empty
     if (!birthInput.value.trim()) {
-        alert('Please enter your birth date.');
+        alert('생일 일자를 작성 해주세요.');
         birthInput.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
+    const birthDateRegex = /^\d+$/;
+    if (!birthDateRegex.test(birthInput.value.trim()) || birthInput.length > 8) {
+        alert('생일일자에는 특수문자를 허용하지 않습니다.');
+        birthInput.focus();
+        document.getElementById('report').style.display = "none";
+        return;
+    }
+
+    if (birthInput.length > 8) {
+        alert('생일일자는 8자만 허용합니다(특수문자 제외)');
+        birthInput.focus();
+        document.getElementById('report').style.display = "none";
+        return;
+    }
+
+
     // Check if the gender has been selected
     if (!inputGender.value.trim()) {
-        alert('Please select your gender.');
+        alert('성별을 입력해주세요.');
         inputGender.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
     // Check if an image has been uploaded
     if (imageCheck.files.length === 0) {
-        alert('Please select an image to upload.');
+        alert('이미지 첨부를 해주세요.');
         imageCheck.focus();
+        document.getElementById('report').style.display = "none";
         return;
     }
 
@@ -216,10 +230,51 @@ function imageUpload() {
     sendImage();
 }
 
-function pageTransition(id) {
+const pageTransition = (id) => {
     let displayType = id === "intro" || "security" ? "flex" : "block";
     document.getElementById(`${id}`).style.display = `${displayType}`;
 }
+
+function pageTransitionEnhanced(id) {
+    document.body.style.height = "300vh";
+    document.getElementById(`${id}`).style.display = 'none' ? 'flex' : 'none';
+}
+function reportSequenceTransition() {
+    document.body.style.height = "100%";
+    document.getElementById('report').style.display = "none";
+    let insight = document.getElementById('reportOne');
+    let targetElement = document.getElementById('reportOneElement');
+    let targetReportElementHeight;
+    let targetReportContainer;
+    let reports = ["reportOne", "reportTwo", "reportThree", "reportFour", "reportLast"];
+    let targetElementList = ["reportOneElement", "reportTwoElement", "reportThreeElement", "reportFourElement"];
+
+    insight.style.height = `calc(${targetElement.style.height} + 140px)`;
+    document.getElementById("intro").style.display = 'none';
+    document.getElementById("reportSequence").style.display = 'flex';
+    const assignHeight = () => {
+        targetElementList.forEach((element, index) => {
+            targetReportElementHeight  = document.getElementById(`${element}`).style.height;
+            document.getElementById(`${reports[index]}`).style.height = `${element} === "reportOne"` ? `calc(${targetReportElementHeight} + 140px)` : `calc(${targetReportElementHeight} + 100px))`;})
+    }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+            }
+        });
+    }, {
+        threshold: 0.1 // Trigger when 10% of the element is visible
+    });
+
+    reports.forEach(report => {
+        observer.observe(document.getElementById(report));
+    });
+}
+
+
+
+
 // function backToMain() {
 //     // Correct the ID if it's 'messageArea' and not 'message-area'
 //     const targetArea = document.getElementById('targetTopNote');
@@ -241,7 +296,7 @@ function pageTransition(id) {
 //     document.getElementById("intro").style.display = "flex";
 // }
 
-function backToPage() {
+const backToPage = () => {
     window.location.href = "https://acscent.co.kr";
 }
 
@@ -272,6 +327,8 @@ function resetPage() {
     baseArea.textContent = 'BASE NOTE | ';
 
 }
+
+
 
 async function sendImage() {
     const birthInput = document.getElementById('date');
@@ -350,7 +407,7 @@ async function sendImage() {
         // console.log("hello there" + document.getElementById('date').value);
 
         document.getElementById('loader').style.display = "flex"; // Show loading icon
-        document.getElementById('backButton').style.display = "none"; // Hide back button
+        // document.getElementById('backButton').style.display = "none"; // Hide back button
 
         const response = await fetch('/imageMaster/image', {
             // local: http://localhost:3003/imageMaster/image
@@ -374,13 +431,21 @@ async function sendImage() {
             window.location.href = "https://acscent.co.kr";
         }
 
-        pageTransition("report");
+        // pageTransition("report");
         // console.log('hello' + responseData.message.combinedInsights);
+        // displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
+        // displayReport(responseData.message.topNote, "testing", 'targetTopNote');
+        // displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
+        // displayReport(responseData.message.baseNote, "testing", 'targetBaseNote');
+        // displayReport(responseData.message.nameRecommendation, "testing", 'targetNameRecommend');
+        console.log('hello' + responseData.message.combinedInsights);
+        reportSequenceTransition();
         displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');
         displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
         displayReport(responseData.message.baseNote, "testing", 'targetBaseNote');
         displayReport(responseData.message.nameRecommendation, "testing", 'targetNameRecommend');
+
 
         imageInput.value = '';
     } catch (error) {
@@ -390,7 +455,7 @@ async function sendImage() {
         // document.getElementById('loader').style.display = "none"; // Hide loading icon
         // document.getElementById('backButton').style.display = "block"; // Show back button
         const loader = document.getElementById('loader');
-        const backButton = document.getElementById('backButton');
+        // const backButton = document.getElementById('backButton');
 
         loader.classList.add('hidden'); // Add the hidden class to trigger fade-out
 
@@ -401,9 +466,53 @@ async function sendImage() {
             loader.removeEventListener('transitionend', handleTransitionEnd); // Clean up the event listener
         });
 
-        backButton.style.display = "block"; // Show back button
+        // backButton.style.display = "block"; // Show back button
     }
 }
+//구현해야됨
+const compressedReport = () => {
+    const reportTitle = document.getElementById('chunktargetNameRecommend').innerText;
+    const reportOne = document.getElementById('chunktargetInsight').innerText;
+    const reportTwo = document.getElementById('chunktargetTopNote').innerText;
+    const reportThree = document.getElementById('chunktargetMiddleNote').innerText;
+    const reportFour = document.getElementById('chunktargetBaseNote').innerText;
+    document.getElementById('report').style.display = "flex";
+    document.getElementById('reportSequence').style.display = 'none';
+    document.getElementById('reportCompressedPage').style.display = "flex";
+
+
+
+    document.body.style.height = '100vh';
+    document.body.style.maxWidth = '100%';
+    document.body.style.width = '100%';
+    document.getElementById('report').style.marginTop = '0';
+    document.getElementById('report').style.padding = '0';
+    document.getElementById('report').style.height = '100%';
+    document.getElementById('report-main').style.display = 'none';
+    document.getElementById('reportCompressedPage').style.backgroundColor = 'white';
+    // document.getElementById('messageArea').style.marginTop = "30px";
+    displayReport(reportOne, "preview", 'previewInsight');
+    displayReport(reportTwo, "preview", 'previewTopNote');
+    displayReport(reportThree, "preview", 'previewMiddleNote');
+    displayReport(reportFour, "preview", 'previewBaseNote');
+    displayReport(reportTitle, "preview", 'previewName');
+
+
+
+
+
+
+
+}
+
+const revertCompressedReport = () => {
+    document.getElementById('reportSequence').style.display = 'flex';
+    document.getElementById('reportCompressedPage').style.display = "none";
+    document.body.style.height = '100vh';
+}
+
+
+
 
 
 
@@ -452,10 +561,11 @@ async function sendImage() {
 function displayMessage(message, sender) {
     const messageArea = document.getElementById('messageArea');
     const messageElement = document.createElement('div');
+
     messageElement.textContent = message;
     messageElement.className = sender;
     messageElement.style.marginBottom = '5px'; // Add margin between messages
-    messageElement.style.fontSize = '30px';
+    messageElement.style.fontSize = '20px';
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight; // Scroll to the bottom to show the latest message
 }
@@ -467,17 +577,24 @@ function displayReport(message, sender, targetID, ) {
 
     const targetArea = document.getElementById(targetID);
     const messageElement = document.createElement('div');
+    messageElement.id = `chunk${targetID}`;
     messageElement.textContent = message;
+    messageElement.style.textAlign = "left";
     messageElement.className = sender;
     // messageElement.style.marginBottom = '5px'; // Add margin between messages
     // messageElement.style.marginTop = '20px';
     if (targetID === 'targetNameRecommend') {
-        messageElement.style.fontSize = '32px';
+        messageElement.style.fontSize = '20px';
         messageElement.style.color = 'white';
     } else {
         messageElement.style.fontSize = '16px';
     }
     targetArea.appendChild(messageElement);
     targetArea.scrollTop = targetArea.scrollHeight; // Scroll to the bottom to show the latest message
-
 }
+
+
+
+
+
+
