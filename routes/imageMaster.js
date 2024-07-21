@@ -18,6 +18,7 @@ const openai = new OpenAI({
 const multer = require('multer');
 const path = require('path');
 const stream = require("node:stream");
+const {language} = require("googleapis/build/src/apis/language");
 const fs = require('fs').promises;
 const GOOGLE_ACCOUNT = path.join(__dirname, '../perfume-maker-google.json');
 
@@ -199,7 +200,7 @@ function imageNameAsDate(originalName, userName) {
         ("0" + now.getMinutes()).slice(-2) + "-" +
         ("0" + now.getSeconds()).slice(-2);
     const extension = path.extname(originalName);
-    return userName + "-" + dateString + extension;
+    return dateString + extension + "-" + userName;
 }
 
 //if you want to save without name, then use code below
@@ -325,6 +326,7 @@ router.post('/image', upload.single('image'), async (req, res) => {
         if (req.file) {
             const userBirthDate = req.body.birthDate;
             const userGender = req.body.gender;
+            // const userLanguage = req.body.language;
             const userName = req.body.name;
 
             // Upload file to Google Drive
@@ -517,11 +519,13 @@ async function getFilteredTopNotes() {
     return topNotes.filter(note => note.count <= threshold);
 }
 
-async function imageToGpt(file, gender, birthdate, name) {
+async function imageToGpt(file, gender, birthdate,name) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
     const userBirthDate = birthdate;
     const userName = name;
+    // const userLanguage = language;
+    // console.log(language);
     const filteredTopNotes = await getFilteredTopNotes(); // 필터링된 top notes 선택
 
     let topNotePrompts = 'Top Note 향 오일 리스트:\n';
@@ -657,11 +661,11 @@ async function imageToGpt(file, gender, birthdate, name) {
                 },
                 {
                     role: "user",
-                    content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 2500자 이상 이어야 합니다.`
+                    content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
                 },
                 {
                     "role": "assistant",
-                    
+
                     "content": `Insight 1: 차은우 님은 세련되고 우아한 느낌을 자아내고 있습니다.
                     Insight 2: 미소를 지은 상태에서 카메라를 응시하는 표정은 차분하고 고요하면서도 부드러운 인상을 줍니다.
                     Insight 3: 흰색 슈트를 착용한 인물의 모습은 트렌디하면서도 세련된 분위기를 증대시켜줍니다.
@@ -684,7 +688,7 @@ async function imageToGpt(file, gender, birthdate, name) {
                     content: [
                         {
                             type: "text",
-                            text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 모든 분석은 한글로 작성하셔야 합니다. 향수 노트 추천은 2500자 이상 이어야 합니다.`
+                            text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
                         },
                         {
                             type: "image_url", image_url: {"url": encodedImage},

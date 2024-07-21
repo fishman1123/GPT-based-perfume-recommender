@@ -191,6 +191,7 @@ function imageUpload() {
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
+    // const inputLanguage = document.getElementById('foreignerCheck');
     document.getElementById('report').style.display = "flex";
 
 
@@ -229,11 +230,17 @@ function imageUpload() {
 
     // Check if the gender has been selected
     if (!inputGender.value.trim()) {
-        alert('성별을 입력해주세요.');
+        alert('성별을 골라주세요.');
         inputGender.focus();
         document.getElementById('report').style.display = "none";
         return;
     }
+    // if (!inputLanguage.value.trim()) {
+    //     alert('언어를 골라주세요.');
+    //     inputLanguage.focus();
+    //     document.getElementById('report').style.display = "none";
+    //     return;
+    // }
 
     // Check if an image has been uploaded
     if (imageCheck.files.length === 0) {
@@ -367,6 +374,7 @@ async function sendImage() {
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
+    // const inputLanguage = document.getElementById('foreignerCheck');
     const imageInput = document.getElementById('imageInput');
     // console.log("can you get this?: " + birthInput.value);
     if (imageInput.files.length === 0) {
@@ -435,6 +443,7 @@ async function sendImage() {
         const formData = new FormData();
         formData.append('image', compressedFile); // Append the compressed file
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
+        // formData.append('language', inputGender.value === "00" ? '한국어' : '영어');
         formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
         // console.log("hello there" + document.getElementById('date').value);
@@ -635,6 +644,8 @@ function displayReport(message, sender, targetID, ) {
     if (targetID === 'targetNameRecommend') {
         messageElement.style.fontSize = '20px';
         messageElement.style.color = 'white';
+    } else if (targetID === 'targetNameRecommend') {
+        messageElement.style.width = '250px';
     } else {
         messageElement.style.fontSize = '16px';
     }
