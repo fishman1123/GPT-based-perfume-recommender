@@ -121,49 +121,63 @@ async function codeSubmit() {
             body: JSON.stringify({ passcode }),
         });
 
-        if (!response.ok) {
-            alert('처리 중 문제가 발생했습니다.');
-            // backToPage();
-            window.reload();
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const responseData = await response.json();
 
-        // Show loading
-        document.getElementById('report').style.display = "flex";
+
+
+        // Wait for fade-in to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+
+        const securityElement = document.getElementById('security');
+        securityElement.classList.add('fade-out');
+
+        // Wait for fade-out to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        securityElement.style.display = 'none';
+        // Show loading with fade-in
+        const report = document.getElementById('report');
+        report.style.display = "flex";
         pageTransition('loader');
-        document.getElementById('security').style.display = 'none';
 
-        setTimeout(() => {
-            // Check passcode based on the server response
-            if (responseData.status === 'validated') { // Passcode validated and updated
-                // Hide loading and show intro
-                document.getElementById('loader').style.display = 'none';
-                pageTransition('intro');
-                document.getElementById('report').style.display = "none";
+        securityElement.classList.remove('fade-out');
 
-            } else if (responseData.status === 'already_used') { // Passcode already used
-                // Hide loading and show alert
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('security').style.display = 'flex';
-                alert('Passcode already used');
-                document.getElementById('report').style.display = 'none';
-                window.reload();
+        const loader = document.getElementById('loader');
+        console.log(loader.style.display);
+        loader.style.opacity = '1';  // Ensure loader is fully visible
+
+        setTimeout(async () => {
+            if (responseData.status === 'validated') {
+                loader.style.opacity = '0';
+
+                // Wait for fade-out to complete
+                await new Promise(resolve => setTimeout(resolve, 1300));
+
+                loader.style.display = 'none';
+                report.style.display = "none";
+                await pageTransition('intro'); // Ensure intro transition happens after loader fades out
+
             } else {
-                // Hide loading and show alert
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('security').style.display = 'flex';
-                alert('Wrong passcode');
-                document.getElementById('report').style.display = 'none';
-                window.reload();
+                loader.style.opacity = '0';
 
+                // Wait for fade-out to complete
+                await new Promise(resolve => setTimeout(resolve, 1300));
+                loader.style.display = 'none';
+
+                securityElement.style.display = 'flex';
+                securityElement.classList.add('fade-in');
+
+                const alertMessage = responseData.status === 'already_used' ? '이미 사용된 비밀번호 입니다.' : '비밀번호가 틀렸습니다.';
+                alert(alertMessage);
+
+                report.classList.remove('fade-in');
+                report.style.display = 'none';
+                window.reload();
             }
         }, 2000); // Simulating a delay for the validation process
     } catch (error) {
         console.error('Error:', error);
-        alert('이미지 처리 중 문제가 발생했습니다.');
-        // backToPage();
+        alert('비밀번호를 정확하게 입력하셔야 합니다.');
     }
 }
 
@@ -230,9 +244,24 @@ function imageUpload() {
     sendImage();
 }
 
-const pageTransition = (id) => {
-    let displayType = id === "intro" || "security" ? "flex" : "block";
-    document.getElementById(`${id}`).style.display = `${displayType}`;
+// const pageTransition = (id) => {
+//     let displayType = id === "intro" || "security" ? "flex" : "block";
+//     document.getElementById(`${id}`).style.display = `${displayType}`;
+// }
+
+const pageTransition = async (id) => {
+
+
+    let displayType = id === "intro" || id === "security" ? "flex" : "block";
+
+    const element = document.getElementById(id);
+
+    // Apply fade-in class
+    element.style.display = displayType;
+    element.classList.add('fade-in');
+
+    // Wait for fade-in to complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
 }
 
 function pageTransitionEnhanced(id) {

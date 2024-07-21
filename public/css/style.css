@@ -1,3 +1,32 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Define the fade-out animation */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1.3s forwards;
+}
+
+/* Class to trigger the fade-out effect */
+.fade-out {
+    animation: fadeOut 0.3s forwards;
+}
+
+
 /* Your Button CSS */
 .button-54 {
     font-family: "Open Sans", sans-serif;
@@ -245,7 +274,11 @@ body::before {
 
 #loader {
     opacity: 1;
-    transition: opacity 1.3s ease-out; /* 1 second fade-out transition */
+    transition: opacity 1.3s ease-out;
+}
+#security {
+    opacity: 1;
+    transition: opacity 1.3s ease-out;
 }
 
 #loader.hidden {

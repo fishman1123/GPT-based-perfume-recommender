@@ -376,7 +376,7 @@ router.post('/passcode', async (req, res) => {
         });
 
         const rows = getResponse.data.values;
-        console.log("what is this row", rows);
+        // console.log("what is this row", rows);
         if (!rows || rows.length === 0) {
             console.log('No data found in the sheet');
             return res.status(404).send('No data found in the sheet');
