@@ -585,8 +585,8 @@ body::before {
 
 .securitySubmit {
     display: flex;
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     background-color: black;
     border-radius: 3rem;
     border: none;
@@ -614,19 +614,19 @@ body::before {
     color: #333;
     font-size: 16px;
     padding-left: 6px;
-    padding-top: 7px;
+    /*padding-top: 8px;*/
 
     background-color: transparent;
     border: none;
     width: 80%;
     display: block;
     border-bottom: solid transparent;
-    margin-left: 5px;
+    margin-left: 15px;
 }
 .form__group {
     display: flex;
     border-radius: 3rem;
-    height: 30px;
+    height: 36px;
     background-color: white;
     margin-top: 4px;
     margin-bottom: 10px;
