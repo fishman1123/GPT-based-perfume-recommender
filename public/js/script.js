@@ -111,6 +111,9 @@ let assistantMessages = [];
 let myDateTime = '';
 async function codeSubmit() {
     const passcode = document.getElementById('passcode').value;
+    console.log(document.getElementById("securityButton").disabled);
+    document.getElementById("securityButton").disabled = true;
+
 
     try {
         const response = await fetch('/imageMaster/passcode', {
@@ -126,7 +129,7 @@ async function codeSubmit() {
 
 
         // Wait for fade-in to complete
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 800));
 
 
         const securityElement = document.getElementById('security');
@@ -134,6 +137,7 @@ async function codeSubmit() {
 
         // Wait for fade-out to complete
         await new Promise(resolve => setTimeout(resolve, 1000));
+        document.getElementById("securityButton").disabled = false;
         securityElement.style.display = 'none';
         // Show loading with fade-in
         const report = document.getElementById('report');
@@ -172,7 +176,7 @@ async function codeSubmit() {
 
                 report.classList.remove('fade-in');
                 report.style.display = 'none';
-                window.reload();
+                return window.reload();
             }
         }, 2000); // Simulating a delay for the validation process
     } catch (error) {
@@ -505,6 +509,7 @@ const compressedReport = () => {
     const reportTwo = document.getElementById('chunktargetTopNote').innerText;
     const reportThree = document.getElementById('chunktargetMiddleNote').innerText;
     const reportFour = document.getElementById('chunktargetBaseNote').innerText;
+    document.getElementById('loader').style.display = "none";
     document.getElementById('report').style.display = "flex";
     document.getElementById('reportSequence').style.display = 'none';
     document.getElementById('reportCompressedPage').style.display = "flex";
