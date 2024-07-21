@@ -642,8 +642,8 @@ function displayReport(message, sender, targetID, ) {
     // messageElement.style.marginBottom = '5px'; // Add margin between messages
     // messageElement.style.marginTop = '20px';
     if (targetID === 'targetNameRecommend') {
-        messageElement.style.fontSize = '20px';
-        messageElement.style.color = 'white';
+        messageElement.style.fontSize = '30px';
+        messageElement.style.color = 'black';
     } else if (targetID === 'targetNameRecommend') {
         messageElement.style.width = '250px';
     } else {
