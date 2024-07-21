@@ -111,9 +111,14 @@ let assistantMessages = [];
 let myDateTime = '';
 async function codeSubmit() {
     const passcode = document.getElementById('passcode').value;
-    console.log(document.getElementById("securityButton").disabled);
-    document.getElementById("securityButton").disabled = true;
+    const securityButton = document.getElementById("securityButton");
+    const securityElement = document.getElementById('security');
+    const report = document.getElementById('report');
+    const loader = document.getElementById('loader');
 
+    securityButton.disabled = true;
+    securityButton.style.backgroundColor = '#d3d3d3';
+    const formGroup = document.getElementsByClassName("form__group");
 
     try {
         const response = await fetch('/imageMaster/passcode', {
@@ -126,28 +131,23 @@ async function codeSubmit() {
 
         const responseData = await response.json();
 
-
-
         // Wait for fade-in to complete
         await new Promise(resolve => setTimeout(resolve, 800));
 
-
-        const securityElement = document.getElementById('security');
         securityElement.classList.add('fade-out');
 
         // Wait for fade-out to complete
         await new Promise(resolve => setTimeout(resolve, 1000));
-        document.getElementById("securityButton").disabled = false;
         securityElement.style.display = 'none';
+
+        securityButton.disabled = false;
+        securityButton.style.backgroundColor = 'black';
+
         // Show loading with fade-in
-        const report = document.getElementById('report');
         report.style.display = "flex";
         pageTransition('loader');
 
         securityElement.classList.remove('fade-out');
-
-        const loader = document.getElementById('loader');
-        console.log(loader.style.display);
         loader.style.opacity = '1';  // Ensure loader is fully visible
 
         setTimeout(async () => {
@@ -176,12 +176,12 @@ async function codeSubmit() {
 
                 report.classList.remove('fade-in');
                 report.style.display = 'none';
-                return window.reload();
+                window.location.reload();
             }
         }, 2000); // Simulating a delay for the validation process
     } catch (error) {
-        console.error('Error:', error);
         alert('비밀번호를 정확하게 입력하셔야 합니다.');
+        window.location.reload();
     }
 }
 
