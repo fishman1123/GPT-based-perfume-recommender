@@ -502,18 +502,31 @@ async function sendImage() {
         // backButton.style.display = "block"; // Show back button
     }
 }
-//구현해야됨
+//
 const compressedReport = () => {
     const reportTitle = document.getElementById('chunktargetNameRecommend').innerText;
     const reportOne = document.getElementById('chunktargetInsight').innerText;
     const reportTwo = document.getElementById('chunktargetTopNote').innerText;
     const reportThree = document.getElementById('chunktargetMiddleNote').innerText;
     const reportFour = document.getElementById('chunktargetBaseNote').innerText;
+    const compressedMainPage = document.getElementById('reportCompressedPage');
+    const screenShotLineMaker = document.createElement('div');
+    const screenShotLineMakerStatement = document.createElement('div');
+
+    compressedMainPage.appendChild(screenShotLineMaker);
+    screenShotLineMaker.appendChild(screenShotLineMakerStatement);
+    screenShotLineMaker.style.width = '100%';
+    screenShotLineMakerStatement.className = 'dottedLine';
+
+    compressedMainPage.insertBefore(document.getElementById('messageArea'), compressedMainPage.firstChild);
     document.getElementById('loader').style.display = "none";
     document.getElementById('report').style.display = "flex";
     document.getElementById('reportSequence').style.display = 'none';
     document.getElementById('reportCompressedPage').style.display = "flex";
-
+    // you need to make p tag element and insert text element in it for this from displayReport function
+    // compressedMainPage.querySelectorAll('p').forEach(p => {
+    //     p.style.fontSize = '12px';
+    // });
 
 
     document.body.style.height = '100vh';
@@ -530,6 +543,7 @@ const compressedReport = () => {
     displayReport(reportThree, "preview", 'previewMiddleNote');
     displayReport(reportFour, "preview", 'previewBaseNote');
     displayReport(reportTitle, "preview", 'previewName');
+
 
 
 
@@ -612,6 +626,7 @@ function displayReport(message, sender, targetID, ) {
     const targetArea = document.getElementById(targetID);
     const messageElement = document.createElement('div');
     messageElement.id = `chunk${targetID}`;
+    messageElement.style.fontFamily = `'MaruBuri', sans-serif`;
     messageElement.textContent = message;
     messageElement.style.textAlign = "left";
     messageElement.className = sender;

@@ -68,6 +68,11 @@
     font-family: 'BM Hanna Air';
     src: url("../assets/BMHANNAAir_ttf.ttf") format('truetype');
 }
+@font-face {
+    font-family: 'MaruBuri';
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.eot);
+    src: url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.eot?#iefix) format("embedded-opentype"), url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2) format("woff2"), url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff) format("woff"), url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.ttf) format("truetype");
+}
 
 body {
     display: flex;
@@ -491,14 +496,20 @@ body::before {
 }
 
 .title-container {
-    border: solid 4px black;
+    border: solid 2px black;
     border-radius:30px;
     padding: 6px 20px 0px;
-
+    font-family: 'MaruBuri', sans-serif;
     display: inline-flex;
     /*margin-left: 30px;*/
     margin-top: 20px;
     margin-bottom: 10px;
+}
+
+.dottedLine {
+    width: 100%;
+    border-bottom: 1px dotted black;
+    margin: 20px 0;
 }
 
 .report-container {
