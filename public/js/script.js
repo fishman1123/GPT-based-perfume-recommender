@@ -286,7 +286,7 @@ function reportSequenceTransition() {
     let targetElement = document.getElementById('reportOneElement');
     let targetReportElementHeight;
     let targetReportContainer;
-    let reports = ["reportOne", "reportTwo", "reportThree", "reportFour", "reportLast"];
+    let reportElements = ["reportOne","reportHintOne", "reportTwo", "reportHintTwo","reportThree", "reportHintThree","reportFour", "reportLast"];
     let targetElementList = ["reportOneElement", "reportTwoElement", "reportThreeElement", "reportFourElement"];
 
     insight.style.height = `calc(${targetElement.style.height} + 140px)`;
@@ -307,7 +307,7 @@ function reportSequenceTransition() {
         threshold: 0.1 // Trigger when 10% of the element is visible
     });
 
-    reports.forEach(report => {
+    reportElements.forEach(report => {
         observer.observe(document.getElementById(report));
     });
 }
