@@ -11,7 +11,7 @@ export const reportModuleOne = () => {
 
             <div style="display: flex; justify-content: center">
                 <div class="recommend-name-container">
-                    <div id="targetNameRecommend" style="font-size: 30px; color: black"></div>
+                    <div id="targetNameRecommend" style="font-size: 22px; color: black; margin: 0 20px 0 20px"></div>
                 </div>
             </div>
 

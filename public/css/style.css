@@ -520,7 +520,7 @@ body::before {
     margin: 20px 10px 10px;
 }
 .note-container {
-    padding: 20px 40px 10px 20px;
+    padding: 20px 20px 10px 20px;
     text-align: center;
 }
 .second-note-container {
@@ -536,7 +536,7 @@ body::before {
     color: white;
 }
 .recommend-name-container {
-    font-size: 30px;
+    font-size: 22px;
     display: inline-flex;
     justify-content: center;
     text-align: center;
@@ -808,7 +808,7 @@ body::before {
 }
 
 .sequenceGap {
-    margin-top: 300px;
+    margin-top: 200px;
 }
 
 
@@ -822,10 +822,10 @@ body::before {
     z-index: 100;
     text-decoration: none;
     text-shadow: 0;
-    width: 39px; /* 13px * 3 */
-    height: 39px; /* 13px * 3 */
-    border-bottom: 6px solid #fff; /* 2px * 3 */
-    border-right: 6px solid #fff; /* 2px * 3 */
+    width: 26px; /* 13px * 3 */
+    height: 26px; /* 13px * 3 */
+    border-bottom: 4px solid #fff; /* 2px * 3 */
+    border-right: 4px solid #fff; /* 2px * 3 */
     z-index: 9;
     left: 50%;
     -webkit-transform: translate(-50%, 0%) rotate(45deg);

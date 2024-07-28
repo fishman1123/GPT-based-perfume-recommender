@@ -62,6 +62,10 @@
         <div style="font-size: 12px">보다 정확한 분석 결과를 위해 사진 속 인물에 대한 기본 정보를 입력해 주세요. 해당 정보는 오르지 분석 과정에만 사용되며 외부로 유출하진 않습니다.</div>
         <div style="font-size: 12px">Please enter some basic information about the person in the image for better results. this information will only be used for analysis and not be exposed.</div>
     </div>
+    <div style="display: flex; padding-right: 10px; align-items: center; margin-bottom: 10px">
+        <label for="userCode" style="display: flex; padding-right: 10px;">일련번호:</label>
+        <input style="width: 50%" type="text" id="userCode" class="text-input">
+    </div>
     <div style="display: flex; padding-right: 10px; align-items: center">
         <label for="date" style="display: flex; padding-right: 10px;">생년월일:</label>
         <input style="width: 60%" type="text" id="date" class="text-input">
@@ -150,8 +154,16 @@
                 <div class="zigzag-upside-down"></div>
             </div>
             <div id="reportHintOne" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; margin-bottom: 10px; flex-direction: column; margin-top: 30px">
-                <div>
-                    <div class="scroll-down"></div>
+                <div style="width: 400px; height: 200px; margin-top: 40px; margin-right: 40px">
+                    <div style="display: flex; flex-direction: column; align-items: center">
+                        <div>
+                            <h1 style="font-family: 'MaruBuri', sans-serif; text-align: center; padding-left: 50px; color: white">Scroll Down</h1>
+                        </div>
+                        <div>
+                            <div style="margin-top: 10px" class="scroll-down"></div>
+                            <div class="scroll-down"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -182,8 +194,16 @@
             </div>
 
             <div id="reportHintTwo" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; margin-bottom: 10px; flex-direction: column; margin-top: 30px">
-                <div style="width: 400px; height: 200px;">
-                    <div class="scroll-down"></div>
+                <div style="width: 400px; height: 200px; margin-top: 40px; margin-right: 40px">
+                    <div style="display: flex; flex-direction: column; align-items: center">
+                        <div>
+                            <h1 style="font-family: 'MaruBuri', sans-serif; text-align: center; padding-left: 50px; color: white">Scroll Down</h1>
+                        </div>
+                        <div>
+                            <div style="margin-top: 10px" class="scroll-down"></div>
+                            <div class="scroll-down"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -213,8 +233,16 @@
                 <div class="zigzag-upside-down"></div>
             </div>
             <div id="reportHintThree" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; margin-bottom: 10px; flex-direction: column;  margin-top: 30px">
-                <div style="width: 400px; height: 200px;">
-                    <div class="scroll-down"></div>
+                <div style="width: 400px; height: 200px; margin-top: 40px; margin-right: 40px">
+                    <div style="display: flex; flex-direction: column; align-items: center">
+                        <div>
+                            <h1 style="font-family: 'MaruBuri', sans-serif; text-align: center; padding-left: 50px; color: white">Scroll Down</h1>
+                        </div>
+                        <div>
+                            <div style="margin-top: 10px" class="scroll-down"></div>
+                            <div class="scroll-down"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -243,12 +271,53 @@
                 </div>
                 <div class="zigzag-upside-down"></div>
             </div>
-            <div id="reportLast" class="sequenceGap" style="width: 100%; display: flex; opacity: 0; transition: all 1s; scroll-snap-align: start;">
+
+            <div id="reportHintFour" style="width: 100%; opacity: 0; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; margin-bottom: 10px; flex-direction: column; margin-top: 30px">
+                <div style="width: 400px; height: 200px; margin-top: 40px; margin-right: 40px">
+                    <div style="display: flex; flex-direction: column; align-items: center">
+                        <div>
+                            <h1 style="font-family: 'MaruBuri', sans-serif; text-align: center; padding-left: 50px; color: white">Scroll Down</h1>
+                        </div>
+                        <div>
+                            <div style="margin-top: 10px" class="scroll-down"></div>
+                            <div class="scroll-down"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="reportWarning" class="sequenceGap" style="width: 100%; opacity: 1; transition: all 1s; scroll-snap-align: start; display: flex; align-items: center; flex-direction: column">
+                <div class="zigzag" style="margin-top: 20px"></div>
+                <div id="reportWarningElement" style="display: flex; flex-direction: column; width: 100%; background-color: lightgrey;">
+                    <div style="background-color: white; display: flex; flex-direction: column; margin: 10px; border-radius: 20px">
+                        <div style="display: flex; justify-content: flex-start; margin-left: 10px ">
+                            <div class="title-container" style="margin-bottom: 20px">
+                                <div style="font-size: 22px; font-family: 'MaruBuri', sans-serif">주의사항</div>
+                                <div style="margin-left: 5px; margin-top: 2px">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M11 7h2v7h-2zm0 8h2v2h-2z"></path><path d="m21.707 7.293-5-5A.996.996 0 0 0 16 2H8a.996.996 0 0 0-.707.293l-5 5A.996.996 0 0 0 2 8v8c0 .266.105.52.293.707l5 5A.996.996 0 0 0 8 22h8c.266 0 .52-.105.707-.293l5-5A.996.996 0 0 0 22 16V8a.996.996 0 0 0-.293-.707zM20 15.586 15.586 20H8.414L4 15.586V8.414L8.414 4h7.172L20 8.414v7.172z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; margin-bottom: 10px">
+                            <div class="note-container second-note-container" style="padding-top: 0; text-align: start; padding-left: 20px;">
+                                <div style="font-family: 'BM Hanna Air', sans-serif">
+                                    <p>분석 결과는 저장되지 않습니다!</p>
+                                    <p style="margin-top: 12px">AI 조향사가 추천한 향료로 향수 제작을 희망하시는 경우 분석보고서에 나와 있는 향료 번호 3가지를 제공된 종이에 작성하신 뒤 조향사에게 전달해주세요!</p>
+                                    <p style="margin-top: 12px">커스터마이징 향수 제작도 가능합니다! AI조향사가 추천한 향기 외에 원하시는 향료 조합으로 향수 제작을 희망하시는 경우, 가장 마음에 드는 향료 번호 3가지를 제공된 종이에 작성하신 뒤 조향사에게 전달해주세요!</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="zigzag-upside-down"></div>
+            </div>
+
+            <div id="reportLast" class="sequenceGap" style="margin-top: 100px; width: 100%; display: flex; opacity: 0; transition: all 1s; scroll-snap-align: start;">
                 <div style="width: 100%; align-content: center">
                     <h1 class="titleText">AC'SCENT</h1>
                     <p class="titleText securitySubText" style="text-align: center; padding-bottom: 6px; margin-bottom: 80px">AI IMAGE ANALYSIS PERFUME MAKER</p>
                     <div style=" margin: auto; width: 150px; display: flex; align-content: center; flex-direction: column">
-                        <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px" onclick="compressedReport()"><span style="letter-spacing: 10px; padding-left: 10px;">저장하기</span><br><span style="letter-spacing: 0;">Save Report</span></button>
+                        <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px" onclick="compressedReport()"><span style="letter-spacing: 10px; padding-left: 10px;">요약보기</span><br><span style="letter-spacing: 0;">Report Summary</span></button>
                         <button style="border: #878282 2px solid; border-radius: 10px; margin-bottom: 10px; background-color: rgba(0, 0, 0, 0.5); color: white; padding-top: 4px; padding-bottom: 4px; font-size: 20px" onclick="backToPage()"><span style="letter-spacing: 10px; padding-left: 10px;">돌아가기</span><br><span style="letter-spacing: 0">Back to Main</span></button>
                     </div>
                 </div>

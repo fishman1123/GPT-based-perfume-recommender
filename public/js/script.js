@@ -189,6 +189,7 @@ async function codeSubmit() {
 function imageUpload() {
     const imageCheck = document.getElementById('imageInput');
     const birthInput = document.getElementById('date');
+    const userCodeInput = document.getElementById('userCode');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
     // const inputLanguage = document.getElementById('foreignerCheck');
@@ -196,7 +197,14 @@ function imageUpload() {
 
 
 
-    // Check if the name input is empty
+    // 일련번호 validation
+    if (!userCodeInput.value.trim()) {
+        alert('일련번호 작성해 주세요.');
+        userCodeInput.focus();
+        document.getElementById('report').style.display = "none";
+        return;
+    }
+    // 이름 validation
     if (!inputName.value.trim()) {
         alert('이름을 작성해 주세요.');
         inputName.focus();
@@ -204,7 +212,7 @@ function imageUpload() {
         return;
     }
 
-    // Check if the birthdate input is empty
+    // 생년월일 validation
     if (!birthInput.value.trim()) {
         alert('생일 일자를 작성 해주세요.');
         birthInput.focus();
@@ -286,12 +294,13 @@ function reportSequenceTransition() {
     let targetElement = document.getElementById('reportOneElement');
     let targetReportElementHeight;
     let targetReportContainer;
-    let reportElements = ["reportOne","reportHintOne", "reportTwo", "reportHintTwo","reportThree", "reportHintThree","reportFour", "reportLast"];
+    let reportElements = ["reportOne","reportHintOne", "reportTwo", "reportHintTwo","reportThree", "reportHintThree","reportFour", "reportHintFour", "reportLast"];
     let targetElementList = ["reportOneElement", "reportTwoElement", "reportThreeElement", "reportFourElement"];
 
-    insight.style.height = `calc(${targetElement.style.height} + 140px)`;
+    insight.style.height = `calc(${targetElement.style.height} + 160px)`;
     document.getElementById("intro").style.display = 'none';
     document.getElementById("reportSequence").style.display = 'flex';
+
     const assignHeight = () => {
         targetElementList.forEach((element, index) => {
             targetReportElementHeight  = document.getElementById(`${element}`).style.height;
@@ -374,6 +383,7 @@ async function sendImage() {
     const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
+    const inputUserCode = document.getElementById('userCode');
     // const inputLanguage = document.getElementById('foreignerCheck');
     const imageInput = document.getElementById('imageInput');
     // console.log("can you get this?: " + birthInput.value);
@@ -443,6 +453,7 @@ async function sendImage() {
         const formData = new FormData();
         formData.append('image', compressedFile); // Append the compressed file
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
+        formData.append('userCode', inputUserCode.value);
         // formData.append('language', inputGender.value === "00" ? '한국어' : '영어');
         formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
@@ -643,8 +654,10 @@ function displayReport(message, sender, targetID, ) {
     // messageElement.style.marginBottom = '5px'; // Add margin between messages
     // messageElement.style.marginTop = '20px';
     if (targetID === 'targetNameRecommend') {
-        messageElement.style.fontSize = '30px';
+        messageElement.style.fontSize = '22px';
+        messageElement.style.textAlign = "left";
         messageElement.style.color = 'black';
+        messageElement.style.margin = '0 20px 0 20px';
     } else if (targetID === 'targetNameRecommend') {
         messageElement.style.width = '250px';
     } else {

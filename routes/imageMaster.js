@@ -53,7 +53,7 @@ const drive = google.drive({version: 'v3', auth: authDrive});
 const sheets = google.sheets({version: 'v4', auth: authSheets});
 
 
-async function listingReport(userName, resultList) {
+async function listingReport(userName, resultList, userCode) {
     const spreadsheetId = '1D8n8faBvrYjX3Yk-6-voGoS0YUgN37bi7yEkKfk24Ws'; // Replace with your actual spreadsheet ID
     // const sheetName = 'Sheet1'; // Replace with your sheet name
     const check = true;
@@ -69,6 +69,8 @@ async function listingReport(userName, resultList) {
             console.log('Available sheets:', sheetNames);
 
             // Get the existing data to find the column index for '주문번호'
+            // 현재는 '일련번호' 이지만 추후에 주문번호로 바꿔야됨
+            //일련번호는 매장용으로 사용하기 위함
             const getResponse = await sheets.spreadsheets.values.get({
                 spreadsheetId,
                 range: `${sheetNames}!A1:G1`, // Assuming the headers are in the first row
@@ -90,7 +92,7 @@ async function listingReport(userName, resultList) {
                 range: `${sheetNames}!${orderNumberColumnLetter}:${orderNumberColumnLetter}`,
                 valueInputOption: 'RAW',
                 resource: {
-                    values: [['test', `${userName}`, `${resultList.nameRecommendation}`, `${resultList.combinedInsights}`, `${resultList.topNote}`, `${resultList.middleNote}`, `${resultList.baseNote}`]],
+                    values: [[`${userCode}`, `${userName}`, `${resultList.nameRecommendation}`, `${resultList.combinedInsights}`, `${resultList.topNote}`, `${resultList.middleNote}`, `${resultList.baseNote}`]],
                 },
             });
             console.log('Appended value to the spreadsheet:', appendResponse.data.updates);
@@ -329,13 +331,15 @@ router.post('/image', upload.single('image'), async (req, res) => {
             const userGender = req.body.gender;
             // const userLanguage = req.body.language;
             const userName = req.body.name;
+            const userCode = req.body.userCode;
+
 
             // Upload file to Google Drive
             const fileId = await uploadImageToDrive(req.file, userName);
             console.log('File uploaded to Google Drive with ID:', fileId);
 
             // Here you can call the function to process the image and get the evaluation
-            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender, userName);
+            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender, userName, userCode);
 
             console.log('User Birth Date:', userBirthDate);
             console.log('User Gender:', userGender);
@@ -520,11 +524,12 @@ async function getFilteredTopNotes() {
     return topNotes.filter(note => note.count <= threshold);
 }
 
-async function imageToGpt(file, gender, birthdate,name) {
+async function imageToGpt(file, gender, birthdate,name,code) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
     const userBirthDate = birthdate;
     const userName = name;
+    const userCode = code;
     // const userLanguage = language;
     // console.log(language);
     const filteredTopNotes = await getFilteredTopNotes(); // 필터링된 top notes 선택
@@ -719,7 +724,7 @@ async function imageToGpt(file, gender, birthdate,name) {
         if (filteredList.nameRecommendation === 'Name Recommendation not found') {
             return filteredList;
         }
-        await listingReport(userName, filteredList);
+        await listingReport(userName, filteredList, userCode);
 
         await updateTopNoteCount(filteredList.topNote);
 
