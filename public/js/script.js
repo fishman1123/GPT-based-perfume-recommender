@@ -468,6 +468,7 @@ async function sendImage() {
         const responseData = await response.json();
         // console.log("this is the answer: ", responseData);
         // console.log("target input name" + inputName.value);
+        console.log(responseData.message.nameRecommendation);
         if (responseData.message.nameRecommendation === 'Name Recommendation not found') {
             alert("허용하지 않는 이미지 유형입니다.");
             window.location.href = "https://acscent.co.kr";
@@ -480,7 +481,7 @@ async function sendImage() {
         // displayReport(responseData.message.middleNote, "testing", 'targetMiddleNote');
         // displayReport(responseData.message.baseNote, "testing", 'targetBaseNote');
         // displayReport(responseData.message.nameRecommendation, "testing", 'targetNameRecommend');
-        console.log('hello' + responseData.message.combinedInsights);
+
         reportSequenceTransition();
         displayReport(responseData.message.combinedInsights, "testing", 'targetInsight');
         displayReport(responseData.message.topNote, "testing", 'targetTopNote');

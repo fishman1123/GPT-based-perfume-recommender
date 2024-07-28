@@ -715,6 +715,10 @@ async function imageToGpt(file, gender, birthdate,name) {
         console.log("this is Base note: " + filteredList.baseNote);
         console.log("this is Perfume Name: " + filteredList.nameRecommendation);
 
+        //error exception for image that is not allowed
+        if (filteredList.nameRecommendation === 'Name Recommendation not found') {
+            return filteredList;
+        }
         await listingReport(userName, filteredList);
 
         await updateTopNoteCount(filteredList.topNote);
@@ -726,6 +730,12 @@ async function imageToGpt(file, gender, birthdate,name) {
         //     filteredList.baseNote,
         //     filteredList.nameRecommendation
         // );
+
+
+
+        // if (content === "Insight 1: 부적절함") {
+        //     re
+        // }
         return filteredList;
     } catch (error) {
         console.error("Error processing the file:", error);
