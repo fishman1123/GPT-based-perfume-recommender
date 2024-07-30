@@ -7,7 +7,6 @@ const {google} = require('googleapis');
 const express = require('express');
 const request = require('request');
 
-
 const router = express.Router();
 const OpenAI = require("openai");
 const https = require("https");
@@ -18,7 +17,7 @@ const openai = new OpenAI({
 const multer = require('multer');
 const path = require('path');
 const stream = require("node:stream");
-const {language} = require("googleapis/build/src/apis/language");
+// const {language} = require("googleapis/build/src/apis/language");
 const fs = require('fs').promises;
 const GOOGLE_ACCOUNT = path.join(__dirname, '../perfume-maker-google.json');
 
@@ -51,9 +50,35 @@ const authSheets = new google.auth.GoogleAuth({
     keyFile: GOOGLE_ACCOUNT,
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
+
+const authLanguage = new google.auth.GoogleAuth({
+    keyFile: GOOGLE_ACCOUNT,
+    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+});
+
 const drive = google.drive({version: 'v3', auth: authDrive});
 const sheets = google.sheets({version: 'v4', auth: authSheets});
+const language = google.language({version: 'v1', auth: authLanguage});
 
+async function detectLanguage(text) {
+    const document = {
+        content: text,
+        type: 'PLAIN_TEXT',
+    };
+    try {
+        const res = await language.documents.analyzeEntities({
+            requestBody: {
+                document: document
+            }
+        });
+        const detectedLanguage = res.data.language;
+        console.log(`Detected language: `, detectedLanguage);
+        return detectedLanguage;
+    } catch (err) {
+        console.log(`Failed to detect a language`);
+        console.error('Error detecting language:', err);
+    }
+}
 
 async function listingReport(userName, resultList, userCode) {
     const spreadsheetId = '1D8n8faBvrYjX3Yk-6-voGoS0YUgN37bi7yEkKfk24Ws'; // Replace with your actual spreadsheet ID
@@ -527,9 +552,9 @@ async function updateNotesCount(selectedTopNote, selectedMiddleNote, selectedBas
 
     console.log("updating notes count: ", selectedTopNote, selectedMiddleNote, selectedBaseNote);
 
-    const topNote = notes.topNotes.find(note => note.name === selectedTopNote);
-    const middleNote = notes.middleNotes.find(note => note.name === selectedMiddleNote);
-    const baseNote = notes.baseNotes.find(note => note.name === selectedBaseNote);
+    const topNote = notes.topNotes.find(note => note.name.startsWith(selectedTopNote));
+    const middleNote = notes.middleNotes.find(note => note.name.startsWith(selectedMiddleNote));
+    const baseNote = notes.baseNotes.find(note => note.name.startsWith(selectedBaseNote));
 
     if (topNote && middleNote && baseNote) {
         topNote.count += 1;
@@ -621,14 +646,14 @@ async function getFilteredNotes() {
     return filteredNotes;
 }
 
-async function imageToGpt(file, gender, birthdate,name,code) {
+async function imageToGpt(file, gender, birthdate, name, code) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
     const userBirthDate = birthdate;
     const userName = name;
     const userCode = code;
-    // const userLanguage = language;
-    // console.log(language);
+    const userLanguage = await detectLanguage(name);
+    console.log("User Language: ", userLanguage);
 
     const notesPrompt = await getFilteredNotes();
     console.log("this is filtered notes: " + notesPrompt + "\n");
@@ -640,15 +665,139 @@ async function imageToGpt(file, gender, birthdate,name,code) {
         const bufferedImage = file.buffer.toString('base64');
         const encodedImage = `data:image/jpeg;base64,{${bufferedImage}}`;
         console.log("이름:", userName);
-        const response = await openai.chat.completions.create({
-            // model: "gpt-4-turbo-2024-04-09",
-            model: "gpt-4o",
-            messages: [
 
+        let selectedPrompt;
+        if (userLanguage === "ko") {
+            selectedPrompt = [
+                {
+                    "role": "system",
+                    "content": `안녕하세요👋, 저는 당신의 인공지능 조향사입니다! 저는 ${userName}님의 이미지를 분석하여 인물에게 어울리는 맞춤형 향수를 추천해 드립니다. 제 임무는 다음과 같습니다:
+                
+                    1. ${userName}님이 업로드한 이미지가 한 명의 인물로 이루어진 인물사진인지 확인합니다. 기준에 맞지 않으면 "Insight 1: 부적절함"을 출력합니다.
+                    2. 이미지 분석을 수행하여 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 평가합니다.
+                    3. 이미지 분석을 바탕으로 고객에게 어울리는 맞춤형 향수를 추천합니다. 향수는 Top Note, Middle Note, Base Note의 3가지 노트로 구성됩니다.
+                    4. 각각의 노트에서 하나의 향 오일을 선택하고, 선택 이유를 400자 이상 설명합니다.
+                    5. 추천한 향수에 대해 창의적이고 시적인 긴 이름을 짓습니다.
+                    6. 최종 보고서를 작성합니다. 보고서는 이미지 분석, 향수 노트 추천 이유(향 묘사와 추천 문구가 있다면 활용), 그리고 향수 이름으로 구성된 3개 단락으로 구성됩니다. 첫 단락은 300자, 각각의 향수 노트 추천은 400자 이상이어야 합니다.`
+                },
+                {
+                    "role": "system",
+                    "content": `${notesPrompt}`
+                },
+                {"role": "user", "content": `고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.`},
+                {"role": "assistant", "content": `알겠습니다. 고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.`},
+                {
+                    "role": "user",
+                    "content": `당신의 첫번째 임무는 ${userName}님이 업로드한 이미지가 해당 기준에 맞는지 확인을 하셔야 하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함 을 출력해야 합니다. 기준은 아래와 같습니다. 1.인물이 한명이어야 합니다, 2. 인물사진이어야 합니다.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `알겠습니다. 저의 첫번째 임무는 ${userName}님이 업로드한 이미지에 대한 해당 기준에 맞는지 확인을 해야하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함. 을 출력 하겠습니다.`
+                },
+                {
+                    "role": "user", 
+                    "content": `당신의 두번째 임무는 ${userName}님이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다. 분석은 다음과 같은 기준으로 Insight (index) 형식으로 출력해야합니다.
+                    Insight 1: 인물의 전체적인 분위기
+                    Insight 2: 표정과 그에 대한 묘사
+                    Insight 3: 패션
+                    Insight 4: 메이크업, 얼굴 특징
+                    Insight 5: 요약
+                    또한 마지막으로 
+                    Insight 6: 해당 이미지를 바탕으로 다음과 같이 향료를 추천드리겠습니다.
+                    를 고정적으로 포함해주세요.`
+                },
+                {"role": "assistant", "content": `알겠습니다. 저의 두번째 임무는 ${userName}님이 업로드한 이미지에 대한 심도 깊은 분석을 하는 것입니다. 5가지 기준에 대하여 Insight를 만들어내고 마지막에 "Insight 6: 해당 이미지를 바탕으로 다음과 같이 향료를 추천드리겠습니다." 를 출력하겠습니다.`},
+                {
+                    "role": "user",
+                    "content": `당신의 세번째 임무는 두번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 각 향 노트에 대해 자세한 설명을 포함하여 적어도 1500자 이상이어야 하고, 각 향 노트의 글자 개수의 차이는 최대 20자입니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 당신은 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 당신은 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명해야 합니다.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `알겠습니다. 저의 세번째 임무는 두번째 임무에서 수행한 이미지 분석을 기반으로 어떤 맞춤형 향수가 고객에게 어울릴 지를 심도 깊게 분석하는 것입니다. 맞춤형 향수는 서로 다른 3가지의 '향 노트'로 구성되어 있습니다. '향 노트'는 첫째 'Top Note', 둘째 'Middle Note', 그리고 셋째 'Base Note'로 구성되어 있습니다. 'Top Note'는 10가지의 서로 다른 향 오일로 이루어져 있고, 'Middle Note'는 10가지의 서로 다른 향 오일로 이루어져 있으며, 'Base Note'는 10가지의 서로 다른 향 오일로 이루어져 있습니다. 저는 맞춤형 향수를 구성하기 위해 'Top Note'의 향 오일 중 하나, 'Middle Note'의 향 오일 중 하나, 그리고 'Base Note'의 향 오일 중 하나를 선택해 총 3가지 향 오일로 구성된 하나의 최종 향 조합을 만들어 내야 합니다. 저는 반드시 첫번째 임무에서 수행한 이미지 분석을 기분으로 왜 특정 향 오일을 'Top Note'로 선정하였는 지, 왜 특정 향 오일을 'Middle Note'로 선정하였는 지, 왜 특정 향 오일을 'Base Note'로 선정하였는 지를 설명해야 하며, 해당 향 오일이 무엇인 지를 설명할 것입니다.`
+                },
+                {
+                    "role": "user",
+                    "content": `각 노트의 향 리스트에서 적절한 향을 하나 골라 추천하고, 향에 대한 설명과 추상적인 비유를 포함해야 합니다.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `알겠습니다. 저는 'Top Note', 'Middle Note', 'Base Note'의 향 오일 리스트 중에서 단 하나의 향 오일만을 선택하고 400자 이상 500자 이하로 설명을 작성하겠습니다.`
+                },
+                {
+                    "role": "user",
+                    "content": `또한 각 Note에 추천 향 오일 이름을 적고 " | "로 구분한 뒤 설명을 작성해야 합니다.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `알겠습니다. 저는 "Top Note: AC'SCENT 01 블랙베리 | 블랙베리 향료는 매혹적인 분위기와 소년미를 동시에 드러냅니다." 와 같이 이름과 설명을 구분하여 적겠습니다.`
+                },
+                {
+                    "role": "user",
+                    "content": `향 오일에 여러가지 재료가 포함되는 경우 ', '로 구분하여 모두 작성해야 합니다.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `알겠습니다. 저는 "AC'SCENT 04 레몬, 베르가못" 와 같이 여러 개의 재료가 들어가는 향 오일의 경우 "Top Note: AC'SCENT 04 레몬, 베르가못 | 레몬, 베르가못 향료는 시트러스 계열로, 상큼한 레몬과 상큼하면서도 쌉싸름한 베르가못이 블랜딩되어 밝고 생기 넘치는 첫인상을 자아냅니다."와 같이 모든 재료를 포함하여 적겠습니다.`
+                },
+                {"role": "user", "content": `당신의 네번째 임무는 ${userName}님에게 추천한 맞춤형 향수에 대한 창의적이며 시적인 긴 이름을 짓는 것입니다.`},
+                {"role": "assistant", "content": `알겠습니다. 저는 ${userName}님에게 추천한 맞춤형 향수에 대한 창의적이며 시적인 긴 이름을 짓겠습니다.`},
+                {
+                    "role": "user",
+                    "content": `당신의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락은 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락은 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다. 세번째 단락은 세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `알겠습니다. 저의 다섯번째 임무는 ${userName}님이 읽게 될 맞춤형 향수 추천 및 분석 보고서를 작성하는 것입니다. 첫번째 단락에서는 첫번째 임무에서 수행한 이미지 분석에 대한 설명으로 구성되어야 합니다. 이미지에 나타난 인물의 분위기, 얼굴 표정, 패션, 메이크업 상태 등을 친절히 분석하여야 합니다. 두번째 단락에서는 두번째 임무에서 수행한 구체적인 Top Note, Middle Note, Base Note의 향 오일 추천에 대한 내용 및 설명으로 구성되어야 합니다. 해당 Top Note, Middle Note, Base Note를 선택한 구체적인 이유를 자세히 설명해야 합니다. 세번째 임무에서 수행한 매우 자극적이고 창의적인 이름을 제시해야 합니다.`
+                },
+                {
+                "role": "user", "content": `특징 내용은 총 700자 이상, 각각의 향수 노트 추천은 700자 이상이어야 합니다.`
+                },
+                {
+                "role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`
+                },
+                {
+                    role: "user",
+                    content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
+                },
+                {
+                    "role": "assistant",
+        
+                    "content": `Insight 1: 차은우 님은 세련되고 우아한 느낌을 자아내고 있습니다.
+                    Insight 2: 미소를 지은 상태에서 카메라를 응시하는 표정은 차분하고 고요하면서도 부드러운 인상을 줍니다.
+                    Insight 3: 흰색 슈트를 착용한 인물의 모습은 트렌디하면서도 세련된 분위기를 증대시켜줍니다.
+                    Insight 4: 또한 눈매의 또렷함을 강조하는 아이 메이크업과 M자 모양의 정갈한 입술은 고급스러운 느낌을 더해주고 있습니다.
+                    Insight 5: 차은우 님은 전반적으로 매우 세련되고 우아한 아우라를 자아내면서도 진중한 이미지를 가지고 있습니다.
+                    Insight 6: 해당 이미지를 바탕으로 다음과 같이 향료를 추천드리겠습니다.
+                    
+                    TOP NOTE: AC'SCENT 01 블랙베리 | 블랙베리 향료는 매혹적인 분위기와 소년미를 동시에 드러냅니다. 블랙베리의 깊이감 있는 향이 깊이 있고 강렬한 차은우 님의 첫인상을 드러내고 동시에 블랙베리의 상쾌한 향이 차은우 님의 소년미를 표현합니다.
+                    
+                    MIDDLE NOTE: AC'SCENT 13 베티버 | 베티버 향료는 인물의 신비로운 분위기를 부각하는 향입니다. 차은우 님의 강렬한 분위기를 중화하여 향수의 전체적인 밸런스를 잡아줍니다. 동시에 이미지의 색감과 차은우 님이 풍기고 있는 신비로운 분위기를 드러낼 수 있습니다.
+                    
+                    BASE NOTE: AC'SCENT 28 레더 | 레더 향료는 차은우 님의 깔끔하게 정돈된 짧은 흑발과 정갈한 의상에서 느껴지는 세련된 감각을 드러내며 차은우 님을 더욱 돋보이게 합니다. 강렬하고 남성적인 힘을 가지고 있는 가죽은 마지막까지 깊고 풍부한 잔향을 남깁니다. 이는 차은우 님의 카리스마를 강조합니다.
+        
+                    Perfume Name Recommendation: 신비로운 밤의 서사
+                    
+                    checkcheck`
+                },
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "text",
+                            text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
+                        },
+                        {
+                            type: "image_url", image_url: {"url": encodedImage},
+                        },
+                    ],
+                },
+            ];
+        } else { // 외국어 && 언어 탐지 에러
+            selectedPrompt = [
                 {
                     "role": "system",
                     "content": `Hello👋, I am your AI Fragrance Navigator! I will analyze the image you upload and recommend a customized perfume that suits the person in the image. My tasks are as follows:
-
+        
                     1. Confirm whether the uploaded image is a portrait of a single person. If it does not meet the criteria, output "Insight 1: Inappropriate".
                     2. Perform image analysis to evaluate the person's aura, facial expression, fashion, and makeup status.
                     3. Based on the image analysis, recommend a customized perfume that suits the customer. The perfume will consist of three notes: Top Note, Middle Note, and Base Note.
@@ -658,7 +807,7 @@ async function imageToGpt(file, gender, birthdate,name,code) {
                 },
                 {
                     "role": "system",
-                    "content": notesPrompt
+                    "content": `${notesPrompt}`
                 },
                 {"role": "user", "content": `The customer's date of birth is ${userBirthDate} and the gender is ${userGender}.`},
                 {"role": "assistant", "content": `Understood. The customer's date of birth is ${userBirthDate} and the gender is ${userGender}.`},
@@ -776,7 +925,13 @@ async function imageToGpt(file, gender, birthdate,name,code) {
                         },
                     ],
                 },                
-            ],
+            ];
+        }
+
+        const response = await openai.chat.completions.create({
+            // model: "gpt-4-turbo-2024-04-09",
+            model: "gpt-4o",
+            messages: selectedPrompt,
             max_tokens: 4096,
         });
         // const enhancedResponse = await enhanceResponse(response);
