@@ -652,7 +652,7 @@ async function imageToGpt(file, gender, birthdate, name, code) {
     const userBirthDate = birthdate;
     const userName = name;
     const userCode = code;
-    const userLanguage = await detectLanguage(name);
+    let userLanguage = await detectLanguage(name);
     console.log("User Language: ", userLanguage);
 
     const notesPrompt = await getFilteredNotes();
@@ -665,6 +665,7 @@ async function imageToGpt(file, gender, birthdate, name, code) {
         const bufferedImage = file.buffer.toString('base64');
         const encodedImage = `data:image/jpeg;base64,{${bufferedImage}}`;
         console.log("이름:", userName);
+        userLanguage = "ko";
 
         let selectedPrompt;
         if (userLanguage === "ko") {
