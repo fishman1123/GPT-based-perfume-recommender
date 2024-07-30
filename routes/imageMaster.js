@@ -23,6 +23,8 @@ const fs = require('fs').promises;
 const GOOGLE_ACCOUNT = path.join(__dirname, '../perfume-maker-google.json');
 
 const topNoteFilePath = path.join(__dirname, '../topnotes.json');
+const middleNoteFilePath = path.join(__dirname, '../middlenotes.json');
+const baseNoteFilePath = path.join(__dirname, '../basenotes.json');
 
 const iamWebApiKey = process.env.IMWEB_API_KEY;
 const iamWebSecretKey = process.env.IMWEB_SECRET_KEY;
@@ -496,32 +498,127 @@ function extractInsightsAndNotes(content) {
     };
 }
 
-// Top Notes Count Read/Write
-async function readTopNotes() {
-    const data = await fs.readFile(topNoteFilePath, 'utf-8');
-    return JSON.parse(data);
+// Notes Count Read/Write
+async function readNotes() {
+    const [topNoteData, middleNoteData, baseNoteData] = await Promise.all([
+        fs.readFile(topNoteFilePath, 'utf-8'),
+        fs.readFile(middleNoteFilePath, 'utf-8'),
+        fs.readFile(baseNoteFilePath, 'utf-8')
+    ]);
+    
+    const topNotes = JSON.parse(topNoteData);
+    const middleNotes = JSON.parse(middleNoteData);
+    const baseNotes = JSON.parse(baseNoteData);
+
+    return {
+        topNotes,
+        middleNotes,
+        baseNotes
+    };
 }
 
-async function updateTopNoteCount(selectedTopNote) {
-    const topNotes = await readTopNotes();
-    const topNoteRegex = /^(.*?) \|/;
-    selectedTopNote = selectedTopNote.match(topNoteRegex)[1];
-    console.log("updating top note count: ", selectedTopNote);
-    const topNote = topNotes.find(note => note.name === selectedTopNote);
-    if (topNote) {
+async function updateNotesCount(selectedTopNote, selectedMiddleNote, selectedBaseNote) {
+    const notes = await readNotes();
+    const regex = /^AC'SCENT \d{2}/;
+
+    selectedTopNote = selectedTopNote.match(regex)[0];
+    selectedMiddleNote = selectedMiddleNote.match(regex)[0];
+    selectedBaseNote = selectedBaseNote.match(regex)[0];
+
+    console.log("updating notes count: ", selectedTopNote, selectedMiddleNote, selectedBaseNote);
+
+    const topNote = notes.topNotes.find(note => note.name === selectedTopNote);
+    const middleNote = notes.middleNotes.find(note => note.name === selectedMiddleNote);
+    const baseNote = notes.baseNotes.find(note => note.name === selectedBaseNote);
+
+    if (topNote && middleNote && baseNote) {
         topNote.count += 1;
-        await fs.writeFile(topNoteFilePath, JSON.stringify(topNotes, null, 2), 'utf-8');
-        console.log("updating top note count success");
+        middleNote.count += 1;
+        baseNote.count += 1;
+
+        try {
+            await Promise.all([
+                fs.writeFile(topNoteFilePath, JSON.stringify(notes.topNotes, null, 2), 'utf-8'),
+                fs.writeFile(middleNoteFilePath, JSON.stringify(notes.middleNotes, null, 2), 'utf-8'),
+                fs.writeFile(baseNoteFilePath, JSON.stringify(notes.baseNotes, null, 2), 'utf-8')
+            ]);
+            console.log("All notes updated successfully");
+        } catch (err) {
+            console.log("Failed to update notes", err);
+        }
     } else {
-        console.log("updating top note count fail");
+        console.log("One or more notes not found");
     }
 }
 
-async function getFilteredTopNotes() {
-    const topNotes = await readTopNotes();
-    const minCount = Math.min(...topNotes.map(note => note.count));
-    const threshold = minCount + 3;
-    return topNotes.filter(note => note.count <= threshold);
+//// 원본
+// async function getFilteredNotes() {
+//     const notes = await readNotes();
+//     const { topNotes, middleNotes, baseNotes } = notes;
+
+//     // filter each notes
+//     let minCount = Math.min(...topNotes.map(note => note.count));
+//     let threshold = minCount + 3;
+//     const filteredTopNotes = topNotes.filter(note => note.count <= threshold);
+
+//     minCount = Math.min(...middleNotes.map(note => note.count));
+//     threshold = minCount + 3;
+//     const filteredMiddleNotes = middleNotes.filter(note => note.count <= threshold);
+
+//     minCount = Math.min(...baseNotes.map(note => note.count));
+//     threshold = minCount + 3;
+//     const filteredBaseNotes = baseNotes.filter(note => note.count <= threshold);
+
+//     // concat to string
+//     let filteredNotes = 'Top Note 향 오일 리스트:\n';
+//     filteredTopNotes.forEach(note => {
+//         filteredNotes += `${note.name}\n향 묘사: ${note.description}\n추천 문구: ${note.recommendation}\n`;
+//     });
+
+//     filteredNotes += '\nMiddle Note 향 오일 리스트:\n'
+//     filteredMiddleNotes.forEach(note => {
+//         filteredNotes += `${note.name}\n향 묘사: ${note.description}\n추천 문구: ${note.recommendation}\n`;
+//     });
+
+//     filteredNotes += '\nBase Note 향 오일 리스트:\n'
+//     filteredBaseNotes.forEach(note => {
+//         filteredNotes += `${note.name}\n향 묘사: ${note.description}\n추천 문구: ${note.recommendation}\n`;
+//     });
+
+//     return filteredNotes;
+// }
+
+//// GPT가 다듬은 코드
+async function getFilteredNotes() {
+    const notes = await readNotes();
+    const { topNotes, middleNotes, baseNotes } = notes;
+
+    const getFilteredNotesByThreshold = (notesArray) => {
+        const minCount = Math.min(...notesArray.map(note => note.count));
+        const threshold = minCount + 3;
+        return notesArray.filter(note => note.count <= threshold);
+    };
+
+    const filteredTopNotes = getFilteredNotesByThreshold(topNotes);
+    const filteredMiddleNotes = getFilteredNotesByThreshold(middleNotes);
+    const filteredBaseNotes = getFilteredNotesByThreshold(baseNotes);
+
+    const formatNotes = (notesArray, noteType) => {
+        return notesArray.map(note => 
+            `${note.name}\n향 묘사: ${note.description}\n추천 문구: ${note.recommendation}\n`
+        ).join('\n');
+    };
+
+    let filteredNotes = 'Top Note 향 오일 리스트:\n';
+    filteredNotes += formatNotes(filteredTopNotes, 'Top');
+
+    filteredNotes += '\nMiddle Note 향 오일 리스트:\n';
+    filteredNotes += formatNotes(filteredMiddleNotes, 'Middle');
+
+    filteredNotes += '\nBase Note 향 오일 리스트:\n';
+    filteredNotes += formatNotes(filteredBaseNotes, 'Base');
+
+    return filteredNotes;
 }
 
 async function imageToGpt(file, gender, birthdate,name,code) {
@@ -532,14 +629,9 @@ async function imageToGpt(file, gender, birthdate,name,code) {
     const userCode = code;
     // const userLanguage = language;
     // console.log(language);
-    const filteredTopNotes = await getFilteredTopNotes(); // 필터링된 top notes 선택
 
-    let topNotePrompts = 'Top Note 향 오일 리스트:\n';
-    filteredTopNotes.forEach(note => {
-        topNotePrompts += `${note.name}\n향 묘사: ${note.description}\n추천 문구: ${note.recommendation}\n`;
-    });
-
-    console.log("this is filtered top notes: " + topNotePrompts + "\n");
+    const notesPrompt = await getFilteredNotes();
+    console.log("this is filtered notes: " + notesPrompt + "\n");
 
     try {
         console.log("time to analyze bitch");
@@ -566,33 +658,7 @@ async function imageToGpt(file, gender, birthdate,name,code) {
                 },
                 {
                     "role": "system",
-                    "content": topNotePrompts
-                },
-                {
-                    "role": "system",
-                    "content": `Middle Note fragrance oil list:
-                    "AC'SCENT 11": "바질"
-                    "AC'SCENT 12": "백합"
-                    "AC'SCENT 13": "베티버"
-                    "AC'SCENT 14": "민트"
-                    "AC'SCENT 15": "유칼립투스"
-                    "AC'SCENT 16": "삼나무"
-                    "AC'SCENT 17": "인센스"
-                    "AC'SCENT 18": "제라늄"
-                    "AC'SCENT 19": "바다소금"
-                    "AC'SCENT 20": "상록수"
-                  
-                    Base Note fragrance oil list:
-                    "AC'SCENT 21": "머스크"
-                    "AC'SCENT 22": "샌달우드"
-                    "AC'SCENT 23": "은방울 꽃"
-                    "AC'SCENT 24": "앰버우드"
-                    "AC'SCENT 25": "바닐라"
-                    "AC'SCENT 26": "화이트머스크"
-                    "AC'SCENT 27": "로즈우드"
-                    "AC'SCENT 28": "레더"
-                    "AC'SCENT 29": "계피"
-                    "AC'SCENT 30": "생강"`
+                    "content": notesPrompt
                 },
                 {"role": "user", "content": `The customer's date of birth is ${userBirthDate} and the gender is ${userGender}.`},
                 {"role": "assistant", "content": `Understood. The customer's date of birth is ${userBirthDate} and the gender is ${userGender}.`},
@@ -735,7 +801,7 @@ async function imageToGpt(file, gender, birthdate,name,code) {
         }
         await listingReport(userName, filteredList, userCode);
 
-        await updateTopNoteCount(filteredList.topNote);
+        await updateNotesCount(filteredList.topNote, filteredList.middleNote, filteredList.baseNote);
 
         // return await enhanceResponse(
         //     filteredList.combinedInsights,
