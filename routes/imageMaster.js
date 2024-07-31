@@ -104,9 +104,9 @@ async function listingReport(userName, resultList, userCode) {
             });
 
             const headers = getResponse.data.values[0];
-            const orderNumberColumnIndex = headers.indexOf('주문번호');
+            const orderNumberColumnIndex = headers.indexOf('일련번호');
             if (orderNumberColumnIndex === -1) {
-                console.log(`'주문번호' column not found in the sheet`);
+                console.log(`'일련번호' column not found in the sheet`);
                 return;
             }
 
