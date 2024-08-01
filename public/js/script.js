@@ -192,8 +192,9 @@ function imageUpload() {
     const userCodeInput = document.getElementById('userCode');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
-    // const inputLanguage = document.getElementById('foreignerCheck');
+    const inputLanguage = document.getElementById('foreignerCheck');
     document.getElementById('report').style.display = "flex";
+    console.log("hello : ", inputLanguage.value);
 
 
 
@@ -243,12 +244,12 @@ function imageUpload() {
         document.getElementById('report').style.display = "none";
         return;
     }
-    // if (!inputLanguage.value.trim()) {
-    //     alert('언어를 골라주세요.');
-    //     inputLanguage.focus();
-    //     document.getElementById('report').style.display = "none";
-    //     return;
-    // }
+    if (!inputLanguage.value.trim()) {
+        alert('언어를 골라주세요.');
+        inputLanguage.focus();
+        document.getElementById('report').style.display = "none";
+        return;
+    }
 
     // Check if an image has been uploaded
     if (imageCheck.files.length === 0) {
@@ -384,7 +385,7 @@ async function sendImage() {
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
     const inputUserCode = document.getElementById('userCode');
-    // const inputLanguage = document.getElementById('foreignerCheck');
+    const inputLanguage = document.getElementById('foreignerCheck');
     const imageInput = document.getElementById('imageInput');
     // console.log("can you get this?: " + birthInput.value);
     if (imageInput.files.length === 0) {
@@ -454,7 +455,7 @@ async function sendImage() {
         formData.append('image', compressedFile); // Append the compressed file
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('userCode', inputUserCode.value);
-        // formData.append('language', inputGender.value === "00" ? '한국어' : '영어');
+        formData.append('language', inputGender.value === "00" ? '한국어' : '영어');
         formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
         // console.log("hello there" + document.getElementById('date').value);

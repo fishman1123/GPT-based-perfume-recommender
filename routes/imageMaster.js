@@ -356,9 +356,10 @@ router.post('/image', upload.single('image'), async (req, res) => {
         if (req.file) {
             const userBirthDate = req.body.birthDate;
             const userGender = req.body.gender;
-            // const userLanguage = req.body.language;
+            const userLanguage = req.body.language;
             const userName = req.body.name;
             const userCode = req.body.userCode;
+            console.log("second sequence: ", userLanguage);
 
 
             // Upload file to Google Drive
@@ -366,7 +367,7 @@ router.post('/image', upload.single('image'), async (req, res) => {
             console.log('File uploaded to Google Drive with ID:', fileId);
 
             // Here you can call the function to process the image and get the evaluation
-            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender, userName, userCode);
+            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender, userName, userCode, userLanguage);
 
             console.log('User Birth Date:', userBirthDate);
             console.log('User Gender:', userGender);
@@ -646,13 +647,14 @@ async function getFilteredNotes() {
     return filteredNotes;
 }
 
-async function imageToGpt(file, gender, birthdate, name, code) {
+async function imageToGpt(file, gender, birthdate, name, code, language) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
     const userBirthDate = birthdate;
     const userName = name;
     const userCode = code;
-    let userLanguage = await detectLanguage(name);
+    const userLanguage = language;
+    // const userLanguage = await detectLanguage(name);
     console.log("User Language: ", userLanguage);
 
     const notesPrompt = await getFilteredNotes();
@@ -665,10 +667,9 @@ async function imageToGpt(file, gender, birthdate, name, code) {
         const bufferedImage = file.buffer.toString('base64');
         const encodedImage = `data:image/jpeg;base64,{${bufferedImage}}`;
         console.log("이름:", userName);
-        userLanguage = "ko";
 
         let selectedPrompt;
-        if (userLanguage === "ko") {
+        if (userLanguage === "한국어") {
             selectedPrompt = [
                 {
                     "role": "system",

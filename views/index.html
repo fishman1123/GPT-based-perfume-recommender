@@ -80,26 +80,29 @@
                     <input style="width: 80%" type="text" id="nameInput" class="text-input">
                 </div>
             </div>
-            <div style="display: flex">
-                <div>
-                    <label for="gender" style="display: flex; margin-top: 12px; margin-bottom: 12px; align-items: center; padding-right: 13px">성별:</label>
+            <div style="display: flex; flex-direction: column">
+                <div style="display: flex">
+                    <div>
+                        <label for="gender" style="display: flex; margin-top: 12px; margin-bottom: 12px; align-items: center; padding-right: 13px">성별:</label>
+                    </div>
+                    <div style="display: inline-flex; align-items: center;">
+                        <select id="gender" style="display: block;">
+                            <option value="">성별을 골라주세요</option>
+                            <option value="00">남자</option>
+                            <option value="01">여자</option>
+                        </select>
+                    </div>
                 </div>
+
+<!--                this is not working-->
                 <div style="display: inline-flex; align-items: center;">
-                    <select id="gender" style="display: block;">
-                        <option value="">성별을 골라주세요</option>
-                        <option value="00">남자</option>
-                        <option value="01">여자</option>
+                    <label for="foreignerCheck" style="padding-right: 14px">언어:</label>
+                    <select id="foreignerCheck" style="display: block; width: 117px">
+                        <option value="">언어(Language)</option>
+                        <option value="00">한국어</option>
+                        <option value="01">English(Report Only)</option>
                     </select>
                 </div>
-<!--                this is not working -->
-<!--                <div style="display: inline-flex; align-items: center;">-->
-<!--                    <label for="foreignerCheck">언어:</label>-->
-<!--                    <select id="foreignerCheck" style="display: block;">-->
-<!--                        <option value="">언어(Language)</option>-->
-<!--                        <option value="00">한국어</option>-->
-<!--                        <option value="01">English(Report Only)</option>-->
-<!--                    </select>-->
-<!--                </div>-->
 
             </div>
 
