@@ -455,7 +455,7 @@ async function sendImage() {
         formData.append('image', compressedFile); // Append the compressed file
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('userCode', inputUserCode.value);
-        formData.append('language', inputGender.value === "00" ? '한국어' : '영어');
+        formData.append('language', inputLanguage.value === "00" ? '한국어' : '영어');
         formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
         // console.log("hello there" + document.getElementById('date').value);
