@@ -354,7 +354,8 @@ router.get('/products', async (req, res) => {
 router.post('/image', upload.single('image'), async (req, res) => {
     try {
         if (req.file) {
-            const userBirthDate = req.body.birthDate;
+            // date hidden
+            // const userBirthDate = req.body.birthDate;
             const userGender = req.body.gender;
             const userLanguage = req.body.language;
             const userName = req.body.name;
@@ -367,9 +368,9 @@ router.post('/image', upload.single('image'), async (req, res) => {
             console.log('File uploaded to Google Drive with ID:', fileId);
 
             // Here you can call the function to process the image and get the evaluation
-            const imageEvaluation = await imageToGpt(req.file, userBirthDate, userGender, userName, userCode, userLanguage);
+            const imageEvaluation = await imageToGpt(req.file, userGender, userName, userCode, userLanguage);
 
-            console.log('User Birth Date:', userBirthDate);
+            // console.log('User Birth Date:', userBirthDate);
             console.log('User Gender:', userGender);
             res.json({message: imageEvaluation, fileId: fileId});
         } else {
@@ -647,10 +648,11 @@ async function getFilteredNotes() {
     return filteredNotes;
 }
 
-async function imageToGpt(file, gender, birthdate, name, code, language) {
+async function imageToGpt(file, gender, name, code, language) {
     console.log(`Uploaded file:`, file);
     const userGender = gender;
-    const userBirthDate = birthdate;
+    // date hidden
+    // const userBirthDate = birthdate;
     const userName = name;
     const userCode = code;
     const userLanguage = language;
@@ -686,8 +688,8 @@ async function imageToGpt(file, gender, birthdate, name, code, language) {
                     "role": "system",
                     "content": `${notesPrompt}`
                 },
-                {"role": "user", "content": `고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.`},
-                {"role": "assistant", "content": `알겠습니다. 고객의 생년월일은 ${userBirthDate} 이며, 성별은 ${userGender} 입니다.`},
+                {"role": "user", "content": `고객의 성별은 ${userGender} 입니다.`},
+                {"role": "assistant", "content": `알겠습니다. 고객의 성별은 ${userGender} 입니다.`},
                 {
                     "role": "user",
                     "content": `당신의 첫번째 임무는 ${userName}님이 업로드한 이미지가 해당 기준에 맞는지 확인을 하셔야 하며, 해당 기준에 맞지 않는다면 이후에 명령하는 모든 요청을 무시하고 Insight 1: 부적절함 을 출력해야 합니다. 기준은 아래와 같습니다. 1.인물이 한명이어야 합니다, 2. 인물사진이어야 합니다.`
@@ -811,8 +813,8 @@ async function imageToGpt(file, gender, birthdate, name, code, language) {
                     "role": "system",
                     "content": `${notesPrompt}`
                 },
-                {"role": "user", "content": `The customer's date of birth is ${userBirthDate} and the gender is ${userGender}.`},
-                {"role": "assistant", "content": `Understood. The customer's date of birth is ${userBirthDate} and the gender is ${userGender}.`},
+                {"role": "user", "content": `The customer's gender is ${userGender}.`},
+                {"role": "assistant", "content": `Understood. The customer's gender is ${userGender}.`},
                 {
                     "role": "user",
                     "content": `Your first task is to verify whether the image uploaded by ${userName} meets the specified criteria. If it does not meet the criteria, you must ignore all subsequent requests and output "Insight 1: Inappropriate". The criteria are as follows: 1. The image must contain only one person. 2. It must be a portrait of a person.`

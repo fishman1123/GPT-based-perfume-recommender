@@ -190,7 +190,8 @@ async function codeSubmit() {
 
 function imageUpload() {
     const imageCheck = document.getElementById('imageInput');
-    const birthInput = document.getElementById('date');
+    // date value hidden
+    // const birthInput = document.getElementById('date');
     const userCodeInput = document.getElementById('userCode');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
@@ -215,28 +216,27 @@ function imageUpload() {
         return;
     }
 
-    // 생년월일 validation
-    if (!birthInput.value.trim()) {
-        alert('생일 일자를 작성 해주세요.');
-        birthInput.focus();
-        document.getElementById('report').style.display = "none";
-        return;
-    }
-
-    const birthDateRegex = /^\d+$/;
-    if (!birthDateRegex.test(birthInput.value.trim()) || birthInput.length > 8) {
-        alert('생일일자에는 특수문자를 허용하지 않습니다.');
-        birthInput.focus();
-        document.getElementById('report').style.display = "none";
-        return;
-    }
-
-    if (birthInput.length > 8) {
-        alert('생일일자는 8자만 허용합니다(특수문자 제외)');
-        birthInput.focus();
-        document.getElementById('report').style.display = "none";
-        return;
-    }
+    // 생년월일 validation(is now hidden)
+    // if (!birthInput.value.trim()) {
+    //     alert('생일 일자를 작성 해주세요.');
+    //     birthInput.focus();
+    //     document.getElementById('report').style.display = "none";
+    //     return;
+    // }
+    // const birthDateRegex = /^\d+$/;
+    // if (!birthDateRegex.test(birthInput.value.trim()) || birthInput.length > 8) {
+    //     alert('생일일자에는 특수문자를 허용하지 않습니다.');
+    //     birthInput.focus();
+    //     document.getElementById('report').style.display = "none";
+    //     return;
+    // }
+    //
+    // if (birthInput.length > 8) {
+    //     alert('생일일자는 8자만 허용합니다(특수문자 제외)');
+    //     birthInput.focus();
+    //     document.getElementById('report').style.display = "none";
+    //     return;
+    // }
 
 
     // Check if the gender has been selected
@@ -383,7 +383,8 @@ function resetPage() {
 
 
 async function sendImage() {
-    const birthInput = document.getElementById('date');
+    // date hidden
+    // const birthInput = document.getElementById('date');
     const inputName = document.getElementById('nameInput');
     const inputGender = document.getElementById('gender');
     const inputUserCode = document.getElementById('userCode');
@@ -458,7 +459,8 @@ async function sendImage() {
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('userCode', inputUserCode.value);
         formData.append('language', inputLanguage.value === "00" ? '한국어' : '영어');
-        formData.append('birthDate', birthInput.value);
+        // date hidden
+        // formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
         // console.log("hello there" + document.getElementById('date').value);
 
