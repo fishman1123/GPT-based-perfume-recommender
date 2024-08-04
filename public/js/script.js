@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.onload = function(e) {
                 imagePreview.src = e.target.result;
                 imagePreview.style.display = 'block';
+                imagePreview.style.height = 'auto';
+
             }
             reader.readAsDataURL(file);
         } else {
@@ -485,6 +487,7 @@ async function sendImage() {
             alert("허용하지 않는 이미지 유형입니다.");
             window.location.href = "https://acscent.co.kr";
         }
+        alert("분석내용은 저장되지 않습니다. 곧바로 캡쳐해서 보관하세요!");
 
         // pageTransition("report");
         // console.log('hello' + responseData.message.combinedInsights);
