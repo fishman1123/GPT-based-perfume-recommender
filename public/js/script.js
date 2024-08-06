@@ -458,7 +458,19 @@ async function sendImage() {
         formData.append('image', compressedFile); // Append the compressed file
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('userCode', inputUserCode.value);
-        formData.append('language', inputLanguage.value === "00" ? '한국어' : '영어');
+        let targetLanguage;
+        if (inputLanguage.value === "00") {
+            targetLanguage = "한국어";
+        }
+        if (inputLanguage.value === "01") {
+            targetLanguage = "영어";
+
+        }
+        if (inputLanguage.value === "02") {
+            targetLanguage = "중국어";
+        }
+
+        formData.append('language', targetLanguage);
         // date hidden
         // formData.append('birthDate', birthInput.value);
         formData.append('name', inputName.value);
