@@ -51,34 +51,34 @@ const authSheets = new google.auth.GoogleAuth({
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
-const authLanguage = new google.auth.GoogleAuth({
-    keyFile: GOOGLE_ACCOUNT,
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-});
+// const authLanguage = new google.auth.GoogleAuth({
+//     keyFile: GOOGLE_ACCOUNT,
+//     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+// });
 
 const drive = google.drive({version: 'v3', auth: authDrive});
 const sheets = google.sheets({version: 'v4', auth: authSheets});
-const language = google.language({version: 'v1', auth: authLanguage});
+// const language = google.language({version: 'v1', auth: authLanguage});
 
-async function detectLanguage(text) {
-    const document = {
-        content: text,
-        type: 'PLAIN_TEXT',
-    };
-    try {
-        const res = await language.documents.analyzeEntities({
-            requestBody: {
-                document: document
-            }
-        });
-        const detectedLanguage = res.data.language;
-        console.log(`Detected language: `, detectedLanguage);
-        return detectedLanguage;
-    } catch (err) {
-        console.log(`Failed to detect a language`);
-        console.error('Error detecting language:', err);
-    }
-}
+// async function detectLanguage(text) {
+//     const document = {
+//         content: text,
+//         type: 'PLAIN_TEXT',
+//     };
+//     try {
+//         const res = await language.documents.analyzeEntities({
+//             requestBody: {
+//                 document: document
+//             }
+//         });
+//         const detectedLanguage = res.data.language;
+//         console.log(`Detected language: `, detectedLanguage);
+//         return detectedLanguage;
+//     } catch (err) {
+//         console.log(`Failed to detect a language`);
+//         console.error('Error detecting language:', err);
+//     }
+// }
 
 async function listingReport(userName, resultList, userCode) {
     const spreadsheetId = '1D8n8faBvrYjX3Yk-6-voGoS0YUgN37bi7yEkKfk24Ws'; // Replace with your actual spreadsheet ID
@@ -760,8 +760,8 @@ async function imageToGpt(file, gender, name, code, language) {
                 "role": "assistant", "content": `알겠습니다. 특징 내용은 총 300자 이상, 각각의 향수 노트 추천은 400자이상 작성하겠습니다.`
                 },
                 {
-                    role: "user",
-                    content: `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
+                    "role": "user",
+                    "content": `사진이 있다고 치고 예시로 한번 만들어 봅시다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 차은우님의 사진을 기반으로 차은우님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
                 },
                 {
                     "role": "assistant",
@@ -784,19 +784,19 @@ async function imageToGpt(file, gender, name, code, language) {
                     checkcheck`
                 },
                 {
-                    role: "user",
-                    content: [
+                    "role": "user",
+                    "content": [
                         {
-                            type: "text",
-                            text: `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
+                            "type": "text",
+                            "text": `여기 분석할 사진이 있습니다. 첫번째 임무를 기반으로 당신은 사진에서 보여지는 ${userName}님의 사진을 기반으로 ${userName}님의 분위기, 얼굴표정, 패션, 메이크업 상태등을 심도있게 분석, 그리고 두번째 임무를 기반으로 6개의 Insight를 작성해야 합니다. 당신은 해당 특징에 대한 설명을 작성하기전에 'Insight 1:' 와 같은 형식을 유지해야 합니다. 특징 분석은 300자 이아여야 합니다. 정확한 regex를 위해서 각각의 특징들을 제공한 후 줄바꿈을 해야 합니다. 당신은 세번째 임무를 기반으로 탑 노트, 미들노트, 베이스 노트에 대한 정보를 제공할때 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: ' 양식을 지키셔야 합니다. 노트 추천을 할때는 설명도 추가해야 하며, 노트 추천을 하고난 뒤에 향수 이름 추천을 하셔야 합니다. 향수 이름 추천을 할때에는 'Perfume Name Recommendation:' 양식을 지켜야 합니다. 그리고 해당 향수이름 추천을 해야 합니다. 향수 추천 이름은 한글로 작성을 해야 합니다. regex를 위해서 마지막엔 'checkcheck'을 작성해 주세요. 마크다운 양식은 없어야 하며, 향수 노트 추천은 2500자 이상 이어야 합니다.`
                         },
                         {
-                            type: "image_url", image_url: {"url": encodedImage},
+                            "type": "image_url", "image_url": {"url": encodedImage},
                         },
                     ],
                 },
             ];
-        } else { // 외국어 && 언어 탐지 에러
+        } else if (userLanguage === "영어") { // 외국어 && 언어 탐지 에러
             selectedPrompt = [
                 {
                     "role": "system",
@@ -895,8 +895,8 @@ async function imageToGpt(file, gender, name, code, language) {
                     "content": `Understood. The description will be at least 700 characters in total, and each fragrance note recommendation will be at least 700 characters.`
                 },
                 {
-                    role: "user",
-                    content: `Assuming there is a photo, let's create an example. Based on the first task, analyze the atmosphere, facial expression, fashion, and makeup status of Cha Eun-woo as shown in the photo in-depth. Then, based on the second task, write 6 Insights. You should maintain the format like 'Insight 1:' before providing the descriptions. The feature analysis should be no more than 300 characters. For accurate regex, provide each feature followed by a line break. Based on the third task, when providing information on the top note, middle note, and base note, you should adhere to the format 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: '. When recommending a note, include a description as well, and after recommending the notes, you should recommend a perfume name. When recommending a perfume name, follow the format 'Perfume Name Recommendation:' and then provide the name. The recommended perfume name should be written in English. For regex purposes, write 'checkcheck' at the end. There should be no markdown format, and the fragrance note recommendation should be at least 2500 characters.`
+                    "role": "user",
+                    "content": `Assuming there is a photo, let's create an example. Based on the first task, analyze the atmosphere, facial expression, fashion, and makeup status of Cha Eun-woo as shown in the photo in-depth. Then, based on the second task, write 6 Insights. You should maintain the format like 'Insight 1:' before providing the descriptions. The feature analysis should be no more than 300 characters. For accurate regex, provide each feature followed by a line break. Based on the third task, when providing information on the top note, middle note, and base note, you should adhere to the format 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: '. When recommending a note, include a description as well, and after recommending the notes, you should recommend a perfume name. When recommending a perfume name, follow the format 'Perfume Name Recommendation:' and then provide the name. The recommended perfume name should be written in English. For regex purposes, write 'checkcheck' at the end. There should be no markdown format, and the fragrance note recommendation should be at least 2500 characters.`
                 },
                 {
                     "role": "assistant",
@@ -918,17 +918,157 @@ async function imageToGpt(file, gender, name, code, language) {
                     checkcheck`
                 },
                 {
-                    role: "user",
-                    content: [
+                    "role": "user",
+                    "content": [
                         {
-                            type: "text",
-                            text: `Here is a photo to analyze. Based on the first task, you need to analyze the atmosphere, facial expression, fashion, and makeup status of ${userName} as shown in the photo in-depth. Then, based on the second task, write 6 Insights. You should maintain the format like 'Insight 1:' before providing the descriptions. The feature analysis should be no more than 300 characters. For accurate regex, provide each feature followed by a line break. Based on the third task, when providing information on the top note, middle note, and base note, you should adhere to the format 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: '. When recommending a note, include a description as well, and after recommending the notes, you should recommend a perfume name. When recommending a perfume name, follow the format 'Perfume Name Recommendation:' and then provide the name. The recommended perfume name should be written in English. For regex purposes, write 'checkcheck' at the end. There should be no markdown format, and the fragrance note recommendation should be at least 2500 characters.`
+                            "type": "text",
+                            "text": `Here is a photo to analyze. Based on the first task, you need to analyze the atmosphere, facial expression, fashion, and makeup status of ${userName} as shown in the photo in-depth. Then, based on the second task, write 6 Insights. You should maintain the format like 'Insight 1:' before providing the descriptions. The feature analysis should be no more than 300 characters. For accurate regex, provide each feature followed by a line break. Based on the third task, when providing information on the top note, middle note, and base note, you should adhere to the format 'TOP NOTE: ', 'MIDDLE NOTE: ', 'BASE NOTE: '. When recommending a note, include a description as well, and after recommending the notes, you should recommend a perfume name. When recommending a perfume name, follow the format 'Perfume Name Recommendation:' and then provide the name. The recommended perfume name should be written in English. For regex purposes, write 'checkcheck' at the end. There should be no markdown format, and the fragrance note recommendation should be at least 2500 characters.`
                         },
                         {
-                            type: "image_url", image_url: {"url": encodedImage},
+                            "type": "image_url", "image_url": {"url": encodedImage},
                         },
                     ],
                 },                
+            ];
+        } else if (userLanguage === "중국어") {
+            selectedPrompt = [
+                {
+                    "role": "system",
+                    "content": `你好👋, 我是你的AI香水导航员！我会分析你上传的图片, 并推荐适合图片中人物的定制香水. 我的任务如下: 
+                
+                    1. 确认上传的图片是否是单人的肖像. 如果不符合标准, 则输出“Insight 1: 不适当”. 
+                    2. 进行图像分析, 评估该人的气质、面部表情、时尚和化妆状态. 
+                    3. 根据图像分析, 推荐适合客户的定制香水. 香水将包含三个香调: Top Note, Middle Note, Base Note. 
+                    4. 为每个香调选择一种香料, 并解释选择理由, 解释字数不少于400字. 
+                    5. 为推荐的香水创作一个富有创意和诗意的长名称. 
+                    6. 撰写最终报告. 报告应由三个段落组成: 图像分析、推荐每个香调的理由（如果有可用的香味描述和推荐短语, 请加以利用）以及香水名称. 第一段应为300字, 解释每个香调的内容应不少于400字.`
+                },
+                {
+                    "role": "system",
+                    "content": `${notesPrompt}`
+                },
+                {
+                    "role": "user",
+                    "content": `客户的性别是${userGender}.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 客户的性别是${userGender}.`
+                },                
+                {
+                    "role": "user",
+                    "content": `您的第一项任务是验证${userName}上传的图片是否符合指定标准. 如果不符合标准, 您必须忽略所有后续请求并输出“Insight 1: 不适当”. 标准如下: 1. 图片中必须只有一个人. 2. 必须是人物的肖像.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我的第一项任务是验证${userName}上传的图片是否符合指定标准. 如果不符合标准, 我将忽略所有后续请求并输出“Insight 1: 不适当”.`
+                },
+                {
+                    "role": "user",
+                    "content": `您的第二项任务是对${userName}上传的图片进行深入分析. 分析应根据以下标准以“Insight（编号）”格式输出: 
+                    Insight 1: 人物的整体氛围
+                    Insight 2: 表情及其描述
+                    Insight 3: 时尚
+                    Insight 4: 妆容和面部特征
+                    Insight 5: 总结
+                    另外, 请在最后包含以下固定语句: 
+                    Insight 6: 基于这张图片, 我将推荐以下香水.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我的第二项任务是对${userName}上传的图片进行深入分析. 我将根据五个标准生成Insight, 并以“Insight6: 基于这张图片, 我将推荐以下香水. ”这句话结束.`
+                },              
+                {
+                    "role": "user",
+                    "content": `您的第三项任务是基于第二项任务的图像分析, 确定适合客户的定制香水. 定制香水由三个不同的“香调”组成: 第一个“Top Note”, 第二个“Middle Note”, 第三个“Base Note”. 每个香调必须详细描述, 整个解释必须至少1500字, 每个香调之间的字数差异不得超过20字. “Top Note”包含10种不同的香料, “Middle Note”包含10种不同的香料, “Base Note”包含10种不同的香料. 您必须从“Top Note”中选择一种香料, 从“Middle Note”中选择一种香料, 从“Base Note”中选择一种香料, 以创建由三种香料组成的最终香水组合. 您必须解释为什么选择某种香料作为“Top Note”, 为什么选择某种香料作为“Middle Note”, 为什么选择某种香料作为“Base Note”, 并描述每种香料是什么.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我的第三项任务是基于第二项任务的图像分析, 确定适合客户的定制香水. 定制香水由三个不同的“香调”组成: 第一个“Top Note”, 第二个“Middle Note”, 第三个“Base Note”. “Top Note”包含10种不同的香料, “Middle Note”包含10种不同的香料, “Base Note”包含10种不同的香料. 为了制作定制香水, 我将从“Top Note”中选择一种香料, 从“Middle Note”中选择一种香料, 从“Base Note”中选择一种香料, 以创建由三种香料组成的最终香水组合. 我将解释为什么选择某种香料作为“Top Note”, 为什么选择某种香料作为“Middle Note”, 为什么选择某种香料作为“Base Note”, 并描述每种香料是什么.`
+                },
+                {
+                    "role": "user",
+                    "content": `从列表中为每个香调选择合适的香味, 并包括描述和抽象的比喻.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我将从“Top Note”、“Middle Note”和“Base Note”的列表中各选择一种香料, 并写一个400到500字的描述.`
+                },
+                {
+                    "role": "user",
+                    "content": `另外, 在每个香调的描述之前写上推荐的香料名称, 用“ | ”分隔.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我会分开写名称和描述, 例如, “Top Note: AC'SCENT 01 黑莓 | 黑莓香气同时揭示了一种迷人的氛围和少年般的魅力. ”`
+                },
+                {
+                    "role": "user",
+                    "content": `如果一种香料包含多种成分, 请列出所有成分, 用逗号分隔.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 对于包含多种成分的香料, 我会这样写, 例如, “Top Note: AC'SCENT 04 柠檬, 佛手柑 | 柠檬和佛手柑香气是一种柑橘混合物, 明亮的柠檬和略带苦味的佛手柑创造出充满活力和生机的第一印象. ”`
+                },
+                {
+                    "role": "user",
+                    "content": `您的第四项任务是为推荐给${userName}的定制香水创造一个富有创意和诗意的长名称.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我会为推荐给${userName}的定制香水创造一个富有创意和诗意的长名称.`
+                },
+                {
+                    "role": "user",
+                    "content": `您的第五项任务是撰写${userName}将阅读的定制香水推荐和分析报告. 第一段应包括在第一项任务中进行的图像分析的解释, 分析图像中人物的气质、面部表情、时尚和化妆状态. 第二段应包括在第二项任务中选择的 Top Note, Middle Note, Base Note 香料油的详细推荐和解释, 解释选择每种香调的具体原因. 第三段应呈现第三项任务中创建的高度唤起和富有创意的名称.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 我的第五项任务是撰写${userName}将阅读的定制香水推荐和分析报告. 第一段应包括在第一项任务中进行的图像分析的解释, 分析图像中人物的气质、面部表情、时尚和化妆状态. 第二段应包括在第二项任务中选择的 Top Note, Middle Note, Base Note 香料油的详细推荐和解释, 解释选择每种香调的具体原因. 第三段应呈现第三项任务中创建的高度唤起和富有创意的名称.`
+                },
+                {
+                    "role": "user",
+                    "content": `描述总字数应不少于700字, 每个香调推荐的描述应不少于700字.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `明白了. 描述总字数将不少于700字, 每个香调推荐的描述将不少于700字.`
+                },
+                {
+                    "role": "user",
+                    "content": `假设有一张照片, 我们来创建一个示例. 基于第一项任务, 深入分析照片中车银优的气质、面部表情、时尚和化妆状态. 然后, 根据第二项任务, 写6个Insight. 你应该在提供描述之前保持“Insight 1: ”这样的格式. 特征分析不应超过300字. 为了准确的正则表达式, 提供每个特征后跟一个换行符. 根据第三项任务, 在提供 TOP NOTE, MIDDLE NOTE, BASE NOTE 信息时, 你应该遵循“Top Note: ”、“Middle Note: ”、“BASE NOTE: ”的格式. 在推荐香调时, 包含一个描述, 并且在推荐香调之后, 你应该推荐一个香水名称. 在推荐香水名称时, 遵循“Perfume Name Recommendation: ”的格式, 但请用中文书写, 然后提供名称. 推荐的香水名称应以英文书写. 为了正则表达式的目的, 在结尾写“checkcheck”. 不要使用Markdown格式, 香调推荐的描述应不少于2500字.`
+                },
+                {
+                    "role": "assistant",
+                    "content": `Insight 1: 车银优散发出一种精致优雅的气质. 
+                    Insight 2: 他的表情, 微笑着看向镜头, 给人一种平静温和的印象. 
+                    Insight 3: 他穿的白色西装增强了他时尚而精致的外表. 
+                    Insight 4: 此外, 突显他锐利眼神的眼妆和整齐的M形嘴唇增添了一种奢华感. 
+                    Insight 5: 总的来说, 车银优散发出一种非常精致优雅的气质, 同时保持着严肃的形象. 
+                    Insight 6: 基于这张图片, 我将推荐以下香水. 
+                    
+                    TOP NOTE: AC'SCENT 01 黑莓 | 黑莓的香气同时展现了一种迷人的氛围和少年般的魅力. 黑莓的深沉浓烈香气突出了车银优的第一印象, 而新鲜的黑莓香气则表达了他的少年魅力. 
+                    
+                    MIDDLE NOTE: AC'SCENT 13 岩兰草 | 岩兰草的香气突显了人物的神秘气质. 它平衡了车银优强烈的气氛, 确保了香水的整体平衡. 它也反映了车银优散发的色调和神秘气息. 
+                    
+                    BASE NOTE: AC'SCENT 28 皮革 | 皮革的香气突显了车银优整齐修剪的黑色短发和干净衣着所传达的精致感, 使他更加引人注目. 皮革的强烈和男性力量留下了深沉而丰富的持久香气, 突显了车银优的魅力. 
+                    
+                    Perfume Name Recommendation: 神秘之夜的史诗
+                    
+                    checkcheck`
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": `这里有一张照片供分析. 基于第一项任务, 您需要深入分析照片中${userName}的气质、面部表情、时尚和化妆状态. 然后, 根据第二项任务, 写6个Insight. 你应该在提供描述之前保持“Insight 1: ”这样的格式. 特征分析不应超过300字. 为了准确的正则表达式, 提供每个特征后跟一个换行符. 根据第三项任务, 在提供TOP NOTE、MIDDLE NOTE, BASE NOTE 信息时, 你应该遵循“TOP NOTE: ”、“MIDDLE NOTE: ”、“BASE NOTE: ”的格式. 在推荐香调时, 包含一个描述, 并且在推荐香调之后, 你应该推荐一个香水名称. 在推荐香水名称时, 请遵循“Perfume Name Recommendation: ”的格式, 但请用中文书写, 然后提供名称. 推荐的香水名称应以英文书写. 为了正则表达式的目的, 在结尾写“checkcheck”. 不要使用Markdown格式, 香调推荐的描述应不少于2500字.`
+                        },
+                        {
+                            "type": "image_url", "image_url": {"url": encodedImage},
+                        },
+                    ],
+                },
             ];
         }
 
