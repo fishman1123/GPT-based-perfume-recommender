@@ -459,15 +459,19 @@ async function sendImage() {
         formData.append('gender', inputGender.value === "00" ? '남자' : '여자');
         formData.append('userCode', inputUserCode.value);
         let targetLanguage;
+        let targetAlertMessage;
         if (inputLanguage.value === "00") {
             targetLanguage = "한국어";
+            targetAlertMessage = "분석내용은 저장되지 않습니다. 곧바로 캡쳐해서 보관하세요!";
         }
         if (inputLanguage.value === "01") {
             targetLanguage = "영어";
+            targetAlertMessage = "No analysis is saved. Make sure to capture the analysis results";
 
         }
         if (inputLanguage.value === "02") {
             targetLanguage = "중국어";
+            targetAlertMessage = "分析内容未保存。分析结果请务必截图";
         }
 
         formData.append('language', targetLanguage);
@@ -501,7 +505,7 @@ async function sendImage() {
             alert("허용하지 않는 이미지 유형입니다.");
             window.location.href = "https://acscent.co.kr";
         }
-        alert("분석내용은 저장되지 않습니다. 곧바로 캡쳐해서 보관하세요!");
+        alert(`${targetAlertMessage}`);
 
         // pageTransition("report");
         // console.log('hello' + responseData.message.combinedInsights);

@@ -625,6 +625,35 @@ body::before {
     align-items: center;
     /*margin: auto;*/
 }
+.securityTextContainer {
+    display: flex;
+    text-align: end;
+    flex-direction: column;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+.securityTextContainer p {
+    text-align: end;
+}
+.securityMain {
+    display: flex;
+    flex-direction: column;
+}
+.serialNumberContainer {
+    color: white;
+    padding-bottom: 8px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.securityBottomTextKorean {
+    font-size: 12px;
+    margin: 1em 6em;
+}
+.securityBottomTextEnglish {
+    font-size: 12px;
+    margin: 2px 6em;
+}
 
 .securitySubmit {
     display: flex;
@@ -652,11 +681,12 @@ body::before {
 
 
 
-.form__input {
+.formInput {
     font-family: 'Roboto', sans-serif;
     color: #333;
     font-size: 16px;
     padding-left: 6px;
+    margin-top: 5px;
     /*padding-top: 8px;*/
 
     background-color: transparent;
@@ -666,13 +696,17 @@ body::before {
     border-bottom: solid transparent;
     margin-left: 15px;
 }
-.form__group {
+.formGroupContainer {
     display: flex;
     border-radius: 3rem;
     height: 36px;
     background-color: white;
     margin-top: 4px;
     margin-bottom: 10px;
+}
+.formGroupInputContainer {
+    display: flex;
+    align-items: center;
 }
 
 .titleText {
