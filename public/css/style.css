@@ -685,6 +685,7 @@ body::before {
     font-size: 12px;
     font-family: "Times New Roman", Times, serif;
     font-style: italic;
+    text-align: start;
 }
 
 .file-status {
