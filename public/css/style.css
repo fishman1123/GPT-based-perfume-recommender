@@ -162,13 +162,15 @@ body::before {
     height: auto;
 }
 .intro-container, .chatContainer {
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 667px;
     margin-top: 20px;
+    color: white;
+    padding-bottom: 20px;
 }
 .intro-container img {
     width: 50%;
@@ -722,6 +724,87 @@ body::before {
     text-align: start;
 }
 
+.introFlexContainer {
+    display: flex;
+}
+
+.introTextInput {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+}
+.introMainFlex {
+    display: flex;
+    flex-direction: column;
+}
+
+.introLabelContainer {
+    display: flex;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+    padding-right: 13px;
+}
+
+.introInlineFlexContainer {
+    display: inline-flex;
+    align-items: center;
+}
+
+.introBlockDisplay {
+    display: block;
+}
+
+
+.introTitle {
+    text-align: start;
+    padding-bottom: 6px;
+}
+
+.introSecurityTitle {
+    display: flex;
+    padding-right: 10px;
+}
+
+.introName {
+    width: 46px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.introTextContainer {
+    padding-left: 80px;
+    padding-right: 80px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.inlineFlexContainer {
+    display: inline-flex;
+    align-items: center;
+}
+
+.labelPaddingRight {
+    padding-right: 14px;
+}
+
+.blockDisplayWithWidth {
+    display: block;
+    width: 117px;
+}
+
+.introSubText {
+    font-size: 12px;
+}
+
+.securityCodeFromIntroContainer {
+    display: flex;
+    padding-right: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
 .file-status {
     margin-top: 10px;
     font-family: Arial, sans-serif;
