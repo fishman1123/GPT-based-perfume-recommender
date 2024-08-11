@@ -473,6 +473,10 @@ async function sendImage() {
             targetLanguage = "중국어";
             targetAlertMessage = "分析内容未保存。分析结果请务必截图";
         }
+        if (inputLanguage.value === "03") {
+            targetLanguage = "일본어";
+            targetAlertMessage = "分析内容が保存されていません。 分析結果は必ずキャプチャーをお願いします。";
+        }
 
         formData.append('language', targetLanguage);
         // date hidden
