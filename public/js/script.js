@@ -557,6 +557,7 @@ const compressedReport = () => {
     const reportThree = document.getElementById('chunktargetMiddleNote').innerText;
     const reportFour = document.getElementById('chunktargetBaseNote').innerText;
     const compressedMainPage = document.getElementById('reportCompressedPage');
+    compressedMainPage.style.color = "black";
     const screenShotLineMaker = document.createElement('div');
     const screenShotLineMakerStatement = document.createElement('div');
 
@@ -570,6 +571,7 @@ const compressedReport = () => {
     document.getElementById('report').style.display = "flex";
     document.getElementById('reportSequence').style.display = 'none';
     document.getElementById('reportCompressedPage').style.display = "flex";
+
     // you need to make p tag element and insert text element in it for this from displayReport function
     // compressedMainPage.querySelectorAll('p').forEach(p => {
     //     p.style.fontSize = '12px';
