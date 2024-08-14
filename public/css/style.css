@@ -259,6 +259,8 @@ body::before {
     }
 }
 
+
+
 .padded-input {
     padding: 20px 0;
 }
@@ -275,6 +277,8 @@ body::before {
     /*min-width: 780px;*/
     /*height: 900px;*/
 }
+
+
 
 /*loading*/
 
@@ -507,6 +511,20 @@ body::before {
     margin-bottom: 10px;
 }
 
+.topTitle {
+    margin-left: 0;
+    color: black;
+    border: solid 2px black;
+    padding-bottom: 6px;
+}
+
+.topSubTitle {
+    font-size: 22px;
+    font-family: 'MaruBuri', sans-serif;
+}
+
+
+
 .dottedLine {
     width: 100%;
     border-bottom: 1px dotted black;
@@ -679,7 +697,10 @@ body::before {
     font-size: 62,5%;
 }
 
-
+.reportNameEmpty {
+    font-size: 30px;
+    font-family: 'Times New Roman',sans-serif;
+}
 
 
 
@@ -828,6 +849,68 @@ body::before {
     display: none;
     flex-direction: column;
 }
+
+.reportActualContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.reportTitleContainer {
+    width: 100%;
+    opacity: 0;
+    transition: all 1s;
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-direction: column;
+}
+
+.reportElement {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: lightgrey;
+}
+.reportSubElement {
+    display: flex;
+    justify-content: center;
+}
+
+.reportOneAdj {
+    padding-bottom: 20px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 20px;
+}
+
+.reportContentContainer {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-left: 10px;
+}
+
+.reportContentSubContainer {
+    font-size: 22px;
+    padding-bottom: 5px;
+    font-family: 'MaruBuri', sans-serif;
+}
+.reportIconContainer {
+    margin-left: 5px;
+    margin-top: 4px;
+}
+
+.insightContainer {
+    padding-top: 10px;
+}
+
+
+
+
 
 .zigzag {
 
