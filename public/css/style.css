@@ -823,6 +823,12 @@ body::before {
     align-items: center;
 }
 
+
+.reportSequenceContainer {
+    display: none;
+    flex-direction: column;
+}
+
 .zigzag {
 
     width: 100%;
