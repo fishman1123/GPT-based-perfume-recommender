@@ -1136,7 +1136,7 @@ body::before {
 @media (max-width: 410px) and (min-width: 376px) {
     .upper, .lower {
         height: auto;
-        max-height: 280px;
+        max-height: 260px;
     }
 }
 
@@ -1144,22 +1144,22 @@ body::before {
 @media (max-width: 375px) and (min-width: 321px) {
     .upper, .lower {
         height: auto;
-        max-height: 220px;
+        max-height: 210px;
     }
 }
 
 @media (max-width: 320px) {
     .upper, .lower {
         height: auto;
-        max-height: 220px;
+        max-height: 210px;
     }
 }
 
 
-@media (max-height: 654px) {
+@media (max-height: 800px) {
     .upper, .lower {
         height: auto;
-        max-height: 220px;
+        max-height: 210px;
     }
 }
 
