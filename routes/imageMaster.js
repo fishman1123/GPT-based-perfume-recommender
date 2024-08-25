@@ -615,7 +615,6 @@ async function updateNotesCount(selectedTopNote, selectedMiddleNote, selectedBas
 //     return filteredNotes;
 // }
 
-//// GPT가 다듬은 코드
 async function getFilteredNotes() {
     const notes = await readNotes();
     const { topNotes, middleNotes, baseNotes } = notes;

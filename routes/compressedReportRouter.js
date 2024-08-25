@@ -8,8 +8,6 @@ router.post('/report', (req, res) => {
     console.log('targetReportOne:', targetReportOne);
     console.log('targetReportTwo:', targetReportTwo);
     console.log('targetReportThree:', targetReportThree);
-
-    // Respond back to the client
     res.json({ message: 'Data received and logged' });
 });
 

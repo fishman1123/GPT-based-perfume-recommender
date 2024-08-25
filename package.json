@@ -21,7 +21,8 @@
     "jspdf": "^2.5.1",
     "multer": "^1.4.5-lts.1",
     "openai": "^4.33.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "winston": "^3.14.2"
   },
   "bugs": {
     "url": "https://github.com/fishman1123/chatDemo666/issues"

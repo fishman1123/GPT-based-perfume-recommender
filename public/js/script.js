@@ -549,7 +549,7 @@ async function sendImage() {
         // backButton.style.display = "block"; // Show back button
     }
 }
-//
+
 const compressedReport = () => {
     const reportTitle = document.getElementById('chunktargetNameRecommend').innerText;
     const reportOne = document.getElementById('chunktargetInsight').innerText;
