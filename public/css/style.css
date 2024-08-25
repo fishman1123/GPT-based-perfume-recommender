@@ -645,6 +645,7 @@ body::before {
     align-items: center;
     /*margin: auto;*/
 }
+
 .securityTextContainer {
     display: flex;
     text-align: end;
@@ -1075,6 +1076,16 @@ body::before {
     #intro {
         padding-top: 50px;
     }
+}
+
+
+.optionContainer {
+    display: flex;
+    color: white;
+    flex-direction: column;
+    /*width: 375px;*/
+    align-items: center;
+    /*margin: auto;*/
 }
 
 
