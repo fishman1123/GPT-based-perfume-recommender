@@ -49,11 +49,7 @@
     top: 5px;
     left: 5px;
 }
-@media (min-width: 768px) {
-    .button-54 {
-        padding: 0.25em 0.75em;
-    }
-}
+
 /* Additional CSS for Chat UI */
 
 @font-face {
@@ -63,6 +59,10 @@
 @font-face {
     font-family: 'BM Hanna Pro';
     src: url("../assets/BMHANNAPro.ttf") format('truetype');
+}
+@font-face {
+    font-family: 'Post No Bills Extra Bold';
+    src: url("../assets/PostNoBillsJaffna-ExtraBold.ttf") format('truetype');
 }
 @font-face {
     font-family: 'BM Hanna Air';
@@ -500,6 +500,71 @@ body::before {
     100%{width:100%}
 }
 
+.frame {
+    margin-top: 40px;
+    width: 100vw; /* Adjust the frame width */
+    height: 100vh; /* Adjust the frame height */
+    background-color: #B8A388; /* Outer frame background color */
+    border: 10px solid #e3dac9; /* Outer border color */
+    padding: 2px;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.inner-frame {
+    width: 100%;
+    height: 100%;
+    border: 5px solid #e3dac9; /* Border line between outer and inner frame */
+    padding: 10px;
+    background-color: black; /* Inner frame background color */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.upper, .lower {
+    width: 100%;
+    height: 250px;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+    margin-top: 4px;
+}
+
+
+.divider {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-line {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #B8A388; /* Line color */
+    top: 50%; /* Align the line vertically in the center */
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #B8A388; /* Dot color */
+    border-radius: 50%;
+    z-index: 1; /* Ensure the dot is above the line */
+}
+.buttonLineBelow {
+    display: flex;
+    justify-content: center;
+    margin: 4px auto 4px auto;
+    width: 100%;
+    height: 2px;
+    background-color: #B8A388;
+}
+
 .title-container {
     border: solid 2px black;
     border-radius:30px;
@@ -581,25 +646,6 @@ body::before {
     /* Add your CSS rules here */
 }
 
-/* For devices with a width between 576px and 767px */
-@media only screen and (min-width: 576px) and (max-width: 767px) {
-    /* Add your CSS rules here */
-}
-
-/* For devices with a width of 768px or more */
-@media only screen and (min-width: 768px) {
-    /* Add your CSS rules here */
-}
-
-/* For devices with a width of 992px or more */
-@media only screen and (min-width: 992px) {
-    /* Add your CSS rules here */
-}
-
-/* For devices with a width of 1200px or more */
-@media only screen and (min-width: 1200px) {
-    /* Add your CSS rules here */
-}
 
 .button-adjust {
     /*background-color: black;*/
@@ -638,7 +684,7 @@ body::before {
 }
 
 .securityContainer {
-    display: flex;
+    display: none;
     color: white;
     flex-direction: column;
     /*width: 375px;*/
@@ -1075,6 +1121,54 @@ body::before {
     }
     #intro {
         padding-top: 50px;
+    }
+}
+
+
+@media (min-width: 410px) {
+    .upper, .lower {
+        height: auto;
+        min-height: 300px;
+    }
+}
+
+
+@media (max-width: 410px) and (min-width: 376px) {
+    .upper, .lower {
+        height: auto;
+        max-height: 280px;
+    }
+}
+
+
+@media (max-width: 375px) and (min-width: 321px) {
+    .upper, .lower {
+        height: auto;
+        max-height: 220px;
+    }
+}
+
+@media (max-width: 320px) {
+    .upper, .lower {
+        height: auto;
+        max-height: 220px;
+    }
+}
+
+
+@media (max-height: 654px) {
+    .upper, .lower {
+        height: auto;
+        max-height: 220px;
+    }
+}
+
+
+
+
+@media (min-width: 768px) {
+    .button-54 {
+        padding: 0.25em 0.75em;
     }
 }
 

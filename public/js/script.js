@@ -1,8 +1,16 @@
 
 window.onload = () => {
     // alert("인물이 두명 이상인 사진, 혹은 인물 사진이 아닐 경우 분석이 안될 수 있으니 유의 해주세요!");
+    document.body.style.backgroundImage = "none";
+}
 
 
+const changeView = (imageUrl) => {
+    let optionContainer = document.getElementById("option");
+    let securityContainer = document.getElementById("security");
+    optionContainer.style.display = "none";
+    securityContainer.style.display = "flex";
+    document.body.style.backgroundImage = `url('${imageUrl}')`;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
