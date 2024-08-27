@@ -1,6 +1,6 @@
 {
   "name": "chatdemo666",
-  "version": "1.3.0.8",
+  "version": "1.3.0.9",
   "description": "- pm2 start app.js --watch --ignore-watch=\"./public/images/upload\"",
   "main": "app.js",
   "scripts": {
