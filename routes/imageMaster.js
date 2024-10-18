@@ -1205,7 +1205,7 @@ async function imageToGpt(file, gender, name, code, language) {
 
         const response = await openai.chat.completions.create({
             // model: "gpt-4-turbo-2024-04-09",
-            model: "chatgpt-4o-latest",
+            model: "gpt-4o-2024-05-13",
             messages: selectedPrompt,
             max_tokens: 4096,
         });
